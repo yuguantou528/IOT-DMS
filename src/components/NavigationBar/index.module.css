@@ -1,0 +1,165 @@
+.navigationBar {
+  height: 100vh;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+}
+
+.logo {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fff;
+}
+
+.logoIcon {
+  font-size: 24px;
+  color: #1890ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.logoText {
+  margin-left: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #262626;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.menu {
+  flex: 1;
+  border-right: none !important;
+  background: #fff !important;
+}
+
+/* 菜单项样式优化 */
+:global(.ant-menu-light .ant-menu-item) {
+  transition: background-color 0.2s ease !important;
+  margin: 4px 8px !important;
+  border-radius: 6px !important;
+  height: 40px !important;
+  line-height: 40px !important;
+}
+
+:global(.ant-menu-light .ant-menu-item:hover) {
+  background-color: #e6f7ff !important;
+}
+
+:global(.ant-menu-light .ant-menu-item-selected) {
+  background-color: #1890ff !important;
+  color: #fff !important;
+}
+
+:global(.ant-menu-light .ant-menu-item-selected .ant-menu-item-icon) {
+  color: #fff !important;
+}
+
+/* 子菜单样式 */
+:global(.ant-menu-light .ant-menu-submenu-title) {
+  transition: background-color 0.2s ease !important;
+  margin: 4px 8px !important;
+  border-radius: 6px !important;
+  height: 40px !important;
+  line-height: 40px !important;
+}
+
+:global(.ant-menu-light .ant-menu-submenu-title:hover) {
+  background-color: #e6f7ff !important;
+}
+
+:global(.ant-menu-light .ant-menu-submenu-open > .ant-menu-submenu-title) {
+  background-color: #e6f7ff !important;
+}
+
+/* 子菜单项样式 */
+:global(.ant-menu-light .ant-menu-submenu .ant-menu-item) {
+  margin: 2px 8px !important;
+  padding-left: 32px !important;
+  height: 36px !important;
+  line-height: 36px !important;
+  border-radius: 6px !important;
+}
+
+/* 子菜单项选中状态 */
+:global(.ant-menu-light .ant-menu-submenu .ant-menu-item-selected) {
+  background-color: #1890ff !important;
+  color: #fff !important;
+}
+
+/* 子菜单项悬停状态 */
+:global(.ant-menu-light .ant-menu-submenu .ant-menu-item:hover:not(.ant-menu-item-selected)) {
+  background-color: #e6f7ff !important;
+}
+
+/* 折叠状态下的图标居中 */
+:global(.ant-menu-inline-collapsed .ant-menu-item) {
+  padding: 0 calc(50% - 14px) !important;
+  text-align: center;
+}
+
+:global(.ant-menu-inline-collapsed .ant-menu-submenu-title) {
+  padding: 0 calc(50% - 14px) !important;
+  text-align: center;
+}
+
+/* 移除默认的缩进动画，避免跳动 */
+:global(.ant-menu-item .ant-menu-item-icon) {
+  transition: none !important;
+}
+
+:global(.ant-menu-submenu-title .ant-menu-item-icon) {
+  transition: none !important;
+}
+
+/* 子菜单展开动画优化 */
+:global(.ant-menu-sub) {
+  background: #fff !important;
+}
+
+:global(.ant-menu-submenu-inline > .ant-menu-sub) {
+  background: #fafafa !important;
+  border-radius: 0 0 6px 6px;
+  margin: 0;
+  padding: 0 8px;
+}
+
+/* 响应式设计 */
+@media (max-width: 767px) {
+  .logo {
+    height: 56px;
+    padding: 0 12px;
+  }
+  
+  .logoIcon {
+    font-size: 20px;
+    width: 28px;
+    height: 28px;
+  }
+  
+  .logoText {
+    font-size: 12px;
+    margin-left: 8px;
+  }
+  
+  :global(.ant-menu-light .ant-menu-item) {
+    height: 36px !important;
+    line-height: 36px !important;
+    margin: 2px 4px !important;
+  }
+  
+  :global(.ant-menu-light .ant-menu-submenu-title) {
+    height: 36px !important;
+    line-height: 36px !important;
+    margin: 2px 4px !important;
+  }
+}

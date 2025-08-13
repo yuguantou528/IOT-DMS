@@ -1,0 +1,87 @@
+.recordedVideoManager {
+  padding: 20px;
+}
+
+.searchCard {
+  margin-bottom: 16px;
+}
+
+.actionCard {
+  margin-bottom: 16px;
+}
+
+.tableCard {
+  /* 表格卡片样式 */
+}
+
+.thumbnail {
+  position: relative;
+  width: 80px;
+  height: 45px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.duration {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 1px 4px;
+  font-size: 10px;
+  border-radius: 2px;
+}
+
+.videoPlayer {
+  /* 视频播放器样式 */
+}
+
+.videoInfo {
+  margin-top: 16px;
+  padding: 12px;
+  background: #f5f5f5;
+  border-radius: 6px;
+}
+
+.videoInfo div {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.videoInfo div:last-child {
+  margin-bottom: 0;
+}
+
+/* 下载进度样式 */
+.downloadProgress {
+  margin-top: 8px;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .recordedVideoManager {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .recordedVideoManager {
+    padding: 8px;
+  }
+  
+  .searchCard .ant-row {
+    flex-direction: column;
+  }
+  
+  .searchCard .ant-col {
+    width: 100% !important;
+    margin-bottom: 8px;
+  }
+}

@@ -1,0 +1,1514 @@
+/* 主容器样式 */
+.container {
+  padding: 20px;
+  background: #f0f2f5;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* 背景装饰 */
+.backgroundDecoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* 卡片样式 */
+.leftCard,
+.rightCard {
+  height: 100%;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  /* 优化过渡效果，确保平滑的hover体验 */
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+
+.leftCard:hover,
+.rightCard:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  /* 移除transform避免晃动，改用更柔和的阴影过渡效果 */
+}
+
+/* 图标包装器 */
+.iconWrapper {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(45deg, #1890ff, #36cfc9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3);
+}
+
+/* 卡片标题 */
+.cardTitle {
+  font-weight: 600;
+  font-size: 16px;
+  color: #262626;
+}
+
+/* 徽章样式 */
+.countBadge {
+  background-color: #52c41a !important;
+  box-shadow: 0 2px 8px rgba(82, 196, 26, 0.3);
+}
+
+.statusBadge {
+  font-weight: 500;
+}
+
+/* 工具栏样式 */
+.toolbarSelect {
+  width: 120px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+}
+
+.toolbarButton {
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+}
+
+.toolbarButton:hover {
+  background: rgba(24, 144, 255, 0.1);
+  border-color: #1890ff;
+  /* 减少移动距离，避免明显晃动 */
+  transform: translateY(-0.5px);
+}
+
+/* 悬浮面板样式 */
+.statsPanel {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 280px;
+  height: 240px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.statsPanel:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  /* 移除transform避免晃动 */
+}
+
+.nodeListPanel {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 280px;
+  max-height: calc(100% - 32px);
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.nodeListPanel.withStatsPanel {
+  top: 272px;
+  max-height: calc(100% - 288px);
+}
+
+.nodeListPanel:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  /* 移除transform避免晃动 */
+}
+
+.nodeDetailsPanel {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 300px;
+  max-height: calc(100% - 32px);
+  z-index: 15;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.nodeDetailsPanel:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  /* 移除transform避免晃动 */
+}
+
+/* 面板标题栏 */
+.panelHeader {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, rgba(24, 144, 255, 0.05), rgba(54, 207, 201, 0.05));
+}
+
+.panelIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: linear-gradient(45deg, #1890ff, #36cfc9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 12px;
+}
+
+.panelTitle {
+  font-weight: 600;
+  font-size: 14px;
+  color: #262626;
+}
+
+.closeButton {
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: rgba(255, 77, 79, 0.1);
+  color: #ff4d4f;
+}
+
+/* 缩放控制样式 - 无背景版本 */
+.zoomControls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  padding: 8px 4px;
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.zoomButton {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  color: #595959 !important;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border-radius: 6px;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.zoomButton:hover {
+  background: rgba(24, 144, 255, 0.9) !important;
+  border-color: #1890ff !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+}
+
+.zoomButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.zoomText {
+  color: #595959;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 4px;
+  min-width: 40px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* 滚轮缩放提示样式 */
+.scrollHint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.6);
+  padding: 8px 16px;
+  border-radius: 6px;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 5;
+  pointer-events: none;
+  animation: fadeInOut 3s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* 全屏状态下的样式优化 */
+:fullscreen .panelTitle,
+:fullscreen .cardTitle {
+  color: #ffffff !important;
+}
+
+:fullscreen .panelHeader {
+  background: linear-gradient(90deg, rgba(24, 144, 255, 0.2), rgba(54, 207, 201, 0.2));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+:fullscreen .statsPanel,
+:fullscreen .nodeListPanel,
+:fullscreen .nodeDetailsPanel {
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+}
+
+:fullscreen .leftCard,
+:fullscreen .rightCard {
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+}
+
+/* 全屏模式下的文字颜色优化 */
+:fullscreen .ant-typography,
+:fullscreen .ant-typography-title,
+:fullscreen .ant-typography-text {
+  color: #ffffff !important;
+}
+
+:fullscreen .ant-tree-title {
+  color: #ffffff !important;
+}
+
+:fullscreen .ant-tree-node-content-wrapper:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+:fullscreen .ant-tree-node-selected .ant-tree-title {
+  color: #1890ff !important;
+}
+
+:fullscreen .ant-statistic-title {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+:fullscreen .ant-statistic-content {
+  color: #ffffff !important;
+}
+
+:fullscreen .ant-statistic-content-value {
+  color: #ffffff !important;
+}
+
+:fullscreen .ant-badge-count {
+  background: #52c41a !important;
+  color: #ffffff !important;
+}
+
+/* 全屏模式下面板内所有文字 */
+:fullscreen .statsPanel *,
+:fullscreen .nodeListPanel *,
+:fullscreen .nodeDetailsPanel * {
+  color: #ffffff !important;
+}
+
+:fullscreen .statsPanel .ant-statistic-title,
+:fullscreen .nodeListPanel .ant-statistic-title,
+:fullscreen .nodeDetailsPanel .ant-statistic-title {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* 全屏模式下的节点项文字 */
+:fullscreen .nodeItem * {
+  color: #ffffff !important;
+}
+
+:fullscreen .nodeItem .ant-badge {
+  color: #ffffff !important;
+}
+
+/* WebKit全屏兼容 */
+:-webkit-full-screen .panelTitle,
+:-webkit-full-screen .cardTitle {
+  color: #ffffff !important;
+}
+
+:-webkit-full-screen .panelHeader {
+  background: linear-gradient(90deg, rgba(24, 144, 255, 0.2), rgba(54, 207, 201, 0.2));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+:-webkit-full-screen .statsPanel,
+:-webkit-full-screen .nodeListPanel,
+:-webkit-full-screen .nodeDetailsPanel {
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+}
+
+:-webkit-full-screen .leftCard,
+:-webkit-full-screen .rightCard {
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+}
+
+:-webkit-full-screen .ant-typography,
+:-webkit-full-screen .ant-typography-title,
+:-webkit-full-screen .ant-typography-text {
+  color: #ffffff !important;
+}
+
+:-webkit-full-screen .ant-tree-title {
+  color: #ffffff !important;
+}
+
+:-webkit-full-screen .ant-tree-node-content-wrapper:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+:-webkit-full-screen .ant-tree-node-selected .ant-tree-title {
+  color: #1890ff !important;
+}
+
+:-webkit-full-screen .ant-statistic-title {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+:-webkit-full-screen .ant-statistic-content {
+  color: #ffffff !important;
+}
+
+:-webkit-full-screen .ant-statistic-content-value {
+  color: #ffffff !important;
+}
+
+:-webkit-full-screen .ant-badge-count {
+  background: #52c41a !important;
+  color: #ffffff !important;
+}
+
+/* WebKit全屏模式下面板内所有文字 */
+:-webkit-full-screen .statsPanel *,
+:-webkit-full-screen .nodeListPanel *,
+:-webkit-full-screen .nodeDetailsPanel * {
+  color: #ffffff !important;
+}
+
+:-webkit-full-screen .statsPanel .ant-statistic-title,
+:-webkit-full-screen .nodeListPanel .ant-statistic-title,
+:-webkit-full-screen .nodeDetailsPanel .ant-statistic-title {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* WebKit全屏模式下的节点项文字 */
+:-webkit-full-screen .nodeItem * {
+  color: #ffffff !important;
+}
+
+:-webkit-full-screen .nodeItem .ant-badge {
+  color: #ffffff !important;
+}
+
+/* 全屏模式下的按钮和控件优化 */
+:fullscreen .ant-btn {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  pointer-events: auto !important;
+}
+
+:fullscreen .ant-btn:hover {
+  background: rgba(24, 144, 255, 0.3) !important;
+  border-color: #1890ff !important;
+}
+
+:fullscreen .ant-btn:focus,
+:fullscreen .ant-btn:active {
+  background: rgba(24, 144, 255, 0.4) !important;
+  border-color: #1890ff !important;
+  color: #ffffff !important;
+}
+
+:fullscreen .ant-btn-primary {
+  background: #1890ff !important;
+  border-color: #1890ff !important;
+}
+
+/* 全屏模式下工具栏按钮特殊处理 */
+:fullscreen .toolbarButton {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+:fullscreen .toolbarButton:hover {
+  background: rgba(24, 144, 255, 0.4) !important;
+  border-color: #1890ff !important;
+  /* 减少移动距离，避免明显晃动 */
+  transform: translateY(-0.5px);
+}
+
+:fullscreen .ant-select {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  pointer-events: auto !important;
+}
+
+:fullscreen .ant-select-selector {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+:fullscreen .ant-select-arrow {
+  color: #ffffff !important;
+}
+
+:fullscreen .ant-select-selection-item {
+  color: #ffffff !important;
+}
+
+:fullscreen .ant-select-selection-placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* 全屏模式下工具栏选择器特殊处理 */
+:fullscreen .toolbarSelect {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+:fullscreen .toolbarSelect .ant-select-selector {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* 全屏模式下下拉框弹出层样式 */
+:fullscreen .ant-select-dropdown {
+  background: rgba(0, 0, 0, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(10px) !important;
+  z-index: 9999 !important;
+}
+
+:fullscreen .ant-select-item {
+  color: #ffffff !important;
+  background: transparent !important;
+}
+
+:fullscreen .ant-select-item:hover {
+  background: rgba(24, 144, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+:fullscreen .ant-select-item-option-selected {
+  background: rgba(24, 144, 255, 0.5) !important;
+  color: #ffffff !important;
+}
+
+:fullscreen .ant-select-item-option-active {
+  background: rgba(24, 144, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+/* 确保下拉框在全屏模式下可以正常交互 */
+:fullscreen .toolbarSelect {
+  z-index: 1000 !important;
+  position: relative !important;
+}
+
+:fullscreen .toolbarSelect .ant-select-selector {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+:fullscreen .toolbarSelect .ant-select-arrow {
+  color: rgba(255, 255, 255, 0.8) !important;
+  pointer-events: auto !important;
+}
+
+:fullscreen .ant-input {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+:fullscreen .ant-input::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* WebKit全屏按钮和控件优化 */
+:-webkit-full-screen .ant-btn {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  pointer-events: auto !important;
+}
+
+:-webkit-full-screen .ant-btn:hover {
+  background: rgba(24, 144, 255, 0.3) !important;
+  border-color: #1890ff !important;
+}
+
+:-webkit-full-screen .ant-btn:focus,
+:-webkit-full-screen .ant-btn:active {
+  background: rgba(24, 144, 255, 0.4) !important;
+  border-color: #1890ff !important;
+  color: #ffffff !important;
+}
+
+:-webkit-full-screen .ant-btn-primary {
+  background: #1890ff !important;
+  border-color: #1890ff !important;
+}
+
+/* WebKit全屏模式下工具栏按钮特殊处理 */
+:-webkit-full-screen .toolbarButton {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+:-webkit-full-screen .toolbarButton:hover {
+  background: rgba(24, 144, 255, 0.4) !important;
+  border-color: #1890ff !important;
+  /* 减少移动距离，避免明显晃动 */
+  transform: translateY(-0.5px);
+}
+
+:-webkit-full-screen .ant-select {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  pointer-events: auto !important;
+}
+
+:-webkit-full-screen .ant-select-selector {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+:-webkit-full-screen .ant-select-arrow {
+  color: #ffffff !important;
+}
+
+:-webkit-full-screen .ant-select-selection-item {
+  color: #ffffff !important;
+}
+
+:-webkit-full-screen .ant-select-selection-placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* WebKit全屏模式下工具栏选择器特殊处理 */
+:-webkit-full-screen .toolbarSelect {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+:-webkit-full-screen .toolbarSelect .ant-select-selector {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* WebKit全屏模式下下拉框弹出层样式 */
+:-webkit-full-screen .ant-select-dropdown {
+  background: rgba(0, 0, 0, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(10px) !important;
+  z-index: 9999 !important;
+}
+
+:-webkit-full-screen .ant-select-item {
+  color: #ffffff !important;
+  background: transparent !important;
+}
+
+:-webkit-full-screen .ant-select-item:hover {
+  background: rgba(24, 144, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+:-webkit-full-screen .ant-select-item-option-selected {
+  background: rgba(24, 144, 255, 0.5) !important;
+  color: #ffffff !important;
+}
+
+:-webkit-full-screen .ant-select-item-option-active {
+  background: rgba(24, 144, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+/* 确保下拉框在WebKit全屏模式下可以正常交互 */
+:-webkit-full-screen .toolbarSelect {
+  z-index: 1000 !important;
+  position: relative !important;
+}
+
+:-webkit-full-screen .toolbarSelect .ant-select-selector {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+:-webkit-full-screen .toolbarSelect .ant-select-arrow {
+  color: rgba(255, 255, 255, 0.8) !important;
+  pointer-events: auto !important;
+}
+
+/* 全局样式：确保全屏模式下下拉框弹出层正确显示 */
+:global(.ant-select-dropdown) {
+  z-index: 99999 !important;
+}
+
+/* 强制全屏模式下拉框样式 */
+:global(body:fullscreen .ant-select-dropdown),
+:global(body:-webkit-full-screen .ant-select-dropdown),
+:global(:fullscreen .ant-select-dropdown),
+:global(:-webkit-full-screen .ant-select-dropdown) {
+  background: rgba(0, 0, 0, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(10px) !important;
+  z-index: 99999 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+  position: fixed !important;
+  pointer-events: auto !important;
+}
+
+/* 确保下拉框选项在全屏模式下可见和可点击 */
+:global(body:fullscreen .ant-select-dropdown .ant-select-item),
+:global(body:-webkit-full-screen .ant-select-dropdown .ant-select-item),
+:global(:fullscreen .ant-select-dropdown .ant-select-item),
+:global(:-webkit-full-screen .ant-select-dropdown .ant-select-item) {
+  color: #ffffff !important;
+  background: transparent !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+/* 全屏模式下拉框选项交互样式 */
+:global(body:fullscreen .ant-select-item:hover),
+:global(body:-webkit-full-screen .ant-select-item:hover),
+:global(:fullscreen .ant-select-dropdown .ant-select-item:hover),
+:global(:-webkit-full-screen .ant-select-dropdown .ant-select-item:hover) {
+  background: rgba(24, 144, 255, 0.3) !important;
+  color: #ffffff !important;
+  pointer-events: auto !important;
+}
+
+:global(body:fullscreen .ant-select-item-option-selected),
+:global(body:-webkit-full-screen .ant-select-item-option-selected),
+:global(:fullscreen .ant-select-dropdown .ant-select-item-option-selected),
+:global(:-webkit-full-screen .ant-select-dropdown .ant-select-item-option-selected) {
+  background: rgba(24, 144, 255, 0.5) !important;
+  color: #ffffff !important;
+  pointer-events: auto !important;
+}
+
+:global(body:fullscreen .ant-select-item-option-active),
+:global(body:-webkit-full-screen .ant-select-item-option-active),
+:global(:fullscreen .ant-select-dropdown .ant-select-item-option-active),
+:global(:-webkit-full-screen .ant-select-dropdown .ant-select-item-option-active) {
+  background: rgba(24, 144, 255, 0.3) !important;
+  color: #ffffff !important;
+  pointer-events: auto !important;
+}
+
+/* 确保全屏模式下Select组件本身可以正常交互 */
+:global(:fullscreen .toolbarSelect),
+:global(:-webkit-full-screen .toolbarSelect) {
+  z-index: 1000 !important;
+  position: relative !important;
+  pointer-events: auto !important;
+}
+
+:global(:fullscreen .toolbarSelect .ant-select-selector),
+:global(:-webkit-full-screen .toolbarSelect .ant-select-selector) {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+:global(:fullscreen .toolbarSelect .ant-select-arrow),
+:global(:-webkit-full-screen .toolbarSelect .ant-select-arrow) {
+  color: rgba(255, 255, 255, 0.8) !important;
+  pointer-events: auto !important;
+}
+
+/* 专门的全屏下拉框类 */
+.fullscreenDropdown {
+  background: rgba(0, 0, 0, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(10px) !important;
+  z-index: 99999 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+}
+
+.fullscreenDropdown .ant-select-item {
+  color: #ffffff !important;
+  background: transparent !important;
+}
+
+.fullscreenDropdown .ant-select-item:hover {
+  background: rgba(24, 144, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.fullscreenDropdown .ant-select-item-option-selected {
+  background: rgba(24, 144, 255, 0.5) !important;
+  color: #ffffff !important;
+}
+
+.fullscreenDropdown .ant-select-item-option-active {
+  background: rgba(24, 144, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+:-webkit-full-screen .ant-input {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+:-webkit-full-screen .ant-input::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* 全屏模式下的节点列表优化 */
+:fullscreen .nodeItem {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+:fullscreen .nodeItem:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(24, 144, 255, 0.5) !important;
+}
+
+:fullscreen .nodeItem.selected {
+  background: rgba(24, 144, 255, 0.2) !important;
+  border-color: #1890ff !important;
+  border-left: 3px solid #1890ff !important;
+}
+
+:fullscreen .statusOnline {
+  background: #52c41a !important;
+  color: #ffffff !important;
+}
+
+:fullscreen .statusOffline {
+  background: #ff4d4f !important;
+  color: #ffffff !important;
+}
+
+:fullscreen .statusWarning {
+  background: #faad14 !important;
+  color: #ffffff !important;
+}
+
+/* WebKit全屏节点列表优化 */
+:-webkit-full-screen .nodeItem {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+:-webkit-full-screen .nodeItem:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(24, 144, 255, 0.5) !important;
+}
+
+:-webkit-full-screen .nodeItem.selected {
+  background: rgba(24, 144, 255, 0.2) !important;
+  border-color: #1890ff !important;
+  border-left: 3px solid #1890ff !important;
+}
+
+:-webkit-full-screen .statusOnline {
+  background: #52c41a !important;
+  color: #ffffff !important;
+}
+
+:-webkit-full-screen .statusOffline {
+  background: #ff4d4f !important;
+  color: #ffffff !important;
+}
+
+:-webkit-full-screen .statusWarning {
+  background: #faad14 !important;
+  color: #ffffff !important;
+}
+
+/* 全屏模式下的滚动条优化 */
+:fullscreen ::-webkit-scrollbar {
+  width: 8px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+:fullscreen ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+:fullscreen ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+:-webkit-full-screen ::-webkit-scrollbar {
+  width: 8px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+:-webkit-full-screen ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+:-webkit-full-screen ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* 全屏模式下缩放控制优化 - 保持一致样式 */
+:fullscreen .zoomControls,
+:-webkit-full-screen .zoomControls {
+  bottom: 30px;
+  right: 30px;
+  gap: 10px;
+}
+
+:fullscreen .zoomButton,
+:-webkit-full-screen .zoomButton {
+  width: 36px;
+  height: 36px;
+  font-size: 16px;
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  color: #595959 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+:fullscreen .zoomButton:hover,
+:-webkit-full-screen .zoomButton:hover {
+  background: rgba(24, 144, 255, 0.95) !important;
+  border-color: #1890ff !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 16px rgba(24, 144, 255, 0.4);
+}
+
+:fullscreen .zoomText,
+:-webkit-full-screen .zoomText {
+  background: rgba(255, 255, 255, 0.95);
+  color: #595959;
+  font-size: 13px;
+  min-width: 44px;
+  padding: 6px 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+/* WebKit全屏模式背景优化 */
+:-webkit-full-screen {
+  background: linear-gradient(135deg, #4c63d2 0%, #5a67d8 100%) !important;
+}
+
+:-webkit-full-screen .topologyView {
+  background: linear-gradient(135deg, #4c63d2 0%, #5a67d8 100%) !important;
+  box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* 树形结构容器样式 */
+.treeContainer {
+  height: calc(100vh - 140px);
+  overflow-y: auto;
+  padding: 0 8px;
+}
+
+.companyItem {
+  display: flex;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 14px;
+}
+
+.topologyItem {
+  width: 100%;
+  padding: 8px 0;
+}
+
+.topologyTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 13px;
+}
+
+.topologyMeta {
+  margin-top: 4px;
+  font-size: 11px;
+}
+
+.topologyContent {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.topologyInfo {
+  padding: 16px;
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.topologyDisplay {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 拓扑图SVG样式 */
+.topologyView {
+  width: 100%;
+  height: 100%;
+  /* 使用更明亮的蓝灰色渐变背景 */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+  border-radius: 6px;
+  /* 添加微妙的内阴影和边框增加层次感 */
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* 添加微妙的纹理效果 */
+  position: relative;
+  /* 优化鼠标滚轮缩放体验 */
+  outline: none;
+  cursor: grab;
+}
+
+.topologyView:active {
+  cursor: grabbing;
+}
+
+.topologyView::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.topologyView::-webkit-scrollbar {
+  display: none;
+}
+
+.topologyView {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* 控制面板样式 */
+.controlPanel {
+  background: #fafafa;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+/* 节点列表样式 */
+.nodeList {
+  height: 100%;
+}
+
+.nodeList :global(.ant-card-body) {
+  padding: 0;
+}
+
+.nodeListItem {
+  padding: 8px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+.nodeListItem:hover {
+  background-color: #f0f8ff;
+}
+
+.nodeListItem:last-child {
+  border-bottom: none;
+}
+
+/* 悬浮面板样式 */
+.floatingPanel {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.floatingPanel:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* 统计面板样式 */
+.statsPanel {
+  animation: slideInDown 0.3s ease-out;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 节点列表面板样式 */
+.nodeListPanel {
+  animation: slideInLeft 0.3s ease-out;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 节点详情面板样式 */
+.nodeDetailsPanel {
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 统计卡片样式 */
+.statsCard {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+}
+
+.statsCard :global(.ant-statistic-title) {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.statsCard :global(.ant-statistic-content) {
+  color: white;
+}
+
+.emptyState {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 40px;
+}
+
+/* Tree 组件样式优化 */
+:global(.ant-tree .ant-tree-node-content-wrapper) {
+  width: calc(100% - 24px);
+  padding: 6px 8px;
+  border-radius: 6px;
+  transition: all 0.3s;
+  margin-bottom: 2px;
+}
+
+:global(.ant-tree .ant-tree-node-content-wrapper:hover) {
+  background-color: #f5f5f5;
+}
+
+:global(.ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected) {
+  background-color: #e6f7ff;
+  border: 1px solid #91d5ff;
+}
+
+/* 图标与文字对齐 */
+:global(.ant-tree .ant-tree-iconEle) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+:global(.ant-tree .ant-tree-switcher) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+:global(.ant-tree .ant-tree-title) {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+:global(.ant-tree .ant-tree-node-content-wrapper) {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+/* 公司节点样式 */
+:global(.ant-tree-treenode) {
+  margin-bottom: 4px;
+}
+
+:global(.ant-tree-treenode[data-level="0"]) {
+  font-weight: 500;
+}
+
+/* 拓扑图节点样式 */
+:global(.ant-tree-treenode[data-level="1"]) {
+  margin-left: 8px;
+}
+
+/* 状态徽章样式 */
+:global(.ant-badge-status-dot) {
+  width: 8px;
+  height: 8px;
+}
+
+:global(.ant-badge-status-text) {
+  font-size: 11px;
+  margin-left: 4px;
+}
+
+/* 卡片标题样式 */
+:global(.ant-card-head-title) {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* 空状态样式 */
+:global(.ant-empty-description) {
+  color: #8c8c8c;
+  font-size: 14px;
+}
+
+/* 全屏模式样式 */
+:fullscreen {
+  /* 全屏模式使用稍微深一些的蓝紫色背景 */
+  background: linear-gradient(135deg, #4c63d2 0%, #5a67d8 100%) !important;
+}
+
+:fullscreen .topologyView {
+  /* 全屏模式下拓扑图背景保持一致但稍微深一些 */
+  background: linear-gradient(135deg, #4c63d2 0%, #5a67d8 100%) !important;
+  box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* 全屏模式下确保下拉框弹出层正确显示 */
+:fullscreen .ant-select-dropdown,
+:fullscreen .ant-dropdown {
+  background: rgba(0, 0, 0, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(10px) !important;
+  z-index: 99999 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* WebKit全屏模式下确保下拉框弹出层正确显示 */
+:-webkit-full-screen .ant-select-dropdown,
+:-webkit-full-screen .ant-dropdown {
+  background: rgba(0, 0, 0, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(10px) !important;
+  z-index: 99999 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 自定义滚动条样式 */
+.nodeList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.nodeList::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.nodeList::-webkit-scrollbar-thumb {
+  background: rgba(64, 169, 255, 0.6);
+  border-radius: 3px;
+  transition: background 0.3s ease;
+}
+
+.nodeList::-webkit-scrollbar-thumb:hover {
+  background: rgba(64, 169, 255, 0.8);
+}
+
+/* 拖拽状态样式 */
+.dragging {
+  cursor: grabbing !important;
+}
+
+/* 节点选中状态 */
+.nodeSelected {
+  background-color: #e6f7ff !important;
+  border: 1px solid #91d5ff !important;
+}
+
+/* 重复的缩放控制器样式已移除，使用上方统一的样式定义 */
+
+/* 控制按钮样式 */
+.controlButtons {
+  display: flex;
+  gap: 8px;
+  z-index: 15;
+}
+
+.controlButton {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  transition: all 0.2s ease;
+}
+
+.controlButton:hover {
+  background: rgba(255, 255, 255, 1) !important;
+  /* 减少移动距离，避免明显晃动 */
+  transform: translateY(-0.5px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 面板头部样式 */
+.panelHeader {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px 8px 0 0;
+}
+
+/* 面板内容样式 */
+.panelContent {
+  padding: 0;
+  max-height: calc(100% - 53px);
+  overflow: auto;
+}
+
+/* 自定义滚动条 - 悬浮面板 */
+.panelContent::-webkit-scrollbar {
+  width: 4px;
+}
+
+.panelContent::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 2px;
+}
+
+.panelContent::-webkit-scrollbar-thumb {
+  background: rgba(24, 144, 255, 0.3);
+  border-radius: 2px;
+  transition: background 0.3s ease;
+}
+
+.panelContent::-webkit-scrollbar-thumb:hover {
+  background: rgba(24, 144, 255, 0.5);
+}
+
+/* 树形结构容器样式 */
+.treeContainer {
+  height: calc(100vh - 140px);
+  overflow-y: auto;
+  padding: 0 8px;
+}
+
+/* 树形组件样式 */
+.topologyTree {
+  background: transparent;
+}
+
+.topologyTree :global(.ant-tree-node-content-wrapper) {
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-size: 13px;
+}
+
+.topologyTree :global(.ant-tree-node-content-wrapper:hover) {
+  background-color: #f5f5f5;
+}
+
+.topologyTree :global(.ant-tree-node-content-wrapper.ant-tree-node-selected) {
+  background-color: #e6f7ff;
+  color: #1890ff;
+  font-weight: 500;
+}
+
+/* 树形节点图标样式 */
+.topologyTree :global(.ant-tree-iconEle) {
+  margin-right: 6px;
+}
+
+.topologyTree :global(.ant-tree-switcher) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 公司节点样式 */
+.topologyTree :global(.ant-tree-treenode) {
+  margin-bottom: 2px;
+}
+
+.topologyTree :global(.ant-tree-child-tree) {
+  margin-left: 16px;
+}
+
+/* 叶子节点样式 */
+.topologyTree :global(.ant-tree-treenode[data-level="1"]) {
+  margin-left: 8px;
+}
+
+.topologyTree :global(.ant-tree-treenode[data-level="1"] .ant-tree-node-content-wrapper) {
+  margin-left: 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+.topologyTree :global(.ant-tree-treenode[data-level="1"] .ant-tree-node-content-wrapper.ant-tree-node-selected) {
+  color: #1890ff;
+  background-color: #e6f7ff;
+}
+
+/* 树形滚动条样式 */
+.treeContainer::-webkit-scrollbar {
+  width: 4px;
+}
+
+.treeContainer::-webkit-scrollbar-track {
+  background: #f5f5f5;
+  border-radius: 2px;
+}
+
+.treeContainer::-webkit-scrollbar-thumb {
+  background: #d9d9d9;
+  border-radius: 2px;
+  transition: background 0.3s ease;
+}
+
+.treeContainer::-webkit-scrollbar-thumb:hover {
+  background: #bfbfbf;
+}
+
+/* 展开/收起动画 */
+.topologyTree :global(.ant-tree-child-tree) {
+  transition: all 0.3s ease;
+}
+
+/* 树形节点标题样式 */
+.topologyTree :global(.ant-tree-title) {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* 根节点（公司）样式 */
+.topologyTree :global(.ant-tree-treenode[data-level="0"] .ant-tree-node-content-wrapper) {
+  font-weight: 600;
+  color: #262626;
+  padding: 6px 8px;
+}
+
+.topologyTree :global(.ant-tree-treenode[data-level="0"] .ant-tree-node-content-wrapper:hover) {
+  background-color: #f0f0f0;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .container {
+    padding: 12px;
+  }
+
+  .topologyInfo {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 8px;
+  }
+
+  .listCard,
+  .topologyCard {
+    margin-bottom: 16px;
+  }
+
+  .topologyInfo {
+    padding: 8px;
+  }
+
+  .topologyInfo :global(.ant-row) {
+    flex-direction: column;
+  }
+
+  .topologyInfo :global(.ant-col) {
+    margin-bottom: 8px;
+  }
+
+  /* 移动端隐藏部分控制元素 */
+  .zoomControls {
+    display: none;
+  }
+}

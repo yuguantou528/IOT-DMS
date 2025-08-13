@@ -1,0 +1,170 @@
+.liveVideoPlayer {
+  padding: 20px;
+}
+
+.videoCard {
+  height: 100%;
+}
+
+.videoContainer {
+  position: relative;
+}
+
+.videoWrapper {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background: #000;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.videoElement {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  color: white;
+}
+
+.placeholderOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+}
+
+.controlBar {
+  margin-top: 16px;
+  padding: 12px;
+  background: #fafafa;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.deviceInfo {
+  padding: 8px 0;
+}
+
+.infoItem {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+.label {
+  color: #666;
+  font-weight: 500;
+}
+
+.connected {
+  color: #52c41a;
+  font-weight: 500;
+}
+
+.disconnected {
+  color: #ff4d4f;
+  font-weight: 500;
+}
+
+.recording {
+  color: #ff4d4f;
+  font-weight: 500;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.3; }
+}
+
+.ptzControl {
+  padding: 8px 0;
+}
+
+.directionControl {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.controlRow {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.controlRow button {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.zoomControl {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.controlItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.controlItem span {
+  color: #666;
+  font-weight: 500;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .videoWrapper {
+    height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .liveVideoPlayer {
+    padding: 12px;
+  }
+  
+  .videoWrapper {
+    height: 250px;
+  }
+  
+  .controlBar {
+    flex-direction: column;
+    gap: 12px;
+  }
+}

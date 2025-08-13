@@ -1,0 +1,905 @@
+.meshRadioManager {
+  width: 100%;
+  height: 100%;
+}
+
+/* 网络统计卡片 */
+.statsCard {
+  margin-bottom: 16px;
+}
+
+.statsCard :global(.ant-card-body) {
+  padding: 16px;
+}
+
+.statsCard :global(.ant-statistic-title) {
+  font-size: 12px;
+  color: #8c8c8c;
+  margin-bottom: 4px;
+}
+
+.statsCard :global(.ant-statistic-content) {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* 拓扑图容器 */
+.topologyContainer {
+  width: 100%;
+  height: 300px;
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
+  background: #fafafa;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 简化拓扑图样式 */
+.simpleTopology {
+  width: 100%;
+  min-height: 300px;
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 6px;
+}
+
+.topologyNodes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.topologyNode {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 100px;
+}
+
+.topologyNode:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.topologyNode.main {
+  border: 2px solid #1890ff;
+}
+
+.topologyNode.relay {
+  border: 2px solid #52c41a;
+}
+
+.topologyNode.endpoint {
+  border: 2px solid #8c8c8c;
+}
+
+.topologyNode.online {
+  background: #f6ffed;
+}
+
+.topologyNode.offline {
+  background: #fff2f0;
+  opacity: 0.7;
+}
+
+.nodeIcon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.nodeLabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: #262626;
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+.nodeType {
+  font-size: 10px;
+  color: #8c8c8c;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.nodeStatus {
+  font-size: 10px;
+}
+
+.topologyConnections {
+  background: #fff;
+  border-radius: 6px;
+  padding: 12px;
+  border: 1px solid #e8e8e8;
+}
+
+.connectionInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 12px;
+}
+
+.connectionInfo:last-child {
+  border-bottom: none;
+}
+
+.rssi {
+  color: #8c8c8c;
+  font-size: 11px;
+}
+
+/* 专业拓扑图样式 */
+.professionalTopology {
+  display: flex;
+  height: 500px;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  background: #fff;
+  overflow: hidden;
+}
+
+/* 全屏模式样式 */
+.professionalTopology:fullscreen {
+  height: 100vh;
+  width: 100vw;
+  border: none;
+  border-radius: 0;
+  background: #000;
+}
+
+.professionalTopology:fullscreen .deviceList {
+  background: #1a1a1a;
+  border-right-color: #333;
+}
+
+.professionalTopology:fullscreen .deviceListHeader {
+  background: #2a2a2a;
+  border-bottom-color: #333;
+  color: #fff;
+}
+
+.professionalTopology:fullscreen .headerTitle {
+  color: #fff;
+}
+
+.professionalTopology:fullscreen .deviceCount {
+  color: #ccc;
+}
+
+.professionalTopology:fullscreen .selectAllCheckbox {
+  color: #fff;
+}
+
+.professionalTopology:fullscreen .selectAllCheckbox :global(.ant-checkbox-wrapper) {
+  color: #fff;
+}
+
+.professionalTopology:fullscreen .deviceItem {
+  border-bottom-color: #333;
+  color: #fff;
+}
+
+.professionalTopology:fullscreen .deviceItem:hover {
+  background: #333;
+}
+
+.professionalTopology:fullscreen .deviceName {
+  color: #fff;
+}
+
+.professionalTopology:fullscreen .deviceType {
+  color: #ccc;
+}
+
+.professionalTopology:fullscreen .topologyCanvas {
+  background: #000;
+}
+
+.professionalTopology:fullscreen .canvasHeader {
+  background: #1a1a1a;
+  border-bottom-color: #333;
+  color: #fff;
+}
+
+.professionalTopology:fullscreen .canvasContent {
+  background: #000;
+}
+
+.professionalTopology:fullscreen .detailPanel {
+  background: #1a1a1a;
+  border-left-color: #333;
+}
+
+.professionalTopology:fullscreen .detailHeader {
+  background: #2a2a2a;
+  border-bottom-color: #333;
+  color: #fff;
+}
+
+.professionalTopology:fullscreen .nodeDetails {
+  color: #fff;
+}
+
+.professionalTopology:fullscreen .detailLabel {
+  color: #ccc;
+}
+
+/* 全屏模式下的连线标签颜色 */
+.professionalTopology:fullscreen .connectionLabel {
+  fill: #fff !important;
+}
+
+.professionalTopology:fullscreen .labelBackground {
+  fill: rgba(0, 0, 0, 0.8) !important;
+  stroke: #444 !important;
+}
+
+.professionalTopology:fullscreen .arrowhead {
+  fill: #fff !important;
+}
+
+/* 全屏模式下的节点文字颜色 */
+.professionalTopology:fullscreen .topologySvg text {
+  fill: #fff !important;
+}
+
+.professionalTopology:fullscreen .topologySvg .connectionLabel {
+  fill: #fff !important;
+}
+
+/* 左侧设备列表 */
+.deviceList {
+  width: 200px;
+  border-right: 1px solid #e8e8e8;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+}
+
+.deviceListHeader {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e8e8e8;
+  background: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  font-size: 13px;
+  gap: 8px;
+}
+
+.headerTitle {
+  font-weight: 600;
+  color: #262626;
+}
+
+.headerInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.deviceCount {
+  color: #8c8c8c;
+  font-size: 11px;
+}
+
+.selectAllCheckbox {
+  font-size: 12px;
+}
+
+.deviceItems {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+.deviceItem {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+  gap: 8px;
+}
+
+.deviceItem:hover {
+  background: #e6f7ff;
+}
+
+.deviceItem.offline {
+  opacity: 0.6;
+}
+
+.deviceItem.unchecked {
+  opacity: 0.5;
+  color: #bfbfbf;
+}
+
+.deviceItem.unchecked .deviceName {
+  color: #bfbfbf;
+}
+
+.deviceItem.unchecked .deviceType {
+  color: #d9d9d9;
+}
+
+.deviceIndicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.deviceInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.deviceName {
+  font-size: 12px;
+  font-weight: 500;
+  color: #262626;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deviceType {
+  font-size: 10px;
+  color: #8c8c8c;
+  margin-top: 2px;
+}
+
+.deviceStatus {
+  font-size: 10px;
+}
+
+/* 中央拓扑图区域 */
+.topologyCanvas {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+
+.canvasHeader {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e8e8e8;
+  background: #fafafa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+  font-size: 13px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.canvasContent {
+  flex: 1;
+  position: relative;
+  background: linear-gradient(45deg, #f9f9f9 25%, transparent 25%),
+              linear-gradient(-45deg, #f9f9f9 25%, transparent 25%),
+              linear-gradient(45deg, transparent 75%, #f9f9f9 75%),
+              linear-gradient(-45deg, transparent 75%, #f9f9f9 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+.topologySvg {
+  width: 100%;
+  height: 100%;
+}
+
+.connectionLine {
+  cursor: pointer;
+  transition: stroke-width 0.2s;
+  stroke-dasharray: none;
+  pointer-events: all;
+}
+
+.connectionLine:hover {
+  stroke-width: 3;
+  filter: drop-shadow(0 0 2px rgba(0,0,0,0.3));
+}
+
+/* 双向连线样式 */
+.bidirectionalLine {
+  stroke-dasharray: none;
+}
+
+/* 平行箭头连线样式 */
+.parallelArrowLine {
+  stroke-dasharray: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 正向连线 - 实线 */
+.forwardLine {
+  stroke-dasharray: none;
+  stroke-opacity: 1;
+}
+
+/* 反向连线 - 虚线 */
+.backwardLine {
+  stroke-dasharray: 3, 2;
+  stroke-opacity: 0.8;
+}
+
+/* 连线标签样式 */
+.connectionLabel {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 500;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  font-size: 10px;
+  text-shadow: 0px 0px 1px white;
+}
+
+.labelBackground {
+  pointer-events: none;
+  transition: all 0.2s ease;
+  filter: drop-shadow(0 0 1px rgba(255,255,255,0.8));
+  opacity: 0.9;
+}
+
+/* 箭头样式 */
+.arrowhead {
+  transition: fill 0.2s ease;
+}
+
+/* 节点文字样式 */
+.nodeIdText {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.nodeLabelText {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* 全屏模式下的节点文字颜色 */
+.professionalTopology:fullscreen .nodeLabelText {
+  fill: #fff !important;
+}
+
+.nodeGroup {
+  cursor: pointer;
+}
+
+.nodeCircle {
+  transition: all 0.2s;
+}
+
+.nodeCircle:hover {
+  r: 28;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+/* 右侧详情面板 */
+.detailPanel {
+  width: 220px;
+  border-left: 1px solid #e8e8e8;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+}
+
+.detailHeader {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e8e8e8;
+  background: #f0f0f0;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.detailContent {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.nodeDetails {
+  padding: 16px;
+}
+
+.nodeTitle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.nodeTitleIndicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.nodeDetailItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 12px;
+}
+
+.nodeDetailItem:last-child {
+  border-bottom: none;
+}
+
+.detailLabel {
+  color: #8c8c8c;
+  font-weight: 500;
+}
+
+.noSelection {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 图例样式 */
+.legend {
+  text-align: center;
+  padding: 8px 0;
+  background: #f9f9f9;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.legend :global(.ant-badge) {
+  margin: 0 12px;
+}
+
+.legend :global(.ant-badge-status-dot) {
+  width: 8px;
+  height: 8px;
+}
+
+.legend :global(.ant-badge-status-text) {
+  font-size: 12px;
+  color: #595959;
+}
+
+/* 标签页样式 */
+:global(.ant-tabs-card .ant-tabs-tab) {
+  background: #fafafa;
+  border: 1px solid #e8e8e8;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  margin-right: 4px;
+  padding: 8px 16px;
+  font-weight: 500;
+}
+
+:global(.ant-tabs-card .ant-tabs-tab-active) {
+  background: #fff;
+  border-color: #1890ff;
+  color: #1890ff;
+}
+
+:global(.ant-tabs-card .ant-tabs-content) {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 0 6px 6px 6px;
+  padding: 16px;
+  margin-top: -1px;
+}
+
+/* 表单样式优化 */
+:global(.ant-form-item-label > label) {
+  font-weight: 500;
+  color: #262626;
+}
+
+:global(.ant-form-item-control-input) {
+  min-height: 32px;
+}
+
+/* 输入框样式 */
+:global(.ant-input) {
+  border-radius: 4px;
+}
+
+:global(.ant-select-selector) {
+  border-radius: 4px;
+}
+
+/* 开关样式 */
+:global(.ant-switch) {
+  margin-top: 4px;
+}
+
+:global(.ant-switch-checked) {
+  background-color: #52c41a;
+}
+
+/* 按钮样式 */
+:global(.ant-btn) {
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+:global(.ant-btn-primary) {
+  background: #1890ff;
+  border-color: #1890ff;
+}
+
+:global(.ant-btn-primary:hover) {
+  background: #40a9ff;
+  border-color: #40a9ff;
+}
+
+/* 卡片样式 */
+:global(.ant-card) {
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+:global(.ant-card-head) {
+  border-bottom: 1px solid #f0f0f0;
+  background: #fafafa;
+}
+
+:global(.ant-card-head-title) {
+  font-weight: 600;
+  color: #262626;
+}
+
+:global(.ant-card-body) {
+  padding: 16px;
+}
+
+/* 分割线样式 */
+:global(.ant-divider) {
+  margin: 16px 0;
+  border-color: #f0f0f0;
+}
+
+/* 统计数值样式 */
+:global(.ant-statistic-content-value) {
+  color: #262626;
+}
+
+:global(.ant-statistic-content-prefix) {
+  margin-right: 4px;
+  color: #8c8c8c;
+}
+
+:global(.ant-statistic-content-suffix) {
+  margin-left: 4px;
+  color: #8c8c8c;
+  font-size: 14px;
+}
+
+/* 工具提示样式 */
+:global(.ant-tooltip) {
+  font-size: 12px;
+}
+
+/* 加载状态 */
+:global(.ant-btn-loading) {
+  pointer-events: none;
+}
+
+/* 密码输入框样式 */
+:global(.ant-input-password) {
+  border-radius: 4px;
+}
+
+:global(.ant-input-password-icon) {
+  color: #8c8c8c;
+}
+
+/* 输入框前缀图标 */
+:global(.ant-input-prefix) {
+  margin-right: 4px;
+  color: #8c8c8c;
+}
+
+/* 输入框后缀 */
+:global(.ant-input-group-addon) {
+  background: #fafafa;
+  border-color: #d9d9d9;
+  color: #8c8c8c;
+  font-size: 12px;
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+  .professionalTopology {
+    height: 400px;
+  }
+
+  .deviceList {
+    width: 180px;
+  }
+
+  .detailPanel {
+    width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .professionalTopology {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .deviceList {
+    width: 100%;
+    height: 120px;
+    border-right: none;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  .deviceItems {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px;
+  }
+
+  .deviceItem {
+    flex-shrink: 0;
+    width: 120px;
+    margin-right: 8px;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+    background: #fff;
+  }
+
+  .topologyCanvas {
+    height: 300px;
+  }
+
+  .detailPanel {
+    width: 100%;
+    height: 200px;
+    border-left: none;
+    border-top: 1px solid #e8e8e8;
+  }
+
+  .topologyContainer {
+    height: 250px;
+  }
+
+  .legend {
+    text-align: left;
+  }
+
+  .legend :global(.ant-badge) {
+    margin: 4px 8px 4px 0;
+    display: block;
+  }
+
+  :global(.ant-tabs-card .ant-tabs-tab) {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  :global(.ant-tabs-card .ant-tabs-content) {
+    padding: 12px;
+  }
+
+  .statsCard :global(.ant-col) {
+    margin-bottom: 8px;
+  }
+
+  :global(.ant-statistic-content) {
+    font-size: 14px;
+  }
+
+  :global(.ant-form-item) {
+    margin-bottom: 16px;
+  }
+}
+
+/* 拓扑图节点样式（通过G6配置） */
+.topologyContainer :global(.g6-tooltip) {
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+/* 网络状态指示器 */
+.networkStatus {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.networkStatus .statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.networkStatus .statusDot.online {
+  background: #52c41a;
+}
+
+.networkStatus .statusDot.offline {
+  background: #ff4d4f;
+}
+
+.networkStatus .statusDot.warning {
+  background: #faad14;
+}
+
+/* 参数配置区域 */
+.parameterSection {
+  margin-bottom: 24px;
+}
+
+.parameterSection:last-child {
+  margin-bottom: 0;
+}
+
+/* 表单行间距 */
+:global(.ant-row) {
+  margin-bottom: 0;
+}
+
+:global(.ant-col) {
+  padding-bottom: 0;
+}
+
+/* 表单项标签 */
+:global(.ant-form-item-label) {
+  padding-bottom: 4px;
+}
+
+/* 选择框样式 */
+:global(.ant-select-selection-item) {
+  font-weight: 500;
+}
+
+/* 数字输入框 */
+:global(.ant-input[type="number"]) {
+  text-align: right;
+}
+
+/* 成功状态颜色 */
+.success {
+  color: #52c41a;
+}
+
+/* 警告状态颜色 */
+.warning {
+  color: #faad14;
+}
+
+/* 错误状态颜色 */
+.error {
+  color: #ff4d4f;
+}
+
+/* 信息状态颜色 */
+.info {
+  color: #1890ff;
+}

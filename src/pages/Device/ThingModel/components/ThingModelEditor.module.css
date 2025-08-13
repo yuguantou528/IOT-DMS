@@ -1,0 +1,63 @@
+.editor {
+  /* 编辑器主容器样式 */
+}
+
+.tabContent {
+  padding: 16px 0;
+}
+
+.propertyList {
+  /* 属性列表样式 */
+}
+
+.jsonPreview {
+  background: #f5f5f5;
+  padding: 16px;
+  border-radius: 6px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  max-height: 400px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* 表格样式优化 */
+.editor :global(.ant-table-thead > tr > th) {
+  background: #fafafa;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.editor :global(.ant-table-tbody > tr > td) {
+  font-size: 12px;
+}
+
+.editor :global(.ant-table-tbody > tr:hover > td) {
+  background: #f5f5f5;
+}
+
+/* 标签样式 */
+.editor :global(.ant-tag) {
+  border-radius: 4px;
+  font-size: 11px;
+  margin: 0;
+}
+
+/* 代码样式 */
+.editor :global(.ant-typography code) {
+  background: #f0f0f0;
+  border: 1px solid #d9d9d9;
+  border-radius: 3px;
+  padding: 2px 4px;
+  font-size: 11px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .jsonPreview {
+    font-size: 10px;
+    padding: 12px;
+  }
+}

@@ -1,0 +1,379 @@
+/* 告警规则配置页面样式 */
+.container {
+  padding: 24px;
+  background: #f5f5f5;
+  min-height: calc(100vh - 64px);
+}
+
+/* 搜索区域 */
+.searchCard {
+  margin-bottom: 16px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.searchCard :global(.ant-card-body) {
+  padding: 20px 24px;
+}
+
+/* 表格区域 */
+.tableCard {
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.tableCard :global(.ant-card-body) {
+  padding: 0;
+}
+
+.tableCard :global(.ant-table) {
+  border-radius: 8px;
+}
+
+.tableCard :global(.ant-table-thead > tr > th) {
+  background: #fafafa;
+  font-weight: 600;
+  color: #262626;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.tableCard :global(.ant-table-tbody > tr > td) {
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.tableCard :global(.ant-table-tbody > tr:hover > td) {
+  background: #f8f9fa;
+}
+
+/* 规则状态样式 */
+.ruleStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ruleStatus.enabled {
+  color: #52c41a;
+}
+
+.ruleStatus.disabled {
+  color: #8c8c8c;
+}
+
+/* 条件显示样式 */
+.condition {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 13px;
+  background: #f5f5f5;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: #595959;
+}
+
+/* 操作按钮样式 */
+.actionButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.actionButtons :global(.ant-btn) {
+  border-radius: 4px;
+}
+
+.actionButtons :global(.ant-btn-primary) {
+  background: #1890ff;
+  border-color: #1890ff;
+}
+
+.actionButtons :global(.ant-btn-primary:hover) {
+  background: #40a9ff;
+  border-color: #40a9ff;
+}
+
+.actionButtons :global(.ant-btn-dangerous) {
+  color: #ff4d4f;
+  border-color: #ff4d4f;
+}
+
+.actionButtons :global(.ant-btn-dangerous:hover) {
+  background: #ff4d4f;
+  border-color: #ff4d4f;
+  color: #fff;
+}
+
+/* 开关样式 */
+:global(.ant-switch) {
+  background: #00000040;
+}
+
+:global(.ant-switch-checked) {
+  background: #52c41a;
+}
+
+:global(.ant-switch:focus) {
+  box-shadow: 0 0 0 2px rgba(82, 196, 26, 0.2);
+}
+
+/* 弹窗样式优化 */
+:global(.ant-modal-header) {
+  border-bottom: 1px solid #f0f0f0;
+  background: #fafafa;
+  border-radius: 8px 8px 0 0;
+}
+
+:global(.ant-modal-title) {
+  font-weight: 600;
+  color: #262626;
+}
+
+:global(.ant-modal-footer) {
+  border-top: 1px solid #f0f0f0;
+  background: #fafafa;
+  border-radius: 0 0 8px 8px;
+}
+
+/* 表单样式优化 */
+:global(.ant-form-item-label > label) {
+  font-weight: 500;
+  color: #262626;
+}
+
+:global(.ant-input),
+:global(.ant-select-selector),
+:global(.ant-input-number) {
+  border-radius: 6px;
+}
+
+:global(.ant-input:focus),
+:global(.ant-select-focused .ant-select-selector),
+:global(.ant-input-number-focused) {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+/* 标签样式优化 */
+:global(.ant-tag) {
+  border-radius: 4px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 设备类型标签 */
+.deviceTypeTag {
+  background: #e6f7ff;
+  border-color: #91d5ff;
+  color: #1890ff;
+}
+
+/* 告警级别标签 */
+.alarmLevelTag {
+  font-weight: 600;
+}
+
+.alarmLevelTag.critical {
+  background: #fff2f0;
+  border-color: #ffccc7;
+  color: #ff4d4f;
+}
+
+.alarmLevelTag.error {
+  background: #fff2f0;
+  border-color: #ffccc7;
+  color: #ff7875;
+}
+
+.alarmLevelTag.warning {
+  background: #fff7e6;
+  border-color: #ffd591;
+  color: #fa8c16;
+}
+
+.alarmLevelTag.info {
+  background: #e6f7ff;
+  border-color: #91d5ff;
+  color: #1890ff;
+}
+
+/* 规则说明区域 */
+.ruleHelp {
+  background: #f6ffed;
+  border: 1px solid #b7eb8f;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 16px;
+}
+
+.ruleHelp h4 {
+  color: #52c41a;
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ruleHelp ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #595959;
+  font-size: 13px;
+}
+
+.ruleHelp li {
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
+/* 分页样式 */
+:global(.ant-pagination) {
+  margin: 16px 0 0 0;
+  text-align: right;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .searchCard :global(.ant-row) {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .searchCard :global(.ant-col) {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 12px;
+  }
+  
+  .tableCard :global(.ant-table) {
+    font-size: 12px;
+  }
+  
+  .tableCard :global(.ant-table-thead > tr > th),
+  .tableCard :global(.ant-table-tbody > tr > td) {
+    padding: 12px 8px;
+  }
+  
+  .condition {
+    font-size: 11px;
+  }
+}
+
+/* 加载状态样式 */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #8c8c8c;
+}
+
+/* 空状态样式 */
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #8c8c8c;
+}
+
+.empty :global(.anticon) {
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: #d9d9d9;
+}
+
+/* 规则名称样式 */
+.ruleName {
+  font-weight: 500;
+  color: #262626;
+}
+
+/* 参数名称样式 */
+.parameter {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 13px;
+  background: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: #722ed1;
+}
+
+/* 阈值样式 */
+.threshold {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-weight: 600;
+  color: #fa8c16;
+}
+
+/* 更新时间样式 */
+.updateTime {
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+/* 启用状态行高亮 */
+.enabledRow {
+  background: #f6ffed;
+}
+
+.disabledRow {
+  background: #f5f5f5;
+  opacity: 0.7;
+}
+
+/* 确认删除弹窗样式 */
+:global(.ant-modal-confirm .ant-modal-body) {
+  padding: 32px 32px 24px;
+}
+
+:global(.ant-modal-confirm .ant-modal-confirm-title) {
+  font-weight: 600;
+  color: #262626;
+}
+
+:global(.ant-modal-confirm .ant-modal-confirm-content) {
+  color: #595959;
+  margin-top: 8px;
+}
+
+/* 表单项间距优化 */
+:global(.ant-form-item) {
+  margin-bottom: 20px;
+}
+
+:global(.ant-form-item:last-child) {
+  margin-bottom: 0;
+}
+
+/* 选择器下拉样式 */
+:global(.ant-select-dropdown) {
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+:global(.ant-select-item-option-selected) {
+  background: #e6f7ff;
+  color: #1890ff;
+  font-weight: 500;
+}
+
+/* 文本域样式 */
+:global(.ant-input) {
+  transition: all 0.3s;
+}
+
+:global(.ant-input:hover) {
+  border-color: #40a9ff;
+}
+
+/* 分割线样式 */
+:global(.ant-divider) {
+  margin: 20px 0;
+  border-color: #f0f0f0;
+}
