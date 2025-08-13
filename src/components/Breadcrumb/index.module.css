@@ -1,0 +1,59 @@
+.breadcrumbContainer {
+  padding: 16px 16px 0 16px;
+  background: #f0f2f5;
+}
+
+.breadcrumb {
+  font-size: 14px;
+}
+
+/* 面包屑项样式 */
+:global(.ant-breadcrumb-link) {
+  color: #8c8c8c;
+  transition: color 0.2s ease;
+}
+
+:global(.ant-breadcrumb-link:hover) {
+  color: #1890ff;
+}
+
+:global(.ant-breadcrumb-separator) {
+  color: #d9d9d9;
+  margin: 0 8px;
+}
+
+/* 当前页面样式 */
+:global(.ant-breadcrumb > span:last-child .ant-breadcrumb-link) {
+  color: #262626;
+  font-weight: 500;
+}
+
+/* 图标样式 */
+:global(.ant-breadcrumb .anticon) {
+  font-size: 12px;
+}
+
+/* 响应式设计 */
+@media (max-width: 767px) {
+  .breadcrumbContainer {
+    padding: 12px 12px 0 12px;
+  }
+  
+  .breadcrumb {
+    font-size: 13px;
+  }
+  
+  :global(.ant-breadcrumb .anticon) {
+    font-size: 11px;
+  }
+  
+  :global(.ant-breadcrumb-separator) {
+    margin: 0 6px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .breadcrumbContainer {
+    padding: 14px 14px 0 14px;
+  }
+}

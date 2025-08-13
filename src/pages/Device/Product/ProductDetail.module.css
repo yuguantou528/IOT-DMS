@@ -1,0 +1,229 @@
+.productDetail {
+  padding: 0;
+  min-height: calc(100vh - 112px);
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.errorContainer {
+  padding: 24px;
+}
+
+.headerCard {
+  margin-bottom: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 8px 0;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.backButton {
+  padding: 4px 8px;
+  height: auto;
+  color: #1890ff;
+  font-size: 14px;
+}
+
+.backButton:hover {
+  background: rgba(24, 144, 255, 0.1);
+}
+
+.titleSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.subtitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #8c8c8c;
+  font-size: 14px;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+}
+
+.contentCard {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* 标签页样式 */
+.contentCard :global(.ant-tabs-card .ant-tabs-tab) {
+  background: #fafafa;
+  border: 1px solid #f0f0f0;
+  border-bottom: none;
+  margin-right: 2px;
+}
+
+.contentCard :global(.ant-tabs-card .ant-tabs-tab-active) {
+  background: #fff;
+  border-color: #d9d9d9;
+  border-bottom: 1px solid #fff;
+}
+
+.contentCard :global(.ant-tabs-card .ant-tabs-content) {
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  border-top: none;
+}
+
+/* 描述列表样式 */
+.contentCard :global(.ant-descriptions-title) {
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 16px;
+}
+
+.contentCard :global(.ant-descriptions-item-label) {
+  font-weight: 500;
+  color: #595959;
+  background: #fafafa;
+  width: 120px;
+}
+
+.contentCard :global(.ant-descriptions-item-content) {
+  color: #262626;
+}
+
+/* 列表样式 */
+.contentCard :global(.ant-list-item) {
+  padding: 16px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.contentCard :global(.ant-list-item:last-child) {
+  border-bottom: none;
+}
+
+.contentCard :global(.ant-list-item-meta-title) {
+  margin-bottom: 8px;
+}
+
+.contentCard :global(.ant-list-item-meta-description) {
+  color: #8c8c8c;
+  line-height: 1.5;
+}
+
+.contentCard :global(.ant-list-item-meta-description p) {
+  margin-bottom: 8px;
+}
+
+/* 状态标签样式 */
+.contentCard :global(.ant-badge-status-success) {
+  background-color: #52c41a;
+}
+
+.contentCard :global(.ant-badge-status-processing) {
+  background-color: #1890ff;
+}
+
+.contentCard :global(.ant-badge-status-error) {
+  background-color: #ff4d4f;
+}
+
+.contentCard :global(.ant-badge-status-default) {
+  background-color: #d9d9d9;
+}
+
+/* 标签样式 */
+.contentCard :global(.ant-tag) {
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 2px 8px;
+  margin: 2px 4px 2px 0;
+}
+
+/* 按钮样式 */
+.contentCard :global(.ant-btn) {
+  border-radius: 6px;
+}
+
+.contentCard :global(.ant-btn-primary) {
+  background: #1890ff;
+  border-color: #1890ff;
+}
+
+.contentCard :global(.ant-btn-primary:hover) {
+  background: #40a9ff;
+  border-color: #40a9ff;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+  
+  .headerLeft {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .headerRight {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .productDetail {
+    padding: 0 8px;
+  }
+  
+  .headerCard,
+  .contentCard {
+    margin: 0 -8px 16px -8px;
+    border-radius: 0;
+  }
+  
+  .header {
+    padding: 16px;
+  }
+  
+  .titleSection h3 {
+    font-size: 18px;
+  }
+  
+  .subtitle {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .contentCard :global(.ant-tabs-content) {
+    padding: 16px;
+  }
+  
+  .contentCard :global(.ant-descriptions-item-label) {
+    width: 100px;
+  }
+  
+  .contentCard :global(.ant-list-item) {
+    padding: 12px 0;
+  }
+}

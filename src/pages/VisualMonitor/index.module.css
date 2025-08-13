@@ -1,0 +1,538 @@
+/* 可视化监控大屏样式 */
+
+.visualMonitor {
+  padding: 24px 24px 24px 32px;
+  background: linear-gradient(135deg, #0f1419 0%, #1a2332 25%, #2d3748 50%, #1a2332 75%, #0f1419 100%);
+  min-height: 100vh;
+  margin-top: 8px;
+  color: #ffffff;
+  position: relative;
+}
+
+/* 动态背景效果 */
+.visualMonitor::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.06) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+  animation: backgroundShift 20s ease-in-out infinite;
+}
+
+@keyframes backgroundShift {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* 统计卡片行 */
+.statsRow {
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.statCard {
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 4px 20px rgba(30, 41, 59, 0.6), 0 0 30px rgba(59, 130, 246, 0.2);
+  transition: all 0.3s ease;
+}
+
+.statCard:hover {
+  box-shadow: 0 6px 30px rgba(59, 130, 246, 0.4), 0 0 50px rgba(139, 92, 246, 0.2);
+  transform: translateY(-2px);
+  border-color: rgba(59, 130, 246, 0.6) !important;
+}
+
+.statCard :global(.ant-statistic-title) {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.statCard :global(.ant-statistic-content) {
+  font-size: 24px;
+  font-weight: 600;
+  color: #3b82f6 !important;
+  text-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
+}
+
+.statCard :global(.ant-card-body) {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+/* 主要内容区域 */
+.mainContent {
+  height: calc(100vh - 200px);
+  position: relative;
+  z-index: 1;
+}
+
+/* 地图卡片 */
+.mapCard {
+  height: 100%;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(30, 41, 59, 0.6), 0 0 50px rgba(59, 130, 246, 0.2);
+}
+
+.mapCard :global(.ant-card-head) {
+  border-bottom: 1px solid rgba(59, 130, 246, 0.4) !important;
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.8) 100%) !important;
+  border-radius: 12px 12px 0 0;
+}
+
+.mapCard :global(.ant-card-head-title) {
+  font-weight: 600;
+  color: #ffffff !important;
+  font-size: 15px;
+}
+
+.mapCard :global(.ant-card-body) {
+  padding: 0;
+  height: calc(100% - 57px);
+  background: transparent !important;
+}
+
+/* 地图容器 */
+.mapContainer {
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  border-radius: 0 0 12px 12px;
+  background:
+    radial-gradient(circle at 30% 70%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 70% 30%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(30, 41, 59, 0.4) 100%);
+}
+
+/* 告警卡片 */
+.alarmCard {
+  margin-bottom: 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 4px 20px rgba(30, 41, 59, 0.6), 0 0 30px rgba(59, 130, 246, 0.2);
+}
+
+.alarmCard :global(.ant-card-head) {
+  border-bottom: 1px solid rgba(59, 130, 246, 0.4) !important;
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.8) 100%) !important;
+  padding: 12px 16px;
+  border-radius: 12px 12px 0 0;
+}
+
+.alarmCard :global(.ant-card-head-title) {
+  font-weight: 600;
+  color: #ffffff !important;
+  font-size: 14px;
+}
+
+.alarmCard :global(.ant-card-body) {
+  padding: 12px;
+  max-height: 300px;
+  overflow-y: auto;
+  background: transparent !important;
+}
+
+/* 告警项目 */
+.alarmItem {
+  width: 100%;
+}
+
+.alarmHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.alarmTime {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.alarmContent {
+  padding-left: 4px;
+}
+
+.alarmDevice {
+  font-size: 12px;
+  color: #ffffff;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.alarmMessage {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.4;
+}
+
+/* 设备卡片 */
+.deviceCard {
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 4px 20px rgba(30, 41, 59, 0.6), 0 0 30px rgba(59, 130, 246, 0.2);
+}
+
+.deviceCard :global(.ant-card-head) {
+  border-bottom: 1px solid rgba(59, 130, 246, 0.4) !important;
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.8) 100%) !important;
+  padding: 12px 16px;
+  border-radius: 12px 12px 0 0;
+}
+
+.deviceCard :global(.ant-card-head-title) {
+  font-weight: 600;
+  color: #ffffff !important;
+  font-size: 14px;
+}
+
+.deviceCard :global(.ant-card-body) {
+  padding: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  background: transparent !important;
+}
+
+/* 设备项目 */
+.deviceItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.deviceInfo {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.deviceInfo :global(.ant-badge) {
+  flex: 1;
+}
+
+.deviceInfo :global(.ant-badge-status-text) {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* 列表样式优化 */
+.alarmCard :global(.ant-list-item),
+.deviceCard :global(.ant-list-item) {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2) !important;
+  transition: all 0.3s ease;
+}
+
+.alarmCard :global(.ant-list-item:hover),
+.deviceCard :global(.ant-list-item:hover) {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.08) 100%);
+  border-radius: 6px;
+  margin: 0 -8px;
+  padding: 8px 8px;
+}
+
+.alarmCard :global(.ant-list-item:last-child),
+.deviceCard :global(.ant-list-item:last-child) {
+  border-bottom: none !important;
+}
+
+/* 标签样式 */
+:global(.ant-tag) {
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border: none;
+}
+
+/* 按钮样式 */
+:global(.ant-btn-primary) {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+  border-radius: 6px;
+  color: #ffffff !important;
+}
+
+:global(.ant-btn-primary:hover) {
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+/* 开关样式 */
+:global(.ant-switch) {
+  border-radius: 12px;
+  background: rgba(71, 85, 105, 0.6) !important;
+}
+
+:global(.ant-switch-checked) {
+  background-color: #3b82f6 !important;
+}
+
+/* 选择器样式 */
+:global(.ant-select-selector) {
+  border-radius: 6px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  color: #ffffff !important;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+:global(.ant-select-selector:hover) {
+  border-color: rgba(59, 130, 246, 0.6) !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+:global(.ant-select-focused .ant-select-selector) {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
+}
+
+:global(.ant-select-arrow) {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+:global(.ant-select-selection-item) {
+  color: #ffffff !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .visualMonitor {
+    padding: 16px 16px 16px 24px;
+    margin-top: 6px;
+  }
+  
+  .mainContent {
+    height: auto;
+  }
+  
+  .mapCard :global(.ant-card-body) {
+    height: 400px;
+  }
+  
+  .mapContainer {
+    min-height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .visualMonitor {
+    padding: 12px 12px 12px 16px;
+    margin-top: 4px;
+  }
+  
+  .statsRow {
+    margin-bottom: 16px;
+  }
+  
+  .mainContent {
+    height: auto;
+  }
+  
+  .mapCard :global(.ant-card-body) {
+    height: 300px;
+  }
+  
+  .mapContainer {
+    min-height: 300px;
+  }
+  
+  .alarmCard :global(.ant-card-body),
+  .deviceCard :global(.ant-card-body) {
+    max-height: 200px;
+  }
+  
+  .statCard :global(.ant-statistic-content) {
+    font-size: 20px;
+  }
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 空状态 */
+.empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.empty :global(.anticon) {
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: rgba(59, 130, 246, 0.5);
+}
+
+/* 地图控制按钮样式 */
+.mapCard :global(.ant-card-extra) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mapCard :global(.ant-card-extra .ant-btn) {
+  border-radius: 4px;
+  font-size: 12px;
+  height: 28px;
+  padding: 0 12px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.mapCard :global(.ant-card-extra .ant-btn:hover) {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.4) 0%, rgba(139, 92, 246, 0.3) 100%) !important;
+  border-color: rgba(59, 130, 246, 0.6) !important;
+}
+
+.mapCard :global(.ant-card-extra .ant-select) {
+  font-size: 12px;
+}
+
+.mapCard :global(.ant-card-extra .ant-switch) {
+  transform: scale(0.8);
+}
+
+/* 徽章样式 */
+:global(.ant-badge-count) {
+  background: #ef4444 !important;
+  border-radius: 10px;
+  font-size: 11px;
+  min-width: 18px;
+  height: 18px;
+  line-height: 18px;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+/* 滚动条样式 */
+.alarmCard :global(.ant-card-body)::-webkit-scrollbar,
+.deviceCard :global(.ant-card-body)::-webkit-scrollbar {
+  width: 6px;
+}
+
+.alarmCard :global(.ant-card-body)::-webkit-scrollbar-track,
+.deviceCard :global(.ant-card-body)::-webkit-scrollbar-track {
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: 3px;
+}
+
+.alarmCard :global(.ant-card-body)::-webkit-scrollbar-thumb,
+.deviceCard :global(.ant-card-body)::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.4);
+  border-radius: 3px;
+}
+
+.alarmCard :global(.ant-card-body)::-webkit-scrollbar-thumb:hover,
+.deviceCard :global(.ant-card-body)::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.6);
+}
+
+/* 视频容器样式 */
+.videoContainer {
+  text-align: center;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+}
+
+.videoContainer video {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+}
+
+.noVideo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: rgba(255, 255, 255, 0.7);
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(51, 65, 85, 0.4) 100%);
+}
+
+.noVideo p {
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+/* 模态框样式优化 */
+:global(.ant-modal-content) {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 50%, rgba(15, 23, 42, 0.98) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 12px !important;
+  backdrop-filter: blur(25px);
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.8), 0 0 50px rgba(59, 130, 246, 0.3);
+}
+
+:global(.ant-modal-header) {
+  border-bottom: 1px solid rgba(59, 130, 246, 0.4) !important;
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.8) 100%) !important;
+  border-radius: 12px 12px 0 0 !important;
+}
+
+:global(.ant-modal-title) {
+  font-weight: 600;
+  color: #ffffff !important;
+}
+
+:global(.ant-modal-footer) {
+  border-top: 1px solid rgba(59, 130, 246, 0.4) !important;
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.8) 100%) !important;
+  border-radius: 0 0 12px 12px !important;
+}
+
+:global(.ant-modal-body) {
+  padding: 20px;
+  color: #ffffff !important;
+}
+
+:global(.ant-modal-close) {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+:global(.ant-modal-close:hover) {
+  color: #ffffff !important;
+}
+
+/* 删除全局样式覆盖，改为在组件内部处理 */

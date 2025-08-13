@@ -1,0 +1,301 @@
+/* Leaflet地图容器 */
+.leafletMapContainer {
+  position: relative;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #1a1a1a;
+  z-index: 1;
+}
+
+.mapContainer {
+  border-radius: 8px;
+}
+
+/* 设备标记样式 */
+.deviceMarker {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 2px solid;
+  background: rgba(255, 255, 255, 0.95);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.deviceMarker:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* 在线设备标记 */
+.onlineMarker {
+  border-color: #52c41a;
+  background: linear-gradient(135deg, rgba(82, 196, 26, 0.1) 0%, rgba(255, 255, 255, 0.95) 100%);
+}
+
+.onlineMarker::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border: 2px solid #52c41a;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+/* 离线设备标记 */
+.offlineMarker {
+  border-color: #ff4d4f;
+  background: linear-gradient(135deg, rgba(255, 77, 79, 0.1) 0%, rgba(255, 255, 255, 0.95) 100%);
+  opacity: 0.8;
+}
+
+/* 标记图标 */
+.markerIcon {
+  position: relative;
+  z-index: 2;
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* 告警数量标记 */
+.markerAlarm {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ff4d4f;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  z-index: 3;
+  border: 2px solid white;
+  animation: alarmBlink 1s infinite alternate;
+}
+
+/* 脉冲动画 */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 告警闪烁动画 */
+@keyframes alarmBlink {
+  0% {
+    background: #ff4d4f;
+    transform: scale(1);
+  }
+  100% {
+    background: #ff7875;
+    transform: scale(1.1);
+  }
+}
+
+/* 弹出框样式 */
+.devicePopup {
+  max-width: 280px;
+}
+
+.popupContent {
+  padding: 4px;
+  font-size: 12px;
+}
+
+.popupHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.popupTitle {
+  font-weight: bold;
+  font-size: 14px;
+  color: #262626;
+}
+
+.popupStatus {
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.popupStatus.online {
+  background: #f6ffed;
+  color: #52c41a;
+  border: 1px solid #b7eb8f;
+}
+
+.popupStatus.offline {
+  background: #fff2f0;
+  color: #ff4d4f;
+  border: 1px solid #ffccc7;
+}
+
+.popupInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.popupItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popupLabel {
+  color: #8c8c8c;
+  font-size: 11px;
+  min-width: 60px;
+}
+
+.popupValue {
+  color: #262626;
+  font-size: 11px;
+  text-align: right;
+  flex: 1;
+  margin-left: 8px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .deviceMarker {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+  
+  .markerAlarm {
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+    top: -6px;
+    right: -6px;
+  }
+  
+  .popupContent {
+    font-size: 11px;
+  }
+  
+  .popupTitle {
+    font-size: 13px;
+  }
+}
+
+/* 暗色主题适配 */
+.leafletMapContainer.dark {
+  background: #141414;
+}
+
+.leafletMapContainer.dark .popupContent {
+  background: #1f1f1f;
+  color: #ffffff;
+}
+
+.leafletMapContainer.dark .popupTitle {
+  color: #ffffff;
+}
+
+.leafletMapContainer.dark .popupLabel {
+  color: #bfbfbf;
+}
+
+.leafletMapContainer.dark .popupValue {
+  color: #d9d9d9;
+}
+
+/* 自定义Leaflet控件样式 - 移到右下角 */
+:global(.leaflet-control-zoom) {
+  background: rgba(30, 41, 59, 0.9) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  /* 移动到右下角 */
+  position: absolute !important;
+  right: 20px !important;
+  bottom: 80px !important;
+  left: auto !important;
+  top: auto !important;
+}
+
+:global(.leaflet-control-zoom a) {
+  background: transparent !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  transition: all 0.3s ease !important;
+}
+
+:global(.leaflet-control-zoom a:hover) {
+  background: rgba(59, 130, 246, 0.2) !important;
+  color: #60a5fa !important;
+}
+
+:global(.leaflet-popup-content-wrapper) {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+:global(.leaflet-popup-tip) {
+  background: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* 地图加载时的占位符 */
+.mapLoading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  color: #ffffff;
+}
+
+.mapLoadingIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.7;
+}
+
+.mapLoadingText {
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+.mapLoadingSubtext {
+  font-size: 14px;
+  opacity: 0.6;
+  margin-top: 8px;
+} 

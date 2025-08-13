@@ -1,0 +1,299 @@
+/* 告警消息管理页面样式 */
+.container {
+  padding: 24px;
+  background: #f5f5f5;
+  min-height: calc(100vh - 64px);
+}
+
+/* 搜索区域 */
+.searchCard {
+  margin-bottom: 16px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.searchCard :global(.ant-card-body) {
+  padding: 20px 24px;
+}
+
+/* 表格区域 */
+.tableCard {
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.tableCard :global(.ant-card-body) {
+  padding: 0;
+}
+
+.tableCard :global(.ant-table) {
+  border-radius: 8px;
+}
+
+.tableCard :global(.ant-table-thead > tr > th) {
+  background: #fafafa;
+  font-weight: 600;
+  color: #262626;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.tableCard :global(.ant-table-tbody > tr > td) {
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.tableCard :global(.ant-table-tbody > tr:hover > td) {
+  background: #f8f9fa;
+}
+
+/* 告警级别样式 */
+.alarmLevel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.alarmLevel.critical {
+  color: #ff4d4f;
+  font-weight: 600;
+}
+
+.alarmLevel.error {
+  color: #ff7875;
+  font-weight: 500;
+}
+
+.alarmLevel.warning {
+  color: #ffa940;
+  font-weight: 500;
+}
+
+.alarmLevel.info {
+  color: #1890ff;
+  font-weight: 400;
+}
+
+/* 设备信息样式 */
+.deviceInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.deviceName {
+  font-weight: 500;
+  color: #262626;
+  font-size: 14px;
+}
+
+.deviceMeta {
+  font-size: 12px;
+  color: #8c8c8c;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 状态徽章样式 */
+.statusBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 操作按钮样式 */
+.actionButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.actionButtons :global(.ant-btn) {
+  border-radius: 4px;
+}
+
+.actionButtons :global(.ant-btn-primary) {
+  background: #1890ff;
+  border-color: #1890ff;
+}
+
+.actionButtons :global(.ant-btn-primary:hover) {
+  background: #40a9ff;
+  border-color: #40a9ff;
+}
+
+/* 弹窗样式优化 */
+:global(.ant-modal-header) {
+  border-bottom: 1px solid #f0f0f0;
+  background: #fafafa;
+  border-radius: 8px 8px 0 0;
+}
+
+:global(.ant-modal-title) {
+  font-weight: 600;
+  color: #262626;
+}
+
+:global(.ant-modal-footer) {
+  border-top: 1px solid #f0f0f0;
+  background: #fafafa;
+  border-radius: 0 0 8px 8px;
+}
+
+/* 描述列表样式优化 */
+:global(.ant-descriptions-title) {
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 16px;
+}
+
+:global(.ant-descriptions-item-label) {
+  font-weight: 500;
+  color: #595959;
+  background: #fafafa;
+}
+
+:global(.ant-descriptions-item-content) {
+  color: #262626;
+}
+
+/* 表单样式优化 */
+:global(.ant-form-item-label > label) {
+  font-weight: 500;
+  color: #262626;
+}
+
+:global(.ant-input),
+:global(.ant-select-selector),
+:global(.ant-picker) {
+  border-radius: 6px;
+}
+
+:global(.ant-input:focus),
+:global(.ant-select-focused .ant-select-selector),
+:global(.ant-picker-focused) {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+/* 标签样式优化 */
+:global(.ant-tag) {
+  border-radius: 4px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 分页样式 */
+:global(.ant-pagination) {
+  margin: 16px 0 0 0;
+  text-align: right;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .searchCard :global(.ant-row) {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .searchCard :global(.ant-col) {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 12px;
+  }
+  
+  .tableCard :global(.ant-table) {
+    font-size: 12px;
+  }
+  
+  .tableCard :global(.ant-table-thead > tr > th),
+  .tableCard :global(.ant-table-tbody > tr > td) {
+    padding: 12px 8px;
+  }
+  
+  .deviceName {
+    font-size: 13px;
+  }
+  
+  .deviceMeta {
+    font-size: 11px;
+  }
+}
+
+/* 加载状态样式 */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #8c8c8c;
+}
+
+/* 空状态样式 */
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #8c8c8c;
+}
+
+.empty :global(.anticon) {
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: #d9d9d9;
+}
+
+/* 告警描述样式 */
+.alarmDescription {
+  padding: 12px;
+  background: #fafafa;
+  border-radius: 6px;
+  line-height: 1.6;
+  color: #595959;
+  border-left: 3px solid #1890ff;
+}
+
+/* 处理信息样式 */
+.handleInfo {
+  background: #f6ffed;
+  border: 1px solid #b7eb8f;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 16px;
+}
+
+.handleInfo h4 {
+  color: #52c41a;
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.handleInfo p {
+  margin: 0;
+  color: #595959;
+  font-size: 13px;
+}
+
+/* 告警时间样式 */
+.alarmTime {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 13px;
+  color: #595959;
+}
+
+/* 紧急告警高亮 */
+.criticalRow {
+  background: #fff2f0 !important;
+  border-left: 3px solid #ff4d4f;
+}
+
+.criticalRow:hover {
+  background: #ffebe8 !important;
+}

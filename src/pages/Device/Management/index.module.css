@@ -1,0 +1,329 @@
+.container {
+  padding: 24px;
+  background: #f0f2f5;
+  min-height: calc(100vh - 112px);
+}
+
+/* 搜索区域卡片 */
+.searchCard {
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e8e8e8;
+  background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+  transition: all 0.3s ease;
+}
+
+.searchCard:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.searchCard :global(.ant-card-body) {
+  padding: 20px;
+}
+
+.searchCard :global(.ant-card-head) {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-bottom: 1px solid #e1e5e9;
+}
+
+.searchArea {
+  /* 移除之前的样式，现在由Card组件提供背景和边框 */
+}
+
+/* 列表区域卡片 */
+.tableCard {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #d9d9d9;
+  background: #fff;
+  transition: all 0.3s ease;
+}
+
+.tableCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.tableCard :global(.ant-card-body) {
+  padding: 24px;
+}
+
+.tableCard :global(.ant-card-head) {
+  background: linear-gradient(135deg, #fff 0%, #fafafa 100%);
+  border-bottom: 1px solid #e1e5e9;
+}
+
+/* 卡片标题样式 */
+.cardTitle {
+  font-weight: 600;
+  color: #262626;
+  font-size: 16px;
+}
+
+/* Card标题栏extra区域样式 */
+:global(.ant-card-head-extra) {
+  padding: 0;
+}
+
+:global(.ant-card-head-extra .ant-space) {
+  gap: 8px !important;
+}
+
+:global(.ant-card-head-extra .ant-btn) {
+  height: 32px;
+  font-size: 14px;
+}
+
+/* 搜索区域标题样式（可选） */
+.searchCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #1890ff, #40a9ff);
+  border-radius: 8px 8px 0 0;
+}
+
+/* 设备名称单元格样式 */
+.deviceNameCell {
+  display: flex;
+  flex-direction: column;
+}
+
+.deviceName {
+  font-weight: 600;
+  color: #262626;
+  font-size: 14px;
+}
+
+.deviceCode {
+  font-size: 12px;
+  color: #8c8c8c;
+  margin-top: 2px;
+}
+
+/* 表格样式优化 */
+:global(.ant-table-thead > tr > th) {
+  background: #fafafa !important;
+  font-weight: 600;
+}
+
+:global(.ant-table-tbody > tr:hover > td) {
+  background: #f5f5f5 !important;
+}
+
+/* 状态标签样式 */
+:global(.ant-tag) {
+  border-radius: 4px;
+  font-size: 12px;
+  padding: 2px 8px;
+}
+
+/* 操作按钮样式 */
+:global(.ant-btn-link) {
+  padding: 0 4px;
+  height: auto;
+}
+
+/* Badge状态样式 */
+:global(.ant-badge-status-dot) {
+  width: 8px;
+  height: 8px;
+}
+
+:global(.ant-badge-status-text) {
+  margin-left: 8px;
+  font-size: 12px;
+}
+
+/* 抽屉样式 */
+:global(.ant-drawer-header) {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+:global(.ant-drawer-body) {
+  padding: 24px;
+}
+
+/* 描述列表样式 */
+:global(.ant-descriptions-title) {
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 16px;
+}
+
+:global(.ant-descriptions-item-label) {
+  font-weight: 500;
+  color: #595959;
+}
+
+:global(.ant-descriptions-item-content) {
+  color: #262626;
+}
+
+/* 分割线样式 */
+:global(.ant-divider) {
+  margin: 24px 0;
+}
+
+/* 标签页样式 */
+:global(.ant-tabs-tab) {
+  font-weight: 500;
+}
+
+:global(.ant-tabs-tab-active) {
+  font-weight: 600;
+}
+
+/* 表单样式优化 */
+:global(.ant-form-item-label > label) {
+  font-weight: 500;
+}
+
+:global(.ant-modal-body) {
+  padding: 24px;
+}
+
+/* 搜索区域响应式 */
+@media (max-width: 1200px) {
+  .searchArea :global(.ant-col) {
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
+  /* 搜索卡片响应式 */
+  .searchCard {
+    margin-bottom: 16px;
+  }
+  
+  .searchCard :global(.ant-card-body) {
+    padding: 16px;
+  }
+  
+  /* 列表卡片响应式 */
+  .tableCard :global(.ant-card-body) {
+    padding: 16px;
+  }
+  
+  .searchArea :global(.ant-row) {
+    flex-direction: column;
+  }
+  
+  .searchArea :global(.ant-col) {
+    width: 100% !important;
+    margin-bottom: 12px;
+  }
+  
+  .searchArea :global(.ant-space) {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  /* 移动端Card标题栏响应式 */
+  :global(.ant-card-head) {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+  
+  :global(.ant-card-head-wrapper) {
+    width: 100%;
+  }
+  
+  :global(.ant-card-head-title) {
+    margin-bottom: 8px;
+  }
+  
+  :global(.ant-card-head-extra) {
+    width: 100%;
+    margin-left: 0 !important;
+  }
+  
+  :global(.ant-card-head-extra .ant-space) {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  /* 移动端抽屉样式 */
+  :global(.ant-drawer-content-wrapper) {
+    width: 100% !important;
+  }
+  
+  /* 移动端设备名称单元格 */
+  .deviceNameCell {
+    min-width: 120px;
+  }
+}
+
+/* 卡片样式 */
+:global(.ant-card) {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+:global(.ant-card-body) {
+  padding: 24px;
+}
+
+/* 分页样式 */
+:global(.ant-pagination) {
+  margin-top: 16px;
+  text-align: right;
+}
+
+/* 加载状态优化 */
+:global(.ant-spin-container) {
+  min-height: 200px;
+}
+
+/* 工具提示样式 */
+:global(.ant-tooltip) {
+  font-size: 12px;
+}
+
+/* 日期选择器样式 */
+:global(.ant-picker) {
+  width: 100%;
+}
+
+/* 密码输入框样式 */
+:global(.ant-input-password) {
+  width: 100%;
+}
+
+/* 数字输入框样式 */
+:global(.ant-input[type="number"]) {
+  width: 100%;
+}
+
+/* 连接测试按钮样式 */
+:global(.ant-btn-loading) {
+  pointer-events: none;
+}
+
+/* 设备状态颜色 */
+:global(.ant-badge-status-success) {
+  background-color: #52c41a;
+}
+
+:global(.ant-badge-status-error) {
+  background-color: #ff4d4f;
+}
+
+:global(.ant-badge-status-warning) {
+  background-color: #faad14;
+}
+
+:global(.ant-badge-status-processing) {
+  background-color: #1890ff;
+}
+
+:global(.ant-badge-status-default) {
+  background-color: #d9d9d9;
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物联网设备管理平台原型</title>
+    <!-- 高德地图API - 暂时注释掉，避免API key问题 -->
+    <!-- <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=YOUR_AMAP_KEY&plugin=AMap.Geocoder"></script> -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        #root {
+            height: 100vh;
+        }
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 18px;
+            color: #666;
+        }
+        .error {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #ff4d4f;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <div class="loading">正在加载物联网设备管理平台...</div>
+    </div>
+    <script>
+        // 简单的错误处理
+        window.addEventListener('error', function(e) {
+            const root = document.getElementById('root');
+            root.innerHTML = '<div class="error"><h2>应用加载失败</h2><p>请刷新页面重试，或联系管理员</p><p style="font-size: 12px; color: #999;">错误信息: ' + e.message + '</p></div>';
+        });
+
+        // 检查应用是否在合理时间内加载
+        setTimeout(function() {
+            const root = document.getElementById('root');
+            if (root.innerHTML.includes('正在加载')) {
+                root.innerHTML = '<div class="error"><h2>应用加载超时</h2><p>请检查网络连接并刷新页面</p></div>';
+            }
+        }, 10000);
+    </script>
+</body>
+</html>

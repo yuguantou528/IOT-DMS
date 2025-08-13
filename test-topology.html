@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拓扑图交互测试</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .topology-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            overflow: hidden;
+            outline: none;
+            cursor: grab;
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+        
+        .topology-container:focus {
+            border-color: #1890ff;
+        }
+        
+        .topology-container:active {
+            cursor: grabbing;
+        }
+        
+        .zoom-controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            z-index: 15;
+        }
+        
+        .zoom-button {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            color: #595959;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .zoom-button:hover {
+            background: rgba(24, 144, 255, 0.9);
+            border-color: #1890ff;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+        }
+        
+        .zoom-text {
+            color: #595959;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            padding: 4px 8px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 4px;
+            min-width: 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .scroll-hint {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 8px 16px;
+            border-radius: 6px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            pointer-events: none;
+            animation: fadeInOut 3s ease-in-out infinite;
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        
+        .info {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f6f8fa;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="info">
+            <h2>网络拓扑图交互测试</h2>
+            <p><strong>测试要求：</strong></p>
+            <ol>
+                <li>鼠标移入拓扑图区域，应显示"点击此区域后可使用滚轮缩放"提示</li>
+                <li>点击拓扑图区域后，提示消失，边框变蓝，可以使用滚轮缩放</li>
+                <li>点击其他区域后，失去焦点，需要重新点击才能使用滚轮</li>
+                <li>右下角缩放控制无黑色背景，图标和百分比显示清晰</li>
+            </ol>
+            <div class="status">
+                <div>当前缩放比例: <span id="scale">100%</span></div>
+                <div>拓扑图焦点状态: <span id="focus-status">未获得焦点</span></div>
+                <div>滚轮事件状态: <span id="wheel-status">禁用</span></div>
+            </div>
+        </div>
+        
+        <div class="topology-container" id="topology" tabindex="0">
+            <div class="zoom-controls">
+                <button class="zoom-button" id="zoom-in">+</button>
+                <div class="zoom-text" id="zoom-display">100%</div>
+                <button class="zoom-button" id="zoom-out">-</button>
+            </div>
+            
+            <div class="scroll-hint" id="scroll-hint">
+                点击此区域后可使用滚轮缩放
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let scale = 1;
+        let isFocused = false;
+        
+        const topology = document.getElementById('topology');
+        const scrollHint = document.getElementById('scroll-hint');
+        const scaleDisplay = document.getElementById('scale');
+        const zoomDisplay = document.getElementById('zoom-display');
+        const focusStatus = document.getElementById('focus-status');
+        const wheelStatus = document.getElementById('wheel-status');
+        const zoomInBtn = document.getElementById('zoom-in');
+        const zoomOutBtn = document.getElementById('zoom-out');
+        
+        function updateDisplay() {
+            const percentage = Math.round(scale * 100) + '%';
+            scaleDisplay.textContent = percentage;
+            zoomDisplay.textContent = percentage;
+            focusStatus.textContent = isFocused ? '已获得焦点' : '未获得焦点';
+            wheelStatus.textContent = isFocused ? '启用' : '禁用';
+        }
+        
+        function setScale(newScale) {
+            scale = Math.max(0.4, Math.min(2.5, newScale));
+            updateDisplay();
+        }
+        
+        // 点击事件
+        topology.addEventListener('click', () => {
+            isFocused = true;
+            scrollHint.style.display = 'none';
+            topology.focus();
+            updateDisplay();
+        });
+        
+        // 失去焦点事件
+        topology.addEventListener('blur', () => {
+            isFocused = false;
+            scrollHint.style.display = 'block';
+            updateDisplay();
+        });
+        
+        // 滚轮事件
+        topology.addEventListener('wheel', (e) => {
+            if (!isFocused) return;
+            
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? 0.9 : 1.1;
+            setScale(scale * delta);
+        });
+        
+        // 缩放按钮事件
+        zoomInBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setScale(scale * 1.2);
+        });
+        
+        zoomOutBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setScale(scale / 1.2);
+        });
+        
+        // 点击其他区域失去焦点
+        document.addEventListener('click', (e) => {
+            if (!topology.contains(e.target)) {
+                topology.blur();
+            }
+        });
+        
+        // 初始化显示
+        updateDisplay();
+    </script>
+</body>
+</html>

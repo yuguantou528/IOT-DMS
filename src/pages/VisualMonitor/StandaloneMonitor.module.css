@@ -1,0 +1,2698 @@
+/* 独立可视化监控大屏样�?*/
+
+.standaloneMonitor {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #0f1419 0%, #1a2332 25%, #2d3748 50%, #1a2332 75%, #0f1419 100%);
+  color: #ffffff;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 动态背景效�?*/
+.standaloneMonitor::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 60% 70%, rgba(236, 72, 153, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+  animation: backgroundShift 20s ease-in-out infinite;
+}
+
+@keyframes backgroundShift {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* 顶部标题�?*/
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 50%, rgba(30, 41, 59, 0.95) 100%);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 4px 25px rgba(59, 130, 246, 0.2), 0 0 50px rgba(139, 92, 246, 0.1);
+  border-image: linear-gradient(90deg, rgba(59, 130, 246, 0.5), rgba(139, 92, 246, 0.5), rgba(16, 185, 129, 0.5)) 1;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 4px;
+  text-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 40px rgba(139, 92, 246, 0.4);
+}
+
+.titleIcon {
+  margin-right: 12px;
+  color: #3b82f6;
+  font-size: 32px;
+  animation: pulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.6));
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+
+/* 天气信息 */
+.weatherInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%);
+  border-radius: 8px;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+}
+
+.weatherIcon {
+  font-size: 24px;
+}
+
+.weatherDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.temperature {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 0 15px rgba(59, 130, 246, 0.7);
+}
+
+.weatherCondition {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.humidity {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+}
+
+/* 时间显示 */
+.currentTime {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.15) 100%);
+  border-radius: 8px;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+}
+
+.timeMain {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 15px rgba(139, 92, 246, 0.8);
+}
+
+.dateMain {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'Courier New', monospace;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+}
+
+.headerBtn {
+  color: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%) !important;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  margin-left: 8px;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(59, 130, 246, 0.2);
+}
+
+.headerBtn:hover {
+  color: #ffffff !important;
+  border-color: #3b82f6 !important;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.4) 0%, rgba(139, 92, 246, 0.3) 100%) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4), 0 0 30px rgba(139, 92, 246, 0.3);
+}
+
+/* 主要内容区域 */
+.content {
+  padding: 0;
+  height: calc(100vh - 88px);
+  overflow: hidden;
+  position: relative;
+  z-index: 5;
+}
+
+/* 主要统计网格 */
+.mainStatsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.mainStatItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(51, 65, 85, 0.6) 100%);
+  border-radius: 8px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(30, 41, 59, 0.4);
+}
+
+.mainStatItem:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%);
+  border-color: rgba(59, 130, 246, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(59, 130, 246, 0.3);
+}
+
+.mainStatIcon {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(139, 92, 246, 0.2) 100%);
+  border-radius: 8px;
+  flex-shrink: 0;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+}
+
+.mainStatInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.mainStatNumber {
+  font-size: 20px;
+  font-weight: 700;
+  color: #3b82f6;
+  text-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
+  margin-bottom: 2px;
+}
+
+.mainStatLabel {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+/* 告警脉冲动画 */
+.alarmPulse {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 14px;
+  height: 14px;
+  background: #ff4d4f;
+  border-radius: 50%;
+  animation: alarmPulse 1.5s infinite;
+}
+
+@keyframes alarmPulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 77, 79, 0.8);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 12px rgba(255, 77, 79, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 77, 79, 0);
+  }
+}
+
+/* 地图主容�?*/
+.mapMainContainer {
+  height: calc(100vh - 88px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 地图卡片 */
+.mapCard {
+  height: 100%;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 16px !important;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(30, 41, 59, 0.6), 0 0 50px rgba(59, 130, 246, 0.2);
+}
+
+.mapCard :global(.ant-card-head) {
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.8) 100%) !important;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 16px 16px 0 0 !important;
+}
+
+.mapCard :global(.ant-card-head-title) {
+  color: #ffffff !important;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.mapCard :global(.ant-card-body) {
+  height: calc(100% - 65px);
+  padding: 0 !important;
+}
+
+.mapContainer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+/* Leaflet地图包装�?*/
+.leafletMapWrapper {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+
+/* 地图网格背景 */
+.mapGrid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 49px,
+      rgba(255, 255, 255, 0.03) 50px,
+      rgba(255, 255, 255, 0.03) 51px,
+      transparent 52px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 49px,
+      rgba(255, 255, 255, 0.03) 50px,
+      rgba(255, 255, 255, 0.03) 51px,
+      transparent 52px
+    );
+  pointer-events: none;
+}
+
+/* 地图背景容器 */
+.mapBackground {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  transition: all 0.5s ease;
+}
+
+/* 天地图样�?*/
+.tiandituMap {
+  background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 25%, #1e40af 50%, #3730a3 75%, #1e3a8a 100%);
+}
+
+/* 卫星图样�?*/
+.satelliteMap {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #1e293b 75%, #0f172a 100%);
+}
+
+/* 地图图片样式 */
+.mapImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 8px;
+  transition: opacity 0.5s ease;
+}
+
+/* 天地图图�?*/
+.tiandituLayer,
+.mapLayer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.mapLayer {
+  background-image:
+    /* 模拟天地图的道路网络 */
+    linear-gradient(45deg, transparent 40%, rgba(59, 130, 246, 0.2) 42%, rgba(59, 130, 246, 0.2) 44%, transparent 46%),
+    linear-gradient(-45deg, transparent 40%, rgba(139, 92, 246, 0.15) 42%, rgba(139, 92, 246, 0.15) 44%, transparent 46%),
+    /* 模拟地形纹理 */
+    radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 70% 60%, rgba(59, 130, 246, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 30%);
+  background-size:
+    100px 100px,
+    100px 100px,
+    200px 200px,
+    150px 150px,
+    180px 180px;
+  opacity: 0.7;
+}
+
+/* 卫星图图�?*/
+.satelliteLayer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.satelliteMapLayer {
+  width: 100%;
+  height: 100%;
+  background-image:
+    /* 模拟卫星图的地形纹理 */
+    radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.25) 0%, transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(139, 92, 246, 0.2) 0%, transparent 35%),
+    radial-gradient(circle at 40% 70%, rgba(59, 130, 246, 0.25) 0%, transparent 45%),
+    radial-gradient(circle at 70% 80%, rgba(236, 72, 153, 0.18) 0%, transparent 38%),
+    /* 模拟城市区域 */
+    linear-gradient(30deg, transparent 45%, rgba(59, 130, 246, 0.1) 47%, rgba(59, 130, 246, 0.1) 49%, transparent 51%),
+    linear-gradient(-30deg, transparent 45%, rgba(139, 92, 246, 0.08) 47%, rgba(139, 92, 246, 0.08) 49%, transparent 51%);
+  background-size:
+    300px 300px,
+    250px 250px,
+    200px 200px,
+    280px 280px,
+    150px 150px,
+    150px 150px;
+  opacity: 0.8;
+}
+
+/* 地图标注 */
+.mapLabels {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.cityLabel {
+  position: absolute;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(59, 130, 246, 0.6);
+  padding: 4px 8px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%);
+  border-radius: 4px;
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+.roadLabel {
+  position: absolute;
+  color: #fbbf24;
+  font-size: 12px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8), 0 0 8px rgba(251, 191, 36, 0.6);
+  padding: 2px 6px;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(245, 158, 11, 0.15) 100%);
+  border-radius: 3px;
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+
+/* 地图区域 */
+.mapRegions {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+}
+
+.region {
+  position: absolute;
+  border: 2px solid rgba(59, 130, 246, 0.6);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.region:hover {
+  border-color: rgba(59, 130, 246, 0.8);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(139, 92, 246, 0.2) 100%);
+  box-shadow: 0 6px 25px rgba(59, 130, 246, 0.4);
+}
+
+.regionLabel {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* 设备标记 */
+.deviceMarkers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+}
+
+.deviceMarker {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.onlineMarker {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.9) 0%, rgba(5, 150, 105, 0.8) 100%);
+  border: 2px solid #10b981;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.8), 0 0 40px rgba(16, 185, 129, 0.4);
+}
+
+.offlineMarker {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.9) 0%, rgba(220, 38, 38, 0.8) 100%);
+  border: 2px solid #ef4444;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.8), 0 0 40px rgba(239, 68, 68, 0.4);
+}
+
+.deviceMarker:hover {
+  transform: scale(1.2);
+  z-index: 10;
+}
+
+.markerIcon {
+  font-size: 16px;
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
+}
+
+.markerAlarm {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 16px;
+  height: 16px;
+  background: #ff4d4f;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  color: #ffffff;
+  animation: alarmBlink 1s infinite;
+}
+
+@keyframes markerPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes alarmBlink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* 地图控制按钮在面板中 */
+.mapControlsInPanel {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: center;
+}
+
+/* 地图控制按钮 */
+.mapControls {
+  z-index: 15;
+}
+
+.mapToggleBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 100%);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(30, 41, 59, 0.6), 0 0 30px rgba(59, 130, 246, 0.2);
+}
+
+.mapToggleBtn:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.8) 0%, rgba(139, 92, 246, 0.7) 100%);
+  border-color: #3b82f6;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(59, 130, 246, 0.5), 0 0 50px rgba(139, 92, 246, 0.3);
+}
+
+.mapToggleBtn:active {
+  transform: translateY(0);
+}
+
+.mapToggleIcon {
+  font-size: 16px;
+  transition: transform 0.3s ease;
+}
+
+.mapToggleBtn:hover .mapToggleIcon {
+  transform: scale(1.1);
+}
+
+.mapToggleText {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  letter-spacing: 0.5px;
+}
+
+/* 地图搜索面板 - 美化样式 */
+.mapSearchPanel {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 50%, rgba(51, 65, 85, 0.92) 100%);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  border-radius: 12px;
+  padding: 16px;
+  z-index: 1001;
+  box-shadow: 
+    0 8px 32px rgba(15, 23, 42, 0.7),
+    0 0 40px rgba(59, 130, 246, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  min-width: 340px;
+  max-width: 380px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.searchPanelContent {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mapSearchInput {
+  flex: 2;
+  background: rgba(15, 23, 42, 0.9) !important;
+  border: 1px solid rgba(59, 130, 246, 0.6) !important;
+  border-radius: 8px !important;
+  color: #ffffff !important;
+  transition: all 0.3s ease;
+  height: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.mapSearchInput:hover {
+  border-color: rgba(59, 130, 246, 0.8) !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1) !important;
+}
+
+.mapSearchInput:focus-within {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+.mapSearchInput :global(.ant-input) {
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
+  height: 36px !important;
+  line-height: 22px !important;
+  padding: 7px 11px !important;
+}
+
+.mapSearchInput :global(.ant-input::placeholder) {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.mapSearchInput :global(.ant-input-prefix) {
+  color: rgba(59, 130, 246, 0.8) !important;
+}
+
+.mapSearchInput :global(.ant-input-affix-wrapper) {
+  background: transparent !important;
+  border: none !important;
+  height: 36px !important;
+  padding: 0 !important;
+}
+
+.mapSearchInput :global(.ant-input-affix-wrapper-focused) {
+  box-shadow: none !important;
+}
+
+.mapFilterSelect {
+  width: 120px;
+}
+
+.mapFilterSelect :global(.ant-select-selector) {
+  background: rgba(15, 23, 42, 0.9) !important;
+  border: 1px solid rgba(59, 130, 246, 0.6) !important;
+  border-radius: 8px !important;
+  color: #ffffff !important;
+  height: 36px !important;
+  padding: 0 11px !important;
+  transition: all 0.3s ease;
+}
+
+.mapFilterSelect :global(.ant-select-selector):hover {
+  border-color: rgba(59, 130, 246, 0.8) !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1) !important;
+}
+
+.mapFilterSelect :global(.ant-select-focused .ant-select-selector) {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+.mapFilterSelect :global(.ant-select-selection-item) {
+  color: #ffffff !important;
+  font-size: 14px !important;
+  line-height: 22px !important;
+  padding: 7px 0 !important;
+}
+
+.mapFilterSelect :global(.ant-select-arrow) {
+  color: rgba(59, 130, 246, 0.8) !important;
+}
+
+.trackToggleBtn {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%) !important;
+  border: 1px solid rgba(34, 197, 94, 0.6) !important;
+  color: #ffffff !important;
+  height: 36px !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.15);
+}
+
+.trackToggleBtn:hover {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.1) 100%) !important;
+  border-color: #22c55e !important;
+  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.25);
+  transform: translateY(-1px);
+}
+
+.trackToggleBtn.ant-btn-primary {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.8) 0%, rgba(34, 197, 94, 0.6) 100%) !important;
+  border-color: #22c55e !important;
+  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3);
+}
+
+.batchModeBtn {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%) !important;
+  border: 1px solid rgba(168, 85, 247, 0.6) !important;
+  color: #ffffff !important;
+  height: 36px !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(168, 85, 247, 0.15);
+}
+
+.batchModeBtn:hover {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(168, 85, 247, 0.1) 100%) !important;
+  border-color: #a855f7 !important;
+  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.25);
+  transform: translateY(-1px);
+}
+
+.batchModeBtn.ant-btn-primary {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.8) 0%, rgba(168, 85, 247, 0.6) 100%) !important;
+  border-color: #a855f7 !important;
+  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3);
+}
+
+.batchToolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.08) 100%);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  border-radius: 10px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.batchSelectAll {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.batchSelectAll input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 2px solid rgba(168, 85, 247, 0.6);
+  background: rgba(15, 23, 42, 0.8);
+}
+
+.batchActions {
+  display: flex;
+  gap: 8px;
+}
+
+.batchActions .ant-btn {
+  font-size: 13px !important;
+  height: 32px !important;
+  padding: 0 16px !important;
+  border-radius: 6px !important;
+  font-weight: 600 !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+  letter-spacing: 0.5px !important;
+  min-width: 80px !important;
+}
+
+/* 显示轨迹按钮 - 绿色主题 */
+.batchActions .ant-btn:first-child {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.9) 0%, rgba(34, 197, 94, 0.7) 100%) !important;
+  border: 1px solid #22c55e !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+}
+
+.batchActions .ant-btn:first-child:hover {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.9) 0%, rgba(34, 197, 94, 0.7) 100%) !important;
+  border-color: #16a34a !important;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+  transform: translateY(-1px);
+}
+
+/* 批量定位按钮 - 蓝色主题 */
+.batchActions .ant-btn:nth-child(2) {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.9) 0%, rgba(59, 130, 246, 0.7) 100%) !important;
+  border: 1px solid #3b82f6 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.batchActions .ant-btn:nth-child(2):hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.9) 0%, rgba(59, 130, 246, 0.7) 100%) !important;
+  border-color: #2563eb !important;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  transform: translateY(-1px);
+}
+
+/* 导出数据按钮 - 橙色主题 */
+.batchActions .ant-btn:last-child {
+  background: linear-gradient(135deg, rgba(251, 146, 60, 0.9) 0%, rgba(251, 146, 60, 0.7) 100%) !important;
+  border: 1px solid #fb923c !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(251, 146, 60, 0.3);
+}
+
+.batchActions .ant-btn:last-child:hover {
+  background: linear-gradient(135deg, rgba(251, 146, 60, 0.9) 0%, rgba(251, 146, 60, 0.7) 100%) !important;
+  border-color: #f97316 !important;
+  box-shadow: 0 4px 12px rgba(251, 146, 60, 0.3);
+  transform: translateY(-1px);
+}
+
+.deviceItem.batchModeItem {
+  padding-left: 8px;
+}
+
+.deviceCheckbox {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.deviceCheckbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #3b82f6;
+}
+
+.searchStats {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  margin-top: 8px;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 100%);
+  border-radius: 6px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* 地图图例 - 调整位置避免重叠 */
+.mapLegend {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 100%);
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  border-radius: 8px;
+  padding: 12px;
+  z-index: 1001;
+  box-shadow: 0 4px 20px rgba(30, 41, 59, 0.6), 0 0 30px rgba(59, 130, 246, 0.2);
+  width: 120px;
+}
+
+.legendTitle {
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.legendItems {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.legendMarker {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legendMarker.onlineMarker {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.9) 0%, rgba(5, 150, 105, 0.8) 100%);
+  border: 1px solid #10b981;
+}
+
+.legendMarker.offlineMarker {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.9) 0%, rgba(220, 38, 38, 0.8) 100%);
+  border: 1px solid #ef4444;
+}
+
+.legendAlarm {
+  width: 12px;
+  height: 12px;
+  background: #ff4d4f;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-weight: bold;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.mapPlaceholder {
+  text-align: center;
+  z-index: 1;
+  position: relative;
+}
+
+.mapIcon {
+  font-size: 72px;
+  margin-bottom: 20px;
+  opacity: 0.9;
+  animation: mapFloat 4s ease-in-out infinite;
+}
+
+@keyframes mapFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(2deg);
+  }
+}
+
+.mapTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 12px;
+  text-shadow: 0 0 25px rgba(24, 144, 255, 0.6);
+}
+
+.mapSubtitle {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+
+.mapStats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 32px;
+}
+
+.mapStatItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.mapStatItem:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.mapStatLabel {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+.mapStatValue {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1890ff;
+  text-shadow: 0 0 15px rgba(24, 144, 255, 0.6);
+}
+
+/* 叠加面板样式 */
+.overlayPanel {
+  position: absolute;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 50%, rgba(30, 41, 59, 0.95) 100%);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(30, 41, 59, 0.8), 0 0 50px rgba(59, 130, 246, 0.3);
+  z-index: 1003;
+  animation: slideIn 0.3s ease-out;
+}
+
+/* 标准面板尺寸 */
+.standardPanel {
+  width: 380px;
+  max-width: 380px;
+  height: calc(100vh - 240px);
+  max-height: calc(100vh - 240px);
+}
+
+/* 告警面板专用尺寸 - 更矮一�?*/
+.alarmPanel {
+  width: 380px;
+  max-width: 380px;
+  height: auto;
+  max-height: 480px;
+}
+
+/* 告警面板内容区域 */
+.alarmPanelContent {
+  max-height: 280px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
+  height: 48px;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.8) 0%, rgba(71, 85, 105, 0.6) 100%);
+  border-radius: 12px 12px 0 0;
+}
+
+.panelCloseBtn {
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 0 !important;
+  width: 20px !important;
+  height: 20px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.panelCloseBtn:hover {
+  color: #ff4d4f !important;
+  background: rgba(255, 77, 79, 0.1) !important;
+  border-radius: 4px;
+}
+
+.panelContent {
+  padding: 16px;
+  height: calc(100% - 48px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 迷你统计卡片 */
+.miniStatCard {
+  text-align: center;
+  padding: 12px 8px;
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.6) 0%, rgba(71, 85, 105, 0.4) 100%);
+  border-radius: 8px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(30, 41, 59, 0.4);
+}
+
+.miniStatCard:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(139, 92, 246, 0.2) 100%);
+  border-color: rgba(59, 130, 246, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+}
+
+.miniStatNumber {
+  font-size: 20px;
+  font-weight: 700;
+  color: #3b82f6;
+  text-shadow: 0 0 15px rgba(59, 130, 246, 0.7);
+  margin-bottom: 4px;
+}
+
+.miniStatLabel {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+/* 在线率部�?*/
+.onlineRateSection {
+  margin-top: 16px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.4) 0%, rgba(71, 85, 105, 0.3) 100%);
+  border-radius: 8px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  box-shadow: 0 2px 15px rgba(30, 41, 59, 0.4);
+}
+
+.onlineRateHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.onlineRateLabel {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+.onlineRateValue {
+  font-size: 20px;
+  color: #3b82f6;
+  font-weight: 700;
+  text-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
+}
+
+.onlineRateStatus {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* 空状态样�?*/
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  text-align: center;
+}
+
+/* 叠加层告警项�?*/
+.overlayAlarmItem {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding: 10px 0 !important;
+  margin: 0 !important;
+}
+
+.overlayAlarmItem:last-child {
+  border-bottom: none !important;
+}
+
+/* 叠加层设备类型项�?*/
+.overlayDeviceTypeItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.4) 0%, rgba(71, 85, 105, 0.3) 100%);
+  border-radius: 8px;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(30, 41, 59, 0.3);
+}
+
+.overlayDeviceTypeItem:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(139, 92, 246, 0.2) 100%);
+  border-color: rgba(59, 130, 246, 0.5);
+  transform: translateX(4px);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+}
+
+.overlayDeviceTypeItem:last-child {
+  margin-bottom: 0;
+}
+
+.deviceTypePercent {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+  min-width: 35px;
+  text-align: right;
+}
+
+/* 设备高亮效果 */
+.deviceHighlight {
+  animation: deviceHighlight 3s ease-in-out;
+  z-index: 20 !important;
+  position: relative;
+}
+
+@keyframes deviceHighlight {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6), 0 0 30px rgba(24, 144, 255, 0.3);
+    border: 2px solid rgba(255, 215, 0, 0.8);
+  }
+  25%, 75% {
+    transform: scale(1.3);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 0 50px rgba(24, 144, 255, 0.5);
+    border: 2px solid rgba(255, 215, 0, 1);
+  }
+  50% {
+    transform: scale(1.5);
+    box-shadow: 0 0 35px rgba(255, 215, 0, 1), 0 0 70px rgba(24, 144, 255, 0.7);
+    border: 3px solid rgba(255, 215, 0, 1);
+  }
+}
+
+/* 地图定位动画效果 */
+.mapLocating {
+  animation: mapLocating 2s ease-in-out;
+}
+
+@keyframes mapLocating {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+/* 定位指示器样�?*/
+.locateIndicator {
+  position: absolute;
+  z-index: 25;
+  font-size: 20px;
+  animation: locateIndicator 1.5s ease-in-out infinite;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+@keyframes locateIndicator {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.3) rotate(10deg);
+    opacity: 0.8;
+  }
+}
+
+/* 弹跳动画 */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+/* 面板控制按钮 */
+.panelControls {
+  z-index: 15;
+}
+
+/* 右下角控制按�?*/
+.bottomRightControls {
+  position: fixed;
+  bottom: 20px;
+  right: 80px;
+  z-index: 1002;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.controlBtn {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 8px !important;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  transition: all 0.3s ease;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 15px rgba(30, 41, 59, 0.6);
+}
+
+.controlBtn:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.6) 0%, rgba(139, 92, 246, 0.5) 100%) !important;
+  border-color: #3b82f6 !important;
+  color: #ffffff !important;
+  transform: scale(1.05);
+  box-shadow: 0 6px 25px rgba(59, 130, 246, 0.5);
+}
+
+.controlBtn.ant-btn-primary {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.8) 0%, rgba(139, 92, 246, 0.7) 100%) !important;
+  border-color: #3b82f6 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.6);
+}
+
+/* 告警按钮闪烁动画 */
+.alarmBlinking {
+  animation: alarmBlink 1.5s infinite;
+}
+
+@keyframes alarmBlink {
+  0%, 50% {
+    background: rgba(255, 77, 79, 0.6) !important;
+    border-color: #ff4d4f !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 15px rgba(255, 77, 79, 0.8);
+  }
+  25%, 75% {
+    background: rgba(255, 77, 79, 0.9) !important;
+    border-color: #ff4d4f !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 25px rgba(255, 77, 79, 1);
+  }
+}
+
+/* 告警卡片和图表卡�?*/
+.alarmCard,
+.chartCard {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 16px !important;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(30, 41, 59, 0.6), 0 0 50px rgba(59, 130, 246, 0.2);
+}
+
+/* 确保图表卡片内的所有文字都是白�?*/
+.chartCard :global(.ant-card-body) {
+  color: #ffffff !important;
+}
+
+.chartCard :global(.ant-card-body *) {
+  color: #ffffff !important;
+}
+
+.chartCard :global(.ant-statistic-title) {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.chartCard :global(.ant-statistic-content) {
+  color: #ffffff !important;
+}
+
+.chartCard :global(.ant-statistic-content-value) {
+  color: #1890ff !important;
+  font-weight: 700 !important;
+}
+
+/* 确保系统状态标签页中的所有文字都可见 */
+.panelTabs :global(.ant-tabs-tabpane) {
+  color: #ffffff !important;
+}
+
+.panelTabs :global(.ant-tabs-tabpane *) {
+  color: inherit !important;
+}
+
+.panelTabs :global(.ant-progress-text) {
+  color: #ffffff !important;
+}
+
+.panelTabs :global(.ant-progress-inner) {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.alarmCard :global(.ant-card-head),
+.chartCard :global(.ant-card-head) {
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.8) 100%) !important;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 16px 16px 0 0 !important;
+}
+
+.alarmCard :global(.ant-card-head-title),
+.chartCard :global(.ant-card-head-title) {
+  color: #ffffff !important;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.alarmItem {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding: 14px 0 !important;
+  transition: all 0.3s ease;
+}
+
+.alarmItem:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.08) 100%);
+  border-radius: 8px;
+  margin: 0 -8px;
+  padding: 14px 8px !important;
+  box-shadow: 0 2px 15px rgba(59, 130, 246, 0.2);
+}
+
+.alarmItem:last-child {
+  border-bottom: none !important;
+}
+
+.alarmContent {
+  width: 100%;
+}
+
+.alarmHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.alarmTime {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'Courier New', monospace;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.alarmDevice {
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.alarmMessage {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.alarmAction {
+  font-size: 12px;
+  color: rgba(24, 144, 255, 0.8);
+  display: flex;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.overlayAlarmItem:hover .alarmAction {
+  color: #3b82f6;
+}
+
+/* 设备类型图表 */
+.deviceTypeChart {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 设备类型分布区域 */
+.deviceTypeSection {
+  margin-top: 12px;
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.5) 0%, rgba(71, 85, 105, 0.4) 100%);
+  border-radius: 6px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  box-shadow: 0 2px 15px rgba(30, 41, 59, 0.4);
+}
+
+/* 紧凑型设备类型项 */
+.compactDeviceTypeItem {
+  display: flex;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.compactDeviceTypeItem:last-child {
+  border-bottom: none;
+}
+
+.deviceTypeItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.6) 0%, rgba(71, 85, 105, 0.4) 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  transition: all 0.4s ease;
+  box-shadow: 0 2px 15px rgba(30, 41, 59, 0.4);
+}
+
+.deviceTypeItem:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(139, 92, 246, 0.25) 100%);
+  border-color: rgba(59, 130, 246, 0.6);
+  transform: translateX(6px);
+  box-shadow: 0 6px 25px rgba(59, 130, 246, 0.4);
+}
+
+.deviceTypeIcon {
+  font-size: 20px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.4) 0%, rgba(139, 92, 246, 0.3) 100%);
+  border-radius: 8px;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  margin-right: 8px;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+}
+
+.deviceTypeItem:hover .deviceTypeIcon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.deviceTypeInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.deviceTypeName {
+  font-size: 13px;
+  color: #ffffff;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.deviceTypeCount {
+  font-size: 18px;
+  color: #3b82f6;
+  font-weight: 700;
+  text-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
+}
+
+.deviceTypeBar {
+  width: 60px;
+  height: 6px;
+  background: linear-gradient(135deg, rgba(71, 85, 105, 0.6) 0%, rgba(100, 116, 139, 0.4) 100%);
+  border-radius: 3px;
+  overflow: hidden;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+.deviceTypeProgress {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s ease;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
+}
+
+/* 全局样式覆盖 */
+.standaloneMonitor :global(.ant-tag) {
+  border: none !important;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.standaloneMonitor :global(.ant-badge-count) {
+  background: #ff4d4f !important;
+  border: none;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(255, 77, 79, 0.5);
+}
+
+.standaloneMonitor :global(.ant-progress-bg) {
+  border-radius: 3px !important;
+}
+
+.standaloneMonitor :global(.ant-btn-link) {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.standaloneMonitor :global(.ant-btn-link:hover) {
+  color: #1890ff !important;
+}
+
+/* 滚动条样�?*/
+.content::-webkit-scrollbar,
+.alarmCard :global(.ant-card-body)::-webkit-scrollbar,
+.chartCard :global(.ant-card-body)::-webkit-scrollbar {
+  width: 8px;
+}
+
+.content::-webkit-scrollbar-track,
+.alarmCard :global(.ant-card-body)::-webkit-scrollbar-track,
+.chartCard :global(.ant-card-body)::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.content::-webkit-scrollbar-thumb,
+.alarmCard :global(.ant-card-body)::-webkit-scrollbar-thumb,
+.chartCard :global(.ant-card-body)::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.content::-webkit-scrollbar-thumb:hover,
+.alarmCard :global(.ant-card-body)::-webkit-scrollbar-thumb:hover,
+.chartCard :global(.ant-card-body)::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* 设备信息弹窗样式 */
+.deviceInfoModal :global(.ant-modal-content) {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 50%, rgba(15, 23, 42, 0.98) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 12px !important;
+  -webkit-backdrop-filter: blur(25px);
+  backdrop-filter: blur(25px);
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.8), 0 0 50px rgba(59, 130, 246, 0.3);
+}
+
+.deviceInfoModal :global(.ant-modal-header) {
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.8) 100%) !important;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 12px 12px 0 0 !important;
+}
+
+.deviceInfoModal :global(.ant-modal-title) {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.deviceInfoModal :global(.ant-modal-close) {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.deviceInfoModal :global(.ant-modal-close:hover) {
+  color: #ffffff !important;
+}
+
+.deviceInfo {
+  color: #ffffff;
+}
+
+.deviceInfoHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%);
+  border-radius: 6px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  box-shadow: 0 2px 15px rgba(59, 130, 246, 0.2);
+}
+
+.deviceIcon {
+  font-size: 32px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(139, 92, 246, 0.25) 100%);
+  border-radius: 8px;
+  border: 2px solid rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+}
+
+.deviceBasicInfo {
+  flex: 1;
+}
+
+.deviceName {
+  color: #ffffff !important;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 6px 0 !important;
+  text-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
+}
+
+.deviceStatus {
+  font-size: 12px;
+  font-weight: 600;
+  border: none !important;
+  border-radius: 4px;
+}
+
+.deviceDetails {
+  margin-bottom: 16px;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px;
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.4) 0%, rgba(71, 85, 105, 0.3) 100%);
+  border-radius: 4px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  transition: all 0.3s ease;
+  height: 60px;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(30, 41, 59, 0.4);
+}
+
+.infoItem:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(139, 92, 246, 0.2) 100%);
+  border-color: rgba(59, 130, 246, 0.6);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+}
+
+.infoLabel {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.infoValue {
+  font-size: 13px;
+  color: #ffffff;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
+
+.deviceDescription {
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.6) 0%, rgba(71, 85, 105, 0.4) 100%);
+  border-radius: 6px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  box-shadow: 0 2px 15px rgba(30, 41, 59, 0.4);
+}
+
+.descriptionText {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
+/* 告警详情弹窗样式 */
+.alarmDetailModal :global(.ant-modal-content) {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 50%, rgba(15, 23, 42, 0.98) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 12px !important;
+  -webkit-backdrop-filter: blur(25px);
+  backdrop-filter: blur(25px);
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.8), 0 0 50px rgba(59, 130, 246, 0.3);
+}
+
+.alarmDetailModal :global(.ant-modal-header) {
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.8) 100%) !important;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 12px 12px 0 0 !important;
+}
+
+.alarmDetailModal :global(.ant-modal-title) {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.alarmDetailModal :global(.ant-modal-close) {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.alarmDetailModal :global(.ant-modal-close:hover) {
+  color: #ffffff !important;
+}
+
+.alarmDetail {
+  color: #ffffff;
+}
+
+.alarmDetailHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.1) 100%);
+  border-radius: 6px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  box-shadow: 0 2px 15px rgba(239, 68, 68, 0.2);
+}
+
+.alarmLevelBadge {
+  flex-shrink: 0;
+}
+
+.alarmLevelTag {
+  font-size: 12px;
+  font-weight: 600;
+  border: none !important;
+  border-radius: 4px;
+  padding: 3px 8px;
+}
+
+.alarmBasicInfo {
+  flex: 1;
+}
+
+.alarmTitle {
+  color: #ffffff !important;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 6px 0 !important;
+  text-shadow: 0 0 15px rgba(239, 68, 68, 0.8);
+}
+
+.alarmDevice {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+.alarmDetailContent {
+  margin-bottom: 16px;
+}
+
+.alarmInfoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px;
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.4) 0%, rgba(71, 85, 105, 0.3) 100%);
+  border-radius: 4px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  transition: all 0.3s ease;
+  height: 60px;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(30, 41, 59, 0.4);
+}
+
+.alarmInfoItem:hover {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(220, 38, 38, 0.2) 100%);
+  border-color: rgba(239, 68, 68, 0.6);
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3);
+}
+
+.alarmInfoLabel {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.alarmInfoValue {
+  font-size: 13px;
+  color: #ffffff;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
+
+.alarmDescription {
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.15) 100%);
+  border-radius: 6px;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  margin-bottom: 12px;
+  box-shadow: 0 2px 15px rgba(239, 68, 68, 0.2);
+}
+
+.alarmDescriptionText {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
+.alarmSolution {
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.15) 100%);
+  border-radius: 6px;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  box-shadow: 0 2px 15px rgba(16, 185, 129, 0.2);
+}
+
+.alarmSolutionText {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
+/* 面板标签页样�?*/
+.panelTabs {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.panelTabs :global(.ant-tabs-nav) {
+  margin-bottom: 16px;
+  flex-shrink: 0;
+  padding: 0 8px;
+}
+
+.panelTabs :global(.ant-tabs-nav-wrap) {
+  padding: 0;
+}
+
+.panelTabs :global(.ant-tabs-nav-list) {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.panelTabs :global(.ant-tabs-content) {
+  flex: 1;
+  height: 0;
+}
+
+.panelTabs :global(.ant-tabs-tab) {
+  color: rgba(255, 255, 255, 0.7) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  min-width: 140px !important;
+  width: 140px !important;
+  padding: 10px 16px !important;
+  text-align: center !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  border-radius: 8px 8px 0 0 !important;
+  transition: all 0.3s ease !important;
+  margin-right: 4px !important;
+}
+
+.panelTabs :global(.ant-tabs-tab-active) {
+  color: #1890ff !important;
+  border-color: #1890ff !important;
+  background: rgba(24, 144, 255, 0.15) !important;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+.panelTabs :global(.ant-tabs-tab:hover) {
+  color: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* 标签页内容对�?*/
+.panelTabs :global(.ant-tabs-tab .ant-tabs-tab-btn) {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.panelTabs :global(.ant-tabs-tab .ant-tabs-tab-btn > span) {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.panelTabs :global(.ant-tabs-ink-bar) {
+  background: #1890ff !important;
+}
+
+.panelTabs :global(.ant-tabs-content-holder) {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* 自定义滚动条样式 - 深色主题 */
+.panelTabs :global(.ant-tabs-content-holder)::-webkit-scrollbar {
+  width: 6px;
+}
+
+.panelTabs :global(.ant-tabs-content-holder)::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.panelTabs :global(.ant-tabs-content-holder)::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  transition: background 0.3s ease;
+}
+
+.panelTabs :global(.ant-tabs-content-holder)::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* 全局深色滚动条样�?- 应用于所有面板内�?*/
+.overlayPanel *::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.overlayPanel *::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.overlayPanel *::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  transition: background 0.3s ease;
+}
+
+.overlayPanel *::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.overlayPanel *::-webkit-scrollbar-corner {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* 设备控制区域 */
+.deviceControls {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 0 4px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.deviceSearch {
+  width: 100%;
+}
+
+/* 强制覆盖搜索框的所有可能背景色 */
+.deviceSearch,
+.deviceSearch *,
+.deviceSearch :global(*) {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%) !important;
+}
+
+/* 更具体的搜索框背景覆�?*/
+.deviceControls .deviceSearch :global(.ant-input-affix-wrapper) {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 8px !important;
+}
+
+.deviceControls .deviceSearch :global(.ant-input-affix-wrapper input) {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+.deviceSearch :global(.ant-input) {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 8px !important;
+  color: #ffffff !important;
+  font-size: 13px !important;
+  padding: 8px 12px !important;
+  transition: all 0.3s ease !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 10px rgba(30, 41, 59, 0.4);
+}
+
+.deviceSearch :global(.ant-input:hover) {
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.8) 100%) !important;
+  border-color: rgba(59, 130, 246, 0.6) !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+}
+
+.deviceSearch :global(.ant-input:focus) {
+  background: linear-gradient(135deg, rgba(51, 65, 85, 1) 0%, rgba(71, 85, 105, 0.9) 100%) !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4) !important;
+  outline: none !important;
+}
+
+.deviceSearch :global(.ant-input::placeholder) {
+  color: rgba(255, 255, 255, 0.5) !important;
+  font-style: italic !important;
+}
+
+.deviceSearch :global(.ant-input-prefix) {
+  margin-right: 8px !important;
+}
+
+.deviceSearch :global(.ant-input-clear-icon) {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.deviceSearch :global(.ant-input-clear-icon:hover) {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* 确保搜索框在所有状态下都没有白色背�?*/
+.deviceSearch :global(.ant-input-affix-wrapper) {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 8px !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 10px rgba(30, 41, 59, 0.4);
+}
+
+.deviceSearch :global(.ant-input-affix-wrapper:hover) {
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.8) 100%) !important;
+  border-color: rgba(59, 130, 246, 0.6) !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+}
+
+.deviceSearch :global(.ant-input-affix-wrapper-focused) {
+  background: linear-gradient(135deg, rgba(51, 65, 85, 1) 0%, rgba(71, 85, 105, 0.9) 100%) !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4) !important;
+}
+
+.deviceSearch :global(.ant-input-affix-wrapper input) {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+/* 额外确保搜索框没有白色背景的样式 */
+.deviceSearch :global(.ant-input-group-wrapper) {
+  background: transparent !important;
+}
+
+.deviceSearch :global(.ant-input-wrapper) {
+  background: transparent !important;
+}
+
+.deviceSearch :global(.ant-input-group) {
+  background: transparent !important;
+}
+
+.deviceFilter {
+  width: 100%;
+}
+
+.deviceFilter :global(.ant-select-selector) {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 8px !important;
+  color: #ffffff !important;
+  font-size: 13px !important;
+  padding: 4px 8px !important;
+  transition: all 0.3s ease !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 10px rgba(30, 41, 59, 0.4);
+}
+
+.deviceFilter :global(.ant-select-selector:hover) {
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.8) 100%) !important;
+  border-color: rgba(59, 130, 246, 0.6) !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+}
+
+.deviceFilter :global(.ant-select-focused .ant-select-selector) {
+  background: linear-gradient(135deg, rgba(51, 65, 85, 1) 0%, rgba(71, 85, 105, 0.9) 100%) !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4) !important;
+}
+
+.deviceFilter :global(.ant-select-arrow) {
+  color: rgba(255, 255, 255, 0.6) !important;
+  transition: color 0.3s ease !important;
+}
+
+.deviceFilter :global(.ant-select-arrow:hover) {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.deviceFilter :global(.ant-select-selection-item) {
+  color: #ffffff !important;
+}
+
+/* 设备列表样式 */
+.deviceList {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.deviceItem {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.4) 0%, rgba(71, 85, 105, 0.3) 100%);
+  border-radius: 6px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(30, 41, 59, 0.3);
+  min-height: 56px;
+}
+
+.deviceItem:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(139, 92, 246, 0.2) 100%);
+  border-color: rgba(59, 130, 246, 0.6);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+  transform: translateY(-1px);
+}
+
+.deviceItem .deviceIcon {
+  font-size: 18px;
+  margin-right: 12px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(139, 92, 246, 0.25) 100%);
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+  flex-shrink: 0;
+}
+
+.deviceItem .deviceInfo {
+  flex: 1;
+  margin-right: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.deviceItem .deviceName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 3px;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.deviceItem .deviceLocation {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.deviceItem .deviceStatus {
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  min-width: 60px;
+  justify-content: flex-start;
+  height: 36px;
+}
+
+.deviceItem .deviceStatus :global(.ant-badge-status-text) {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.deviceItem .deviceStatus :global(.ant-badge) {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.deviceItem .deviceStatus :global(.ant-badge-status-dot) {
+  margin-top: 0 !important;
+  position: relative;
+  top: 0;
+}
+
+/* 强制修复设备状态对�?*/
+.deviceItem .deviceStatus :global(.ant-badge-status-success::before) {
+  margin-top: 0 !important;
+  vertical-align: middle !important;
+}
+
+.deviceItem .deviceStatus :global(.ant-badge-status-error::before) {
+  margin-top: 0 !important;
+  vertical-align: middle !important;
+}
+
+.deviceItem .deviceStatus :global(.ant-badge-status-processing::before) {
+  margin-top: 0 !important;
+  vertical-align: middle !important;
+}
+
+.deviceActions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-shrink: 0;
+  height: 36px;
+}
+
+.deviceActions :global(.ant-btn) {
+  color: rgba(255, 255, 255, 0.6) !important;
+  border: none !important;
+  background: transparent !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.deviceActions :global(.ant-btn:hover) {
+  color: #3b82f6 !important;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%) !important;
+}
+
+/* 视频弹窗样式 */
+.videoModal :global(.ant-modal-content) {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 50%, rgba(15, 23, 42, 0.98) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 12px !important;
+  -webkit-backdrop-filter: blur(25px);
+  backdrop-filter: blur(25px);
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.8), 0 0 50px rgba(59, 130, 246, 0.3);
+}
+
+.videoModal :global(.ant-modal-header) {
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.8) 100%) !important;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 12px 12px 0 0 !important;
+}
+
+.videoModal :global(.ant-modal-title) {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.videoModal :global(.ant-modal-close) {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.videoModal :global(.ant-modal-close:hover) {
+  color: #ffffff !important;
+}
+
+.videoModal :global(.ant-modal-footer) {
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.8) 100%) !important;
+  border-top: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 0 0 12px 12px !important;
+}
+
+.videoContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.videoPlayer {
+  flex: 1;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 20px rgba(30, 41, 59, 0.6);
+}
+
+.videoPlaceholder {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.videoText {
+  margin-top: 16px;
+}
+
+.videoText div {
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.videoControls {
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.6) 0%, rgba(71, 85, 105, 0.4) 100%);
+  border-radius: 6px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  box-shadow: 0 2px 15px rgba(30, 41, 59, 0.4);
+}
+
+.videoInfo {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+}
+
+/* 响应式设�?*/
+@media (max-width: 1200px) {
+  .header {
+    padding: 12px 24px;
+  }
+
+  .content {
+    padding: 16px 24px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .timeMain {
+    font-size: 18px;
+  }
+
+  .standardPanel {
+    width: 320px;
+    max-width: 320px;
+    height: calc(100vh - 260px);
+    max-height: calc(100vh - 260px);
+  }
+
+  .alarmPanel {
+    width: 320px;
+    max-width: 320px;
+    height: auto;
+    max-height: 400px;
+  }
+
+  .alarmPanelContent {
+    max-height: 240px;
+  }
+
+  .weatherInfo {
+    display: none; /* 在中等屏幕上隐藏天气信息 */
+  }
+
+  .mainStatNumber {
+    font-size: 18px;
+  }
+
+  .deviceMarker {
+    width: 28px;
+    height: 28px;
+  }
+
+  .markerIcon {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .headerLeft,
+  .headerRight {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .headerRight {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .content {
+    padding: 12px 16px;
+  }
+
+  .mapMainContainer {
+    height: calc(100vh - 140px);
+  }
+
+  .overlayPanel,
+  .standardPanel,
+  .alarmPanel {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    max-height: 60vh !important;
+    margin-bottom: 16px;
+  }
+
+  .alarmPanelContent {
+    max-height: 35vh !important;
+  }
+
+  .panelTabs :global(.ant-tabs-content-holder) {
+    height: 100% !important;
+  }
+
+  .panelTabs :global(.ant-tabs-tab) {
+    min-width: 120px !important;
+    width: 120px !important;
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+    margin-right: 2px !important;
+  }
+
+  .mapControlsInPanel {
+    margin-top: 8px;
+    padding-top: 8px;
+  }
+
+  .panelControls {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    margin-top: 16px;
+  }
+
+  .panelControls :global(.ant-space) {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .panelControls :global(.ant-space-item) {
+    flex: 1;
+  }
+
+  .controlBtn {
+    width: 100% !important;
+    height: 36px !important;
+  }
+
+  .mapStats {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .weatherInfo,
+  .currentTime {
+    display: none; /* 在小屏幕上隐�?*/
+  }
+
+  .mainStatNumber {
+    font-size: 16px;
+  }
+
+  .deviceMarker {
+    width: 24px;
+    height: 24px;
+  }
+
+  .markerIcon {
+    font-size: 12px;
+  }
+
+  .mapLegend {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    margin-top: 16px;
+  }
+}
+
+/* 下拉框选项样式 */
+.deviceFilter :global(.ant-select-dropdown) {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 8px !important;
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(30, 41, 59, 0.8), 0 0 50px rgba(59, 130, 246, 0.3);
+}
+
+.deviceFilter :global(.ant-select-item) {
+  color: rgba(255, 255, 255, 0.9) !important;
+  background: transparent !important;
+}
+
+.deviceFilter :global(.ant-select-item:hover) {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%) !important;
+  color: #ffffff !important;
+}
+
+.deviceFilter :global(.ant-select-item-option-selected) {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(139, 92, 246, 0.25) 100%) !important;
+  color: #ffffff !important;
+}
+
+/* 删除全局样式覆盖 */
