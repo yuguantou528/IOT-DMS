@@ -497,3 +497,111 @@
     margin-right: 0;
   }
 }
+
+/* 全屏模式样式 */
+.fullscreenContainer {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999 !important;
+  border-radius: 0 !important;
+  border: none !important;
+  background: #000 !important;
+}
+
+.fullscreenContainer :global(.leaflet-container) {
+  border-radius: 0 !important;
+  background: #000 !important;
+}
+
+/* 全屏模式下的工具栏样式 */
+.fullscreenContainer .drawToolbar {
+  top: 20px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.98);
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(15px);
+}
+
+.fullscreenContainer .drawToolbar :global(.ant-btn) {
+  height: 32px;
+  padding: 0 16px;
+  font-size: 14px;
+  border-radius: 6px;
+  margin-right: 8px;
+}
+
+.fullscreenContainer .drawToolbar :global(.ant-btn):last-child {
+  margin-right: 0;
+}
+
+/* 全屏模式下的绘制状态信息 */
+.fullscreenContainer .drawStatus {
+  bottom: 30px;
+  left: 30px;
+  right: 30px;
+  background: rgba(255, 255, 255, 0.98);
+  padding: 16px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(15px);
+  font-size: 16px;
+  text-align: center;
+}
+
+.fullscreenContainer .statusSuccess {
+  color: #52c41a;
+  font-weight: 600;
+}
+
+/* 全屏模式下的地图加载指示器 */
+.fullscreenContainer .mapLoadingOverlay {
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 0;
+}
+
+.fullscreenContainer .mapLoadingOverlay :global(.ant-spin-text) {
+  color: #ffffff;
+  font-size: 16px;
+}
+
+/* 全屏模式下的网络错误提示 */
+.fullscreenContainer .networkErrorOverlay {
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 0;
+}
+
+.fullscreenContainer .networkErrorOverlay :global(.ant-result-title) {
+  color: #ffffff !important;
+}
+
+.fullscreenContainer .networkErrorOverlay :global(.ant-result-subtitle) {
+  color: #cccccc !important;
+}
+
+/* 全屏模式退出提示 */
+.fullscreenContainer::before {
+  content: "按 ESC 键退出全屏";
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  z-index: 1001;
+  pointer-events: none;
+  animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { MapContainer, TileLayer, Polygon, Circle, Polyline, Marker, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import { Button, Space, message, Tooltip, Spin } from 'antd';
-import { UndoOutlined, ClearOutlined, CheckOutlined, EditOutlined, LoadingOutlined, GlobalOutlined } from '@ant-design/icons';
+import { UndoOutlined, ClearOutlined, CheckOutlined, EditOutlined, LoadingOutlined, GlobalOutlined, FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons';
 import 'leaflet/dist/leaflet.css';
 import styles from './index.module.css';
 
@@ -112,8 +112,11 @@ const FenceDrawMap = ({
   const [networkError, setNetworkError] = useState(false);
   const [mousePosition, setMousePosition] = useState(null); // 鼠标位置，用于预览线条
   const [isPolygonComplete, setIsPolygonComplete] = useState(false); // 多边形是否已完成
+  const [isFullscreen, setIsFullscreen] = useState(false); // 全屏状态
 
   const mapRef = useRef(null);
+  const containerRef = useRef(null); // 容器引用，用于全屏
+  const mapInstanceRef = useRef(null); // 地图实例引用
 
   // 多个地图瓦片源，提供备用选项
   const tileSources = [
@@ -225,7 +228,7 @@ const FenceDrawMap = ({
   const handleCircleCreate = useCallback((center, radius) => {
     const newCircleData = { center, radius };
     setCircleData(newCircleData);
-    
+
     // 通知父组件
     if (onFenceChange) {
       onFenceChange({
@@ -241,7 +244,7 @@ const FenceDrawMap = ({
   const handleCircleUpdate = useCallback((center, radius) => {
     const newCircleData = { center, radius };
     setCircleData(newCircleData);
-    
+
     // 通知父组件
     if (onFenceChange) {
       onFenceChange({
@@ -258,7 +261,7 @@ const FenceDrawMap = ({
     if (drawMode === 'polygon' && polygonPoints.length > 0) {
       const newPoints = polygonPoints.slice(0, -1);
       setPolygonPoints(newPoints);
-      
+
       if (onFenceChange) {
         onFenceChange({
           type: 'polygon',
@@ -310,13 +313,104 @@ const FenceDrawMap = ({
     setMapLoaded(false);
     message.info(`已切换到${tileSources[nextSource].name}`);
   }, [currentTileSource, tileSources]);
+  // 全屏功能
+  const enterFullscreen = useCallback(async () => {
+    if (!containerRef.current) return;
+
+    try {
+      if (containerRef.current.requestFullscreen) {
+        await containerRef.current.requestFullscreen();
+      } else if (containerRef.current.webkitRequestFullscreen) {
+        await containerRef.current.webkitRequestFullscreen();
+      } else if (containerRef.current.mozRequestFullScreen) {
+        await containerRef.current.mozRequestFullScreen();
+      } else if (containerRef.current.msRequestFullscreen) {
+        await containerRef.current.msRequestFullscreen();
+      }
+    } catch (error) {
+      console.error('进入全屏失败:', error);
+      message.error('进入全屏失败，请检查浏览器设置');
+    }
+  }, []);
+
+  const exitFullscreen = useCallback(async () => {
+    try {
+      if (document.exitFullscreen) {
+        await document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        await document.webkitExitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        await document.mozCancelFullScreen();
+      } else if (document.msExitFullscreen) {
+        await document.msExitFullscreen();
+      }
+    } catch (error) {
+      console.error('退出全屏失败:', error);
+      message.error('退出全屏失败');
+    }
+  }, []);
+
+  // 监听全屏状态变化
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const isCurrentlyFullscreen = !!(
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement
+      );
+
+      setIsFullscreen(isCurrentlyFullscreen);
+
+      // 全屏状态改变时，重新调整地图尺寸
+      setTimeout(() => {
+        if (mapInstanceRef.current) {
+          mapInstanceRef.current.invalidateSize();
+        }
+      }, 100);
+    };
+
+    // 添加全屏状态变化监听器
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+    return () => {
+      // 清理监听器
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
+    };
+  }, []);
+
+  // ESC键退出全屏
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape' && isFullscreen) {
+        exitFullscreen();
+      }
+    };
+
+    if (isFullscreen) {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [isFullscreen, exitFullscreen]);
 
 
 
 
 
   return (
-    <div className={styles.fenceDrawMapContainer} style={{ height, minHeight: height }}>
+    <div
+      ref={containerRef}
+      className={`${styles.fenceDrawMapContainer} ${isFullscreen ? styles.fullscreenContainer : ''}`}
+      style={{ height, minHeight: height }}
+    >
       {/* 绘制工具栏 */}
       <div className={styles.drawToolbar}>
         <Space>
@@ -346,6 +440,13 @@ const FenceDrawMap = ({
             <Button
               icon={<GlobalOutlined />}
               onClick={switchTileSource}
+              disabled={isEditing}
+            />
+          </Tooltip>
+          <Tooltip title={isFullscreen ? "退出全屏" : "进入全屏"}>
+            <Button
+              icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+              onClick={isFullscreen ? exitFullscreen : enterFullscreen}
               disabled={isEditing}
             />
           </Tooltip>
@@ -401,6 +502,9 @@ const FenceDrawMap = ({
         className={styles.mapContainer}
         ref={mapRef}
         whenCreated={(mapInstance) => {
+          // 保存地图实例引用
+          mapInstanceRef.current = mapInstance;
+
           // 监听地图加载完成事件
           mapInstance.on('load', () => {
             setMapLoaded(true);
@@ -440,7 +544,7 @@ const FenceDrawMap = ({
             }
           }}
         />
-        
+
         {/* 地图事件处理 */}
         <MapEventHandler
           drawMode={drawMode}
