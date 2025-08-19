@@ -327,3 +327,498 @@
 :global(.ant-badge-status-default) {
   background-color: #d9d9d9;
 }
+
+/* 设备状态显示样式 */
+.statusDisplay,
+.statusDisplaySmall {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+
+.statusDisplaySmall {
+  font-size: 11px;
+  gap: 4px;
+}
+
+.statusText {
+  font-size: inherit;
+}
+
+/* 设备状态图标样式 */
+.statusIconOnline {
+  color: #52c41a;
+  font-size: 14px;
+}
+
+.statusIconOffline {
+  color: #8c8c8c;
+  font-size: 14px;
+}
+
+.statusIconFault {
+  color: #ff4d4f;
+  font-size: 14px;
+}
+
+.statusIconWarning {
+  color: #faad14;
+  font-size: 14px;
+}
+
+.statusIconMaintenance {
+  color: #722ed1;
+  font-size: 14px;
+}
+
+/* 在线状态呼吸动画 */
+.statusOnline .statusIconOnline {
+  animation: breathe 2s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+/* 故障状态闪烁动画 */
+.statusFault .statusIconFault {
+  animation: blink 1.2s ease-in-out infinite;
+}
+
+/* 告警状态闪烁动画 */
+.statusWarning .statusIconWarning {
+  animation: blink 1.5s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 50%, 100% {
+    opacity: 1;
+  }
+  25%, 75% {
+    opacity: 0.3;
+  }
+}
+
+/* 连接状态显示样式 */
+.connectionDisplay,
+.connectionDisplaySmall {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+
+.connectionDisplaySmall {
+  font-size: 11px;
+  gap: 4px;
+}
+
+.connectionText {
+  font-size: inherit;
+}
+
+/* 连接状态图标样式 */
+.connectionIconConnected {
+  color: #52c41a;
+  font-size: 14px;
+}
+
+.connectionIconDisconnected {
+  color: #8c8c8c;
+  font-size: 14px;
+}
+
+.connectionIconConnecting {
+  color: #1890ff;
+  font-size: 14px;
+}
+
+/* 连接中状态旋转动画 */
+.connectionConnecting .connectionIconConnecting {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 小尺寸状态图标 */
+.statusDisplaySmall .statusIconOnline,
+.statusDisplaySmall .statusIconOffline,
+.statusDisplaySmall .statusIconFault,
+.statusDisplaySmall .statusIconWarning,
+.statusDisplaySmall .statusIconMaintenance {
+  font-size: 12px;
+}
+
+.connectionDisplaySmall .connectionIconConnected,
+.connectionDisplaySmall .connectionIconDisconnected,
+.connectionDisplaySmall .connectionIconConnecting {
+  font-size: 12px;
+}
+
+/* 卡片视图样式 */
+.cardView {
+  min-height: 400px;
+}
+
+.deviceCard {
+  height: 240px;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.deviceCard:hover {
+  border-color: #1890ff;
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.deviceCard :global(.ant-card-body) {
+  padding: 12px;
+  height: calc(100% - 48px);
+  display: flex;
+  flex-direction: column;
+}
+
+.deviceCard :global(.ant-card-actions) {
+  border-top: 1px solid #f0f0f0;
+  background: #fafafa;
+  padding: 8px 0;
+}
+
+.deviceCard :global(.ant-card-actions > li) {
+  margin: 0 4px;
+}
+
+.deviceCard :global(.ant-card-actions > li > span) {
+  color: #595959;
+  font-size: 16px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.deviceCard :global(.ant-card-actions > li > span:hover) {
+  color: #1890ff;
+}
+
+.deviceCardHeader {
+  margin-bottom: 8px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 6px;
+}
+
+.deviceCardTitleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 4px;
+  gap: 8px;
+}
+
+.deviceCardTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+  line-height: 1.4;
+  flex: 1;
+  min-width: 0;
+}
+
+.deviceCardStatusGroup {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.deviceCardCode {
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+.deviceCardContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.deviceCardInfo {
+  flex: 1;
+}
+
+.deviceCardColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+}
+
+.deviceCardRow {
+  display: flex;
+  align-items: flex-start;
+  font-size: 12px;
+  line-height: 1.4;
+  min-height: 22px;
+}
+
+.deviceCardLabel {
+  color: #8c8c8c;
+  font-weight: 500;
+  min-width: 32px;
+  width: 32px;
+  margin-right: 4px;
+  flex-shrink: 0;
+  font-size: 11px;
+  padding-top: 1px;
+}
+
+.deviceCardValue {
+  flex: 1;
+  color: #262626;
+  font-size: 12px;
+  line-height: 1.3;
+  word-break: break-all;
+  overflow: hidden;
+}
+
+/* 统一卡片内所有元素的字体大小 */
+.deviceCardValue * {
+  font-size: 12px !important;
+}
+
+.deviceCardValue .ant-tag {
+  font-size: 11px !important;
+  padding: 0 4px;
+  line-height: 18px;
+}
+
+.deviceCardValue code {
+  font-size: 11px !important;
+  padding: 1px 4px;
+}
+
+
+
+.cardPagination {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* 视图切换按钮样式 */
+:global(.ant-btn-group) {
+  margin-right: 12px;
+}
+
+:global(.ant-btn-group .ant-btn) {
+  border-radius: 4px;
+}
+
+:global(.ant-btn-group .ant-btn:first-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+:global(.ant-btn-group .ant-btn:last-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: 0;
+}
+
+:global(.ant-btn-group .ant-btn:not(:first-child):not(:last-child)) {
+  border-radius: 0;
+  border-left: 0;
+}
+
+/* 卡片视图响应式设计 */
+@media (max-width: 1600px) {
+  .deviceCard {
+    height: 240px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .deviceCard {
+    height: 240px;
+  }
+
+  .deviceCardColumn {
+    gap: 3px;
+  }
+
+  .deviceCardRow {
+    font-size: 10px;
+    min-height: 16px;
+  }
+
+  .deviceCardLabel {
+    min-width: 30px;
+    width: 30px;
+    font-size: 9px;
+  }
+
+  .deviceCardValue {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .deviceCard {
+    height: 260px;
+  }
+
+  .deviceCard :global(.ant-card-body) {
+    padding: 10px;
+  }
+
+  .deviceCardHeader {
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+  }
+
+  .deviceCardTitleRow {
+    gap: 6px;
+  }
+
+  .deviceCardTitle {
+    font-size: 14px;
+  }
+
+  .deviceCardStatusGroup {
+    gap: 6px;
+  }
+
+  .deviceCardColumn {
+    gap: 8px;
+  }
+
+  .deviceCardRow {
+    font-size: 11px;
+    min-height: 18px;
+  }
+
+  .deviceCardLabel {
+    min-width: 35px;
+    width: 35px;
+    margin-right: 6px;
+    font-size: 10px;
+  }
+
+  .deviceCardValue {
+    font-size: 11px;
+  }
+
+  .cardPagination {
+    margin-top: 16px;
+    padding-top: 16px;
+  }
+
+  /* 移动端视图切换按钮 */
+  :global(.ant-btn-group) {
+    margin-right: 8px;
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 576px) {
+  .deviceCard {
+    height: 280px;
+  }
+
+  .deviceCard :global(.ant-card-body) {
+    padding: 8px;
+  }
+
+  .deviceCardTitleRow {
+    gap: 4px;
+  }
+
+  .deviceCardTitle {
+    font-size: 13px;
+  }
+
+  .deviceCardStatusGroup {
+    gap: 6px;
+  }
+
+  .deviceCardColumn {
+    gap: 7px;
+  }
+
+  .deviceCardRow {
+    font-size: 10px;
+    min-height: 16px;
+  }
+
+  .deviceCardLabel {
+    min-width: 32px;
+    width: 32px;
+    margin-right: 4px;
+    font-size: 9px;
+  }
+
+  .deviceCardValue {
+    font-size: 10px;
+  }
+
+  /* 小屏幕下改为单列布局 */
+  .deviceCardInfo :global(.ant-row) {
+    flex-direction: column;
+  }
+
+  .deviceCardInfo :global(.ant-col) {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* 修复弹窗水平滚动条问题 */
+:global(.ant-modal-body) {
+  overflow-x: hidden;
+  padding: 24px;
+}
+
+:global(.ant-modal-content) {
+  overflow: hidden;
+}
+
+:global(.ant-form) {
+  overflow-x: hidden;
+}
+
+:global(.ant-row) {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+:global(.ant-col) {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+
+/* 修复Tabs组件在弹窗中的滚动问题 */
+:global(.ant-tabs-content-holder) {
+  overflow-x: hidden;
+}
+
+:global(.ant-tabs-tabpane) {
+  overflow-x: hidden;
+}

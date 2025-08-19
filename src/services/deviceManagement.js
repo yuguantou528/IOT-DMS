@@ -39,7 +39,7 @@ let deviceData = [
     serialNumber: 'MI20240116001',
     manufacturerId: 2,
     manufacturerName: '小米科技有限责任公司',
-    modelId: 2,
+    modelId: 3, // 修正为正确的型号ID（Mi Smart Camera 2K）
     modelName: 'Mi Smart Camera 2K',
     deviceType: 'network_camera',
     location: '客厅',
@@ -63,7 +63,7 @@ let deviceData = [
     serialNumber: 'DH20240110001',
     manufacturerId: 4,
     manufacturerName: '大华技术股份有限公司',
-    modelId: 3,
+    modelId: 4, // 修正为正确的型号ID（DH-IPC-HFW2431S-S）
     modelName: 'DH-IPC-HFW2431S-S',
     deviceType: 'network_camera',
     location: '停车场',

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设备概览图表测试</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #0f1419 0%, #1a2332 25%, #2d3748 50%, #1a2332 75%, #0f1419 100%);
+            color: white;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .preview {
+            text-align: center;
+            padding: 40px 20px;
+            border: 2px dashed rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .changes {
+            background: rgba(51, 65, 85, 0.8);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+        .change-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .change-item::before {
+            content: "✓";
+            color: #52c41a;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">设备概览图表优化完成</div>
+        
+        <div class="preview">
+            <div style="font-size: 48px; margin-bottom: 10px;">📊</div>
+            <div>图表组件已优化</div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">
+                请在可视化监控大屏中查看效果
+            </div>
+        </div>
+
+        <div class="changes">
+            <div style="font-weight: bold; margin-bottom: 12px; color: #3b82f6;">优化内容：</div>
+            <div class="change-item">移除了设备状态分布饼图</div>
+            <div class="change-item">修复设备类型分布图横轴标签显示</div>
+            <div class="change-item">优化设备在线率仪表盘文字显示</div>
+            <div class="change-item">移除71%文字的突出背景色</div>
+            <div class="change-item">调整仪表盘位置避免底部遮挡</div>
+            <div class="change-item">优化图表布局和尺寸</div>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px; font-size: 12px; color: rgba(255,255,255,0.6);">
+            访问 /visual-monitor 查看完整效果
+        </div>
+    </div>
+</body>
+</html>

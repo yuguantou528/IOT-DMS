@@ -103,7 +103,7 @@ let deviceModelData = [
       maxConnections: '10设备'
     },
     applicableScenarios: '移动办公、临时网络、应急通信',
-    status: 'inactive',
+    status: 'active', // ✅ 修正：从inactive改为active，使其在筛选中可见
     description: '中兴4G便携式路由器，支持多设备共享上网',
     createTime: '2024-01-08 16:45:00',
     updateTime: '2024-01-10 09:30:00'

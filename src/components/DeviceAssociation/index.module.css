@@ -1,0 +1,310 @@
+.deviceAssociation {
+  padding: 16px 0;
+}
+
+/* 搜索区域样式 */
+.searchSection {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #fafafa;
+  border-radius: 6px;
+  border: 1px solid #f0f0f0;
+}
+
+.searchSection :global(.ant-row) {
+  align-items: center;
+}
+
+.searchSection :global(.ant-space) {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+/* 卡片标题样式 */
+:global(.ant-card-head-title) {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* 统一卡片高度 */
+.deviceAssociation :global(.ant-card) {
+  height: 650px;
+  display: flex;
+  flex-direction: column;
+}
+
+.deviceAssociation :global(.ant-card-body) {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+/* 表格样式优化 */
+:global(.ant-table-thead > tr > th) {
+  background: #fafafa;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+:global(.ant-table-tbody > tr > td) {
+  font-size: 12px;
+}
+
+/* 状态标签样式 */
+:global(.ant-tag) {
+  margin: 0;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* 按钮样式优化 */
+:global(.ant-btn-sm) {
+  font-size: 12px;
+  height: 24px;
+  padding: 0 8px;
+}
+
+/* 搜索输入框样式 */
+.searchSection :global(.ant-input) {
+  border-radius: 4px;
+}
+
+.searchSection :global(.ant-select) {
+  border-radius: 4px;
+}
+
+/* 表格滚动条样式 */
+:global(.ant-table-body)::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+:global(.ant-table-body)::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+:global(.ant-table-body)::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+:global(.ant-table-body)::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* 空状态样式 */
+:global(.ant-empty) {
+  color: #8c8c8c;
+}
+
+/* 分页样式 */
+:global(.ant-pagination) {
+  margin-top: 16px;
+  text-align: right;
+}
+
+:global(.ant-pagination-total-text) {
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+/* 卡片内容间距 */
+:global(.ant-card-body) {
+  padding: 16px;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .deviceAssociation :global(.ant-col) {
+    margin-bottom: 16px;
+  }
+  
+  .searchSection :global(.ant-col) {
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .deviceAssociation {
+    padding: 8px 0;
+  }
+  
+  .searchSection {
+    padding: 12px;
+  }
+  
+  :global(.ant-card-body) {
+    padding: 12px;
+  }
+  
+  :global(.ant-table-thead > tr > th),
+  :global(.ant-table-tbody > tr > td) {
+    padding: 8px 4px;
+    font-size: 11px;
+  }
+}
+
+/* 修复弹窗中的表格滚动问题 */
+:global(.ant-table-wrapper) {
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex: 1;
+}
+
+:global(.ant-table) {
+  min-width: 100%;
+}
+
+/* 表格容器高度优化 */
+.deviceAssociation :global(.ant-table-wrapper) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.deviceAssociation :global(.ant-table) {
+  flex: 1;
+  height: 100%;
+}
+
+.deviceAssociation :global(.ant-table-container) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.deviceAssociation :global(.ant-table-body) {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* 搜索区域后的内容区域 */
+.deviceAssociation :global(.ant-card-body) > div:last-child {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* 固定列样式优化 */
+.deviceAssociation :global(.ant-table-fixed-right) {
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.deviceAssociation :global(.ant-table-thead > tr > th.ant-table-cell-fix-right) {
+  background: #fafafa;
+  border-left: 1px solid #f0f0f0;
+}
+
+.deviceAssociation :global(.ant-table-tbody > tr > td.ant-table-cell-fix-right) {
+  background: #fff;
+  border-left: 1px solid #f0f0f0;
+}
+
+.deviceAssociation :global(.ant-table-tbody > tr:hover > td.ant-table-cell-fix-right) {
+  background: #f5f5f5;
+}
+
+/* 确保固定列在滚动时保持位置 */
+.deviceAssociation :global(.ant-table-container) {
+  position: relative;
+}
+
+.deviceAssociation :global(.ant-table-fixed-right) {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+}
+
+/* 选择框样式优化 */
+:global(.ant-table-selection-column) {
+  width: 40px;
+  min-width: 40px;
+}
+
+:global(.ant-checkbox-wrapper) {
+  margin: 0;
+}
+
+/* 工具提示样式 */
+:global(.ant-tooltip) {
+  font-size: 12px;
+}
+
+/* 加载状态样式 */
+:global(.ant-spin-container) {
+  min-height: 200px;
+}
+
+/* 标签颜色定制 */
+:global(.ant-tag-green) {
+  background: #f6ffed;
+  border-color: #b7eb8f;
+  color: #52c41a;
+}
+
+:global(.ant-tag-red) {
+  background: #fff2f0;
+  border-color: #ffccc7;
+  color: #ff4d4f;
+}
+
+:global(.ant-tag-orange) {
+  background: #fff7e6;
+  border-color: #ffd591;
+  color: #fa8c16;
+}
+
+:global(.ant-tag-blue) {
+  background: #e6f7ff;
+  border-color: #91d5ff;
+  color: #1890ff;
+}
+
+/* 操作按钮样式 */
+.searchSection :global(.ant-btn) {
+  border-radius: 4px;
+}
+
+.searchSection :global(.ant-btn-primary) {
+  background: #1890ff;
+  border-color: #1890ff;
+}
+
+.searchSection :global(.ant-btn-primary):hover {
+  background: #40a9ff;
+  border-color: #40a9ff;
+}
+
+/* 表格行悬停效果 */
+:global(.ant-table-tbody > tr:hover > td) {
+  background: #f5f5f5;
+}
+
+/* 已选中行的样式 */
+:global(.ant-table-tbody > tr.ant-table-row-selected > td) {
+  background: #e6f7ff;
+}
+
+/* 禁用状态的复选框 */
+:global(.ant-checkbox-disabled .ant-checkbox-inner) {
+  background-color: #f5f5f5;
+  border-color: #d9d9d9;
+}
+
+/* 卡片头部样式 */
+:global(.ant-card-head) {
+  border-bottom: 1px solid #f0f0f0;
+  min-height: 48px;
+}
+
+/* 间距调整 */
+:global(.ant-space-item) {
+  display: flex;
+  align-items: center;
+}

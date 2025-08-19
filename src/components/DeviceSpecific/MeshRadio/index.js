@@ -557,6 +557,73 @@ const MeshRadioManager = ({ device, onParameterUpdate, mode = 'full' }) => {
                   <span className={styles.detailLabel}>数据速率:</span>
                   <span>9600bps</span>
                 </div>
+
+                {/* 连接信息 */}
+                <div className={styles.connectionSection}>
+                  <div className={styles.connectionHeader}>
+                    <span className={styles.detailLabel}>连接信息:</span>
+                  </div>
+                  <div className={styles.connectionList}>
+                    {(() => {
+                      const connections = getNodeConnections(selectedNode.id);
+                      if (connections.length === 0) {
+                        return (
+                          <div className={styles.noConnections}>
+                            <span style={{ color: '#8c8c8c', fontSize: '12px' }}>暂无连接</span>
+                          </div>
+                        );
+                      }
+
+                      return connections.map((connection, index) => (
+                        <div key={connection.nodeId} className={styles.connectionItem}>
+                          <div className={styles.connectionNodeInfo}>
+                            <div className={styles.connectionNodeName}>
+                              <div
+                                className={styles.connectionNodeIndicator}
+                                style={{ backgroundColor: getNodeColor(connection.nodeType, connection.nodeStatus) }}
+                              />
+                              <span>{connection.nodeName}</span>
+                              <Badge
+                                status={connection.nodeStatus === 'online' ? 'success' : 'error'}
+                                size="small"
+                              />
+                            </div>
+                            <div className={styles.connectionDetails}>
+                              <span className={styles.connectionDistance}>距离: {connection.distance}</span>
+                              {connection.bidirectional ? (
+                                <div className={styles.bidirectionalInfo}>
+                                  <div className={styles.signalInfo}>
+                                    <span className={styles.signalDirection}>发送:</span>
+                                    <span className={styles.signalValue}>{connection.outgoingSignal || 'N/A'}</span>
+                                    <span className={styles.qualityBadge} data-quality={connection.qualityLevel}>
+                                      {connection.outgoingQuality || 'N/A'}
+                                    </span>
+                                  </div>
+                                  <div className={styles.signalInfo}>
+                                    <span className={styles.signalDirection}>接收:</span>
+                                    <span className={styles.signalValue}>{connection.incomingSignal || 'N/A'}</span>
+                                    <span className={styles.qualityBadge} data-quality={connection.qualityLevel}>
+                                      {connection.incomingQuality || 'N/A'}
+                                    </span>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className={styles.unidirectionalInfo}>
+                                  <span className={styles.signalValue}>
+                                    {connection.outgoingSignal || connection.incomingSignal || 'N/A'}
+                                  </span>
+                                  <span className={styles.qualityBadge} data-quality={connection.qualityLevel}>
+                                    {connection.outgoingQuality || connection.incomingQuality || 'N/A'}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ));
+                    })()}
+                  </div>
+                </div>
               </div>
             ) : (
               <div className={styles.noSelection}>
@@ -689,6 +756,90 @@ const MeshRadioManager = ({ device, onParameterUpdate, mode = 'full' }) => {
       default:
         return edge.signal;
     }
+  };
+
+  // 获取节点的连接信息
+  const getNodeConnections = (nodeId) => {
+    if (!topologyData || !topologyData.edges) return [];
+
+    const connections = [];
+    const processedPairs = new Set(); // 用于避免重复的连接对
+
+    topologyData.edges.forEach(edge => {
+      let connectedNodeId = null;
+      let connectionInfo = null;
+
+      if (edge.source === nodeId) {
+        connectedNodeId = edge.target;
+        connectionInfo = {
+          nodeId: connectedNodeId,
+          direction: 'outgoing',
+          signal: edge.signal,
+          quality: edge.quality,
+          distance: edge.distance,
+          qualityLevel: edge.qualityLevel
+        };
+      } else if (edge.target === nodeId) {
+        connectedNodeId = edge.source;
+        connectionInfo = {
+          nodeId: connectedNodeId,
+          direction: 'incoming',
+          signal: edge.signal,
+          quality: edge.quality,
+          distance: edge.distance,
+          qualityLevel: edge.qualityLevel
+        };
+      }
+
+      if (connectedNodeId && connectionInfo) {
+        // 创建连接对的唯一标识（较小的ID在前）
+        const pairKey = [nodeId, connectedNodeId].sort().join('-');
+
+        // 查找是否已有该连接对的记录
+        let existingConnection = connections.find(conn => {
+          const existingPairKey = [nodeId, conn.nodeId].sort().join('-');
+          return existingPairKey === pairKey;
+        });
+
+        if (existingConnection) {
+          // 如果已存在，更新为双向连接信息
+          if (connectionInfo.direction === 'outgoing') {
+            existingConnection.outgoingSignal = connectionInfo.signal;
+            existingConnection.outgoingQuality = connectionInfo.quality;
+          } else {
+            existingConnection.incomingSignal = connectionInfo.signal;
+            existingConnection.incomingQuality = connectionInfo.quality;
+          }
+          existingConnection.bidirectional = true;
+        } else {
+          // 如果不存在，创建新的连接记录
+          const connectedNode = topologyData.nodes.find(n => n.id === connectedNodeId);
+          if (connectedNode) {
+            const newConnection = {
+              nodeId: connectedNodeId,
+              nodeName: connectedNode.label,
+              nodeType: connectedNode.type,
+              nodeStatus: connectedNode.status,
+              distance: connectionInfo.distance,
+              qualityLevel: connectionInfo.qualityLevel,
+              bidirectional: false
+            };
+
+            if (connectionInfo.direction === 'outgoing') {
+              newConnection.outgoingSignal = connectionInfo.signal;
+              newConnection.outgoingQuality = connectionInfo.quality;
+            } else {
+              newConnection.incomingSignal = connectionInfo.signal;
+              newConnection.incomingQuality = connectionInfo.quality;
+            }
+
+            connections.push(newConnection);
+          }
+        }
+      }
+    });
+
+    return connections;
   };
 
   // 获取连线颜色（根据质量等级）

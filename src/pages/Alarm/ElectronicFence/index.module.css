@@ -1,0 +1,342 @@
+/* 电子围栏管理页面样式 */
+.container {
+  padding: 24px;
+  background: #f5f5f5;
+  min-height: calc(100vh - 64px);
+}
+
+/* 统计卡片行 */
+.statsRow {
+  margin-bottom: 16px;
+}
+
+.statsRow :global(.ant-card) {
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+}
+
+.statsRow :global(.ant-card:hover) {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.statsRow :global(.ant-card-body) {
+  padding: 20px;
+}
+
+.statsRow :global(.ant-statistic-title) {
+  color: #8c8c8c;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.statsRow :global(.ant-statistic-content) {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.statsRow :global(.ant-statistic-content-prefix) {
+  margin-right: 8px;
+  font-size: 20px;
+}
+
+/* 搜索区域 */
+.searchCard {
+  margin-bottom: 16px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.searchCard :global(.ant-card-body) {
+  padding: 20px 24px;
+}
+
+.searchCard :global(.ant-input),
+.searchCard :global(.ant-select-selector) {
+  border-radius: 6px;
+  border-color: #d9d9d9;
+  transition: all 0.3s ease;
+}
+
+.searchCard :global(.ant-input:focus),
+.searchCard :global(.ant-select-focused .ant-select-selector) {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.searchCard :global(.ant-btn) {
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.searchCard :global(.ant-btn-primary) {
+  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+  border: none;
+  box-shadow: 0 2px 4px rgba(24, 144, 255, 0.3);
+}
+
+.searchCard :global(.ant-btn-primary:hover) {
+  background: linear-gradient(135deg, #40a9ff 0%, #1890ff 100%);
+  box-shadow: 0 4px 8px rgba(24, 144, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.searchCard :global(.ant-btn-danger) {
+  background: linear-gradient(135deg, #ff4d4f 0%, #cf1322 100%);
+  border: none;
+  box-shadow: 0 2px 4px rgba(255, 77, 79, 0.3);
+}
+
+.searchCard :global(.ant-btn-danger:hover) {
+  background: linear-gradient(135deg, #ff7875 0%, #ff4d4f 100%);
+  box-shadow: 0 4px 8px rgba(255, 77, 79, 0.4);
+  transform: translateY(-1px);
+}
+
+/* 表格区域 */
+.tableCard {
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.tableCard :global(.ant-card-body) {
+  padding: 0;
+}
+
+.tableCard :global(.ant-table) {
+  border-radius: 8px;
+}
+
+.tableCard :global(.ant-table-thead > tr > th) {
+  background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+  font-weight: 600;
+  color: #262626;
+  border-bottom: 2px solid #e8e8e8;
+  padding: 16px;
+}
+
+.tableCard :global(.ant-table-tbody > tr > td) {
+  border-bottom: 1px solid #f5f5f5;
+  padding: 16px;
+  transition: all 0.3s ease;
+}
+
+.tableCard :global(.ant-table-tbody > tr:hover > td) {
+  background: #f8f9fa;
+}
+
+.tableCard :global(.ant-table-row-selected > td) {
+  background: #e6f7ff !important;
+}
+
+/* 表格内容样式 */
+.tableCard :global(.ant-tag) {
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border: none;
+}
+
+.tableCard :global(.ant-badge) {
+  font-size: 12px;
+}
+
+.tableCard :global(.ant-badge-status-dot) {
+  width: 8px;
+  height: 8px;
+}
+
+/* 操作按钮样式 */
+.tableCard :global(.ant-btn-sm) {
+  border-radius: 4px;
+  font-size: 12px;
+  height: 28px;
+  padding: 0 8px;
+  transition: all 0.3s ease;
+}
+
+.tableCard :global(.ant-btn-primary) {
+  background: #1890ff;
+  border-color: #1890ff;
+}
+
+.tableCard :global(.ant-btn-primary:hover) {
+  background: #40a9ff;
+  border-color: #40a9ff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(24, 144, 255, 0.3);
+}
+
+.tableCard :global(.ant-btn-default:hover) {
+  border-color: #1890ff;
+  color: #1890ff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tableCard :global(.ant-btn-dangerous:hover) {
+  background: #ff4d4f;
+  border-color: #ff4d4f;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(255, 77, 79, 0.3);
+}
+
+/* 分页样式 */
+.tableCard :global(.ant-pagination) {
+  margin: 16px 24px;
+  text-align: right;
+}
+
+.tableCard :global(.ant-pagination-item) {
+  border-radius: 4px;
+  border-color: #d9d9d9;
+}
+
+.tableCard :global(.ant-pagination-item-active) {
+  background: #1890ff;
+  border-color: #1890ff;
+}
+
+.tableCard :global(.ant-pagination-item-active a) {
+  color: #fff;
+}
+
+.tableCard :global(.ant-pagination-jump-prev .ant-pagination-item-container .ant-pagination-item-link-icon),
+.tableCard :global(.ant-pagination-jump-next .ant-pagination-item-container .ant-pagination-item-link-icon) {
+  color: #1890ff;
+}
+
+/* 选择框样式 */
+.tableCard :global(.ant-checkbox-wrapper) {
+  margin-right: 0;
+}
+
+.tableCard :global(.ant-checkbox-checked .ant-checkbox-inner) {
+  background-color: #1890ff;
+  border-color: #1890ff;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .statsRow :global(.ant-col) {
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 12px;
+  }
+  
+  .statsRow {
+    margin-bottom: 12px;
+  }
+  
+  .searchCard {
+    margin-bottom: 12px;
+  }
+  
+  .searchCard :global(.ant-card-body) {
+    padding: 16px;
+  }
+  
+  .searchCard :global(.ant-row) {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .searchCard :global(.ant-col) {
+    width: 100% !important;
+    max-width: none !important;
+  }
+  
+  .tableCard :global(.ant-table-thead > tr > th),
+  .tableCard :global(.ant-table-tbody > tr > td) {
+    padding: 12px 8px;
+    font-size: 12px;
+  }
+  
+  .tableCard :global(.ant-pagination) {
+    margin: 12px 16px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 8px;
+  }
+  
+  .statsRow :global(.ant-card-body) {
+    padding: 16px;
+  }
+  
+  .statsRow :global(.ant-statistic-content) {
+    font-size: 20px;
+  }
+  
+  .searchCard :global(.ant-card-body) {
+    padding: 12px;
+  }
+  
+  .tableCard :global(.ant-table-thead > tr > th),
+  .tableCard :global(.ant-table-tbody > tr > td) {
+    padding: 8px 4px;
+    font-size: 11px;
+  }
+  
+  .tableCard :global(.ant-btn-sm) {
+    height: 24px;
+    padding: 0 6px;
+    font-size: 11px;
+  }
+  
+  .tableCard :global(.ant-tag) {
+    font-size: 10px;
+    padding: 1px 6px;
+  }
+}
+
+/* 暗色主题适配 */
+.container.dark {
+  background: #141414;
+}
+
+.container.dark .statsRow :global(.ant-card) {
+  background: #1f1f1f;
+  border-color: #434343;
+}
+
+.container.dark .searchCard,
+.container.dark .tableCard {
+  background: #1f1f1f;
+  border-color: #434343;
+}
+
+.container.dark .tableCard :global(.ant-table-thead > tr > th) {
+  background: linear-gradient(135deg, #262626 0%, #1f1f1f 100%);
+  color: #d9d9d9;
+  border-bottom-color: #434343;
+}
+
+.container.dark .tableCard :global(.ant-table-tbody > tr > td) {
+  background: #1f1f1f;
+  color: #d9d9d9;
+  border-bottom-color: #303030;
+}
+
+.container.dark .tableCard :global(.ant-table-tbody > tr:hover > td) {
+  background: #262626;
+}
+
+.container.dark .tableCard :global(.ant-table-row-selected > td) {
+  background: #111b26 !important;
+}

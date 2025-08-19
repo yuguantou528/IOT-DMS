@@ -1,9 +1,9 @@
-// 产品管理服务
+// 设备模板管理服务
 
 // 模拟延迟
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-// 产品状态选项
+// 模板状态选项
 export const productStatuses = [
   { value: 'active', label: '启用', color: 'success' },
   { value: 'inactive', label: '禁用', color: 'default' },
@@ -23,15 +23,15 @@ export const deviceTypes = [
   { value: 'other', label: '其他设备' }
 ];
 
-// 模拟产品数据
+// 模拟模板数据
 let productData = [
   {
     id: 1,
-    name: '智能Mesh通信产品',
+    name: '智能Mesh通信模板',
     code: 'PROD_MESH_001',
     deviceType: 'mesh_radio',
     deviceTypeName: 'Mesh电台',
-    description: '支持多跳自组网的智能通信产品，适用于应急通信场景',
+    description: '支持多跳自组网的智能通信模板，适用于应急通信场景',
     status: 'active',
     version: 'v1.2.0',
     thingModelId: 2, // 关联Mesh电台物模型
@@ -117,11 +117,11 @@ let productData = [
   },
   {
     id: 2,
-    name: '370M基站通信产品',
+    name: '370M基站通信模板',
     code: 'PROD_370M_001',
     deviceType: '370m_base_station',
     deviceTypeName: '370M基站',
-    description: '专业级370M频段基站通信产品，支持大范围覆盖',
+    description: '专业级370M频段基站通信模板，支持大范围覆盖',
     status: 'active',
     version: 'v2.1.0',
     linkedDevices: [],
@@ -156,11 +156,11 @@ let productData = [
   },
   {
     id: 3,
-    name: '智能视频监控产品',
+    name: '智能视频监控模板',
     code: 'PROD_VIDEO_001',
     deviceType: 'network_camera',
     deviceTypeName: '网络摄像头',
-    description: 'AI智能视频监控产品，支持人脸识别和行为分析',
+    description: 'AI智能视频监控模板，支持人脸识别和行为分析',
     status: 'active',
     version: 'v1.0.0-beta',
     thingModelId: 1, // 关联智能摄像头物模型
@@ -216,11 +216,11 @@ let productData = [
   },
   {
     id: 4,
-    name: '智能网关通信产品',
+    name: '智能网关通信模板',
     code: 'PROD_GATEWAY_001',
     deviceType: 'gateway',
     deviceTypeName: '网关设备',
-    description: '多协议智能网关产品，支持4G/5G/WiFi/以太网多种接入方式',
+    description: '多协议智能网关模板，支持4G/5G/WiFi/以太网多种接入方式',
     status: 'active',
     version: 'v1.5.0',
     linkedDevices: [],
@@ -267,11 +267,11 @@ let productData = [
   },
   {
     id: 5,
-    name: '高清摄像头产品',
+    name: '高清摄像头模板',
     code: 'PROD_HD_CAM_001',
     deviceType: 'network_camera',
     deviceTypeName: '网络摄像头',
-    description: '高清网络摄像头产品，支持4K录制',
+    description: '高清网络摄像头模板，支持4K录制',
     status: 'active',
     version: 'v2.0.0',
     thingModelId: 1, // 关联智能摄像头物模型
@@ -282,11 +282,11 @@ let productData = [
   },
   {
     id: 6,
-    name: 'Mesh中继器产品',
+    name: 'Mesh中继器模板',
     code: 'PROD_MESH_RELAY_001',
     deviceType: 'mesh_radio',
     deviceTypeName: 'Mesh电台',
-    description: 'Mesh网络中继器产品，扩展网络覆盖范围',
+    description: 'Mesh网络中继器模板，扩展网络覆盖范围',
     status: 'active',
     version: 'v1.0.0',
     thingModelId: 2, // 关联Mesh电台物模型
@@ -312,13 +312,13 @@ let productData = [
   }
 ];
 
-// 获取产品列表
+// 获取模板列表
 export const getProductList = async (params = {}) => {
   await delay(500);
   
   let filteredData = [...productData];
   
-  // 按产品名称搜索
+  // 按模板名称搜索
   if (params.name) {
     filteredData = filteredData.filter(item => 
       item.name.toLowerCase().includes(params.name.toLowerCase()) ||
@@ -357,7 +357,7 @@ export const getProductList = async (params = {}) => {
   };
 };
 
-// 获取产品详情
+// 获取模板详情
 export const getProductDetail = async (id) => {
   await delay(300);
   
@@ -371,12 +371,12 @@ export const getProductDetail = async (id) => {
   } else {
     return {
       success: false,
-      message: '产品不存在'
+      message: '模板不存在'
     };
   }
 };
 
-// 创建产品
+// 创建模板
 export const createProduct = async (data) => {
   await delay(800);
   
@@ -385,7 +385,7 @@ export const createProduct = async (data) => {
   if (existingCode) {
     return {
       success: false,
-      message: '产品编码已存在'
+      message: '模板编码已存在'
     };
   }
   
@@ -394,7 +394,7 @@ export const createProduct = async (data) => {
   if (existingName) {
     return {
       success: false,
-      message: '产品名称已存在'
+      message: '模板名称已存在'
     };
   }
   
@@ -411,7 +411,7 @@ export const createProduct = async (data) => {
 
   // 如果关联了物模型，记录日志
   if (data.thingModelId) {
-    console.log('✅ [产品管理] 新产品已关联物模型:', {
+    console.log('✅ [模板管理] 新模板已关联物模型:', {
       productId: newProduct.id,
       productName: newProduct.name,
       thingModelId: data.thingModelId
@@ -425,7 +425,7 @@ export const createProduct = async (data) => {
   };
 };
 
-// 更新产品
+// 更新模板
 export const updateProduct = async (id, data) => {
   await delay(800);
   
@@ -434,7 +434,7 @@ export const updateProduct = async (id, data) => {
   if (index === -1) {
     return {
       success: false,
-      message: '产品不存在'
+      message: '模板不存在'
     };
   }
   
@@ -445,7 +445,7 @@ export const updateProduct = async (id, data) => {
   if (existingCode) {
     return {
       success: false,
-      message: '产品编码已存在'
+      message: '模板编码已存在'
     };
   }
   
@@ -456,7 +456,7 @@ export const updateProduct = async (id, data) => {
   if (existingName) {
     return {
       success: false,
-      message: '产品名称已存在'
+      message: '模板名称已存在'
     };
   }
   
@@ -471,7 +471,7 @@ export const updateProduct = async (id, data) => {
 
   // 如果物模型关联发生变化，记录日志
   if (oldProduct.thingModelId !== data.thingModelId) {
-    console.log('🔄 [产品管理] 物模型关联已更新:', {
+    console.log('🔄 [模板管理] 物模型关联已更新:', {
       productId: id,
       productName: productData[index].name,
       oldThingModelId: oldProduct.thingModelId,
@@ -486,7 +486,7 @@ export const updateProduct = async (id, data) => {
   };
 };
 
-// 删除产品
+// 删除模板
 export const deleteProduct = async (id) => {
   await delay(500);
   
@@ -495,7 +495,7 @@ export const deleteProduct = async (id) => {
   if (index === -1) {
     return {
       success: false,
-      message: '产品不存在'
+      message: '模板不存在'
     };
   }
   
@@ -507,7 +507,7 @@ export const deleteProduct = async (id) => {
   };
 };
 
-// 导出产品数据
+// 导出模板数据
 export const exportProductData = async (params = {}) => {
   await delay(1000);
 
@@ -520,7 +520,7 @@ export const exportProductData = async (params = {}) => {
   };
 };
 
-// 根据物模型ID获取关联的产品列表
+// 根据物模型ID获取关联的模板列表
 export const getProductsByThingModelId = async (thingModelId) => {
   await delay(200);
 
@@ -535,7 +535,7 @@ export const getProductsByThingModelId = async (thingModelId) => {
   };
 };
 
-// 更新产品关联设备列表
+// 更新模板关联设备列表
 // 获取所有已关联的设备ID（按设备类型分组）
 export const getAllLinkedDevicesByType = async (deviceType, excludeProductId = null) => {
   await delay(100);
@@ -544,12 +544,12 @@ export const getAllLinkedDevicesByType = async (deviceType, excludeProductId = n
     const linkedDeviceIds = new Set();
     
     productData.forEach(product => {
-      // 如果指定了排除的产品ID，则跳过该产品
+      // 如果指定了排除的模板ID，则跳过该模板
       if (excludeProductId && product.id === excludeProductId) {
         return;
       }
       
-      // 只检查相同设备类型的产品
+      // 只检查相同设备类型的模板
       if (product.deviceType === deviceType && product.linkedDevices) {
         product.linkedDevices.forEach(device => {
           linkedDeviceIds.add(device.id);
@@ -580,7 +580,7 @@ export const updateProductLinkedDevices = async (productId, deviceData, action) 
   if (productIndex === -1) {
     return {
       success: false,
-      message: '产品不存在'
+      message: '模板不存在'
     };
   }
 
@@ -607,14 +607,14 @@ export const updateProductLinkedDevices = async (productId, deviceData, action) 
         product.linkedDevices.push({ id: deviceId });
       }
 
-      console.log('✅ [产品服务] 设备已添加到产品关联列表:', {
+      console.log('✅ [模板服务] 设备已添加到模板关联列表:', {
         productId,
         productName: product.name,
         deviceId,
         totalLinkedDevices: product.linkedDevices.length
       });
 
-      // 同步更新设备的产品关联信息
+      // 同步更新设备的模板关联信息
       try {
         const { updateDevice } = await import('./deviceManagement');
         const { getDeviceList } = await import('./deviceManagement');
@@ -630,7 +630,7 @@ export const updateProductLinkedDevices = async (productId, deviceData, action) 
               productName: product.name,
               productCode: product.code
             });
-            console.log('✅ [产品服务] 已同步更新设备的产品关联信息:', {
+            console.log('✅ [模板服务] 已同步更新设备的模板关联信息:', {
               deviceId,
               deviceName: device.name,
               productId,
@@ -639,14 +639,14 @@ export const updateProductLinkedDevices = async (productId, deviceData, action) 
           }
         }
       } catch (error) {
-        console.warn('⚠️ [产品服务] 同步更新设备产品信息失败:', error);
+        console.warn('⚠️ [模板服务] 同步更新设备模板信息失败:', error);
       }
 
     } else {
       // 如果设备已存在，更新设备信息
       if (typeof deviceData === 'object') {
         product.linkedDevices[existingIndex] = deviceData;
-        console.log('✅ [产品服务] 已更新产品关联设备信息:', {
+        console.log('✅ [模板服务] 已更新模板关联设备信息:', {
           productId,
           deviceId
         });
@@ -662,7 +662,7 @@ export const updateProductLinkedDevices = async (productId, deviceData, action) 
 
     product.linkedDevices = product.linkedDevices.filter(device => device.id !== deviceId);
 
-    console.log('✅ [产品服务] 设备已从产品关联列表移除:', {
+    console.log('✅ [模板服务] 设备已从模板关联列表移除:', {
       productId,
       productName: product.name,
       deviceId,
@@ -671,7 +671,7 @@ export const updateProductLinkedDevices = async (productId, deviceData, action) 
       remainingLinkedDevices: product.linkedDevices.length
     });
 
-    // 同步清除设备的产品关联信息
+    // 同步清除设备的模板关联信息
     try {
       const { updateDevice } = await import('./deviceManagement');
       const { getDeviceList } = await import('./deviceManagement');
@@ -689,25 +689,25 @@ export const updateProductLinkedDevices = async (productId, deviceData, action) 
           });
 
           if (updateResult.success) {
-            console.log('✅ [产品服务] 已同步清除设备的产品关联信息:', {
+            console.log('✅ [模板服务] 已同步清除设备的模板关联信息:', {
               deviceId,
               deviceName: device.name,
               previousProductId: device.productId,
               previousProductName: device.productName
             });
           } else {
-            console.error('❌ [产品服务] 清除设备产品关联信息失败:', updateResult.message);
+            console.error('❌ [模板服务] 清除设备模板关联信息失败:', updateResult.message);
           }
         } else {
-          console.warn('⚠️ [产品服务] 未找到要清除关联的设备:', { deviceId });
+          console.warn('⚠️ [模板服务] 未找到要清除关联的设备:', { deviceId });
         }
       }
     } catch (error) {
-      console.error('❌ [产品服务] 同步清除设备产品信息异常:', error);
+      console.error('❌ [模板服务] 同步清除设备模板信息异常:', error);
     }
   }
 
-  // 更新产品的更新时间
+  // 更新模板的更新时间
   product.updateTime = new Date().toLocaleString('zh-CN');
 
   return {

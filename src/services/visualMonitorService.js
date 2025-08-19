@@ -1,14 +1,14 @@
 // 可视化监控服务
 
-// 模拟设备数据
+// 模拟设备数据 - 位于张家界国家森林公园区域
 const mockDevices = [
   {
     id: 1,
     name: '智能摄像头-001',
     type: 'camera',
     status: 'online',
-    position: [116.397428, 39.90923],
-    address: '北京市朝阳区建国门外大街1号',
+    position: [110.3245, 29.2156], // 张家界森林公园入口区域
+    address: '湖南省张家界市武陵源区森林公园入口',
     lastUpdate: '2024-01-20 14:30:25',
     alarmCount: 2,
     videoUrl: 'https://example.com/video1.mp4',
@@ -18,7 +18,7 @@ const mockDevices = [
     maintainer: '张三',
     phone: '13800138001',
     ip: '192.168.1.101',
-    location: '北京市朝阳区建国门外大街1号',
+    location: '湖南省张家界市武陵源区森林公园入口',
     lastOnline: '2024-01-20 14:30:25',
     description: '高清网络摄像头，支持夜视功能，用于重要区域监控'
   },
@@ -27,8 +27,8 @@ const mockDevices = [
     name: 'Mesh电台-002',
     type: 'radio',
     status: 'online',
-    position: [116.407428, 39.91923],
-    address: '北京市朝阳区建国门外大街2号',
+    position: [110.3567, 29.2389], // 黄石寨景区
+    address: '湖南省张家界市武陵源区黄石寨景区',
     lastUpdate: '2024-01-20 14:28:15',
     alarmCount: 0,
     videoUrl: null,
@@ -38,7 +38,7 @@ const mockDevices = [
     maintainer: '李四',
     phone: '13800138002',
     ip: '192.168.1.102',
-    location: '北京市朝阳区建国门外大街2号',
+    location: '湖南省张家界市武陵源区黄石寨景区',
     lastOnline: '2024-01-20 14:28:15',
     description: 'Mesh网络电台，支持自组网和多跳中继通信'
   },
@@ -47,8 +47,8 @@ const mockDevices = [
     name: '温湿度传感器-003',
     type: 'sensor',
     status: 'offline',
-    position: [116.387428, 39.89923],
-    address: '北京市朝阳区建国门外大街3号',
+    position: [110.2987, 29.1923], // 金鞭溪区域
+    address: '湖南省张家界市武陵源区金鞭溪自然保护区',
     lastUpdate: '2024-01-20 13:45:10',
     alarmCount: 1,
     videoUrl: null,
@@ -58,7 +58,7 @@ const mockDevices = [
     maintainer: '王五',
     phone: '13800138003',
     ip: '192.168.1.103',
-    location: '北京市朝阳区建国门外大街3号',
+    location: '湖南省张家界市武陵源区金鞭溪自然保护区',
     lastOnline: '2024-01-20 13:45:10',
     description: '多功能环境监测传感器，监测温度、湿度、空气质量'
   },
@@ -67,8 +67,8 @@ const mockDevices = [
     name: '智能摄像头-004',
     type: 'camera',
     status: 'online',
-    position: [116.417428, 39.92923],
-    address: '北京市朝阳区建国门外大街4号',
+    position: [110.4123, 29.2678], // 袁家界景区
+    address: '湖南省张家界市武陵源区袁家界景区',
     lastUpdate: '2024-01-20 14:32:08',
     alarmCount: 0,
     videoUrl: 'https://example.com/video4.mp4',
@@ -78,7 +78,7 @@ const mockDevices = [
     maintainer: '赵六',
     phone: '13800138004',
     ip: '192.168.1.104',
-    location: '北京市朝阳区建国门外大街4号',
+    location: '湖南省张家界市武陵源区袁家界景区',
     lastOnline: '2024-01-20 14:32:08',
     description: '球型云台摄像头，支持360度旋转和远程控制'
   },
@@ -87,8 +87,8 @@ const mockDevices = [
     name: '370M基站-005',
     type: 'base_station',
     status: 'online',
-    position: [116.427428, 39.88923],
-    address: '北京市朝阳区建国门外大街5号',
+    position: [110.3789, 29.3012], // 天子山区域
+    address: '湖南省张家界市武陵源区天子山自然保护区',
     lastUpdate: '2024-01-20 14:35:12',
     alarmCount: 1,
     videoUrl: null,
@@ -98,13 +98,53 @@ const mockDevices = [
     maintainer: '孙七',
     phone: '13800138005',
     ip: '192.168.1.105',
-    location: '北京市朝阳区建国门外大街5号',
+    location: '湖南省张家界市武陵源区天子山自然保护区',
     lastOnline: '2024-01-20 14:35:12',
     description: '370M基站设备，提供区域通信覆盖和数据中继服务'
+  },
+  {
+    id: 6,
+    name: '单兵执法记录仪-006',
+    type: 'body_camera',
+    status: 'online',
+    position: [110.2654, 29.2534], // 十里画廊区域
+    address: '湖南省张家界市武陵源区十里画廊景区',
+    lastUpdate: '2024-01-20 14:40:15',
+    alarmCount: 0,
+    videoUrl: 'https://example.com/video6.mp4',
+    manufacturer: '海康威视',
+    model: 'DS-MH2111',
+    installDate: '2024-01-10',
+    maintainer: '李警官',
+    phone: '13800138006',
+    ip: '192.168.1.106',
+    location: '湖南省张家界市武陵源区十里画廊景区',
+    lastOnline: '2024-01-20 14:40:15',
+    description: '单兵执法记录仪，支持高清录像、实时传输、GPS定位等功能'
+  },
+  {
+    id: 7,
+    name: '单兵执法记录仪-007',
+    type: 'body_camera',
+    status: 'offline',
+    position: [110.4456, 29.1789], // 杨家界区域
+    address: '湖南省张家界市武陵源区杨家界自然保护区',
+    lastUpdate: '2024-01-20 13:20:30',
+    alarmCount: 1,
+    videoUrl: 'https://example.com/video7.mp4',
+    manufacturer: '大华',
+    model: 'DH-IVS-F7500-B',
+    installDate: '2024-01-08',
+    maintainer: '王警官',
+    phone: '13800138007',
+    ip: '192.168.1.107',
+    location: '湖南省张家界市武陵源区杨家界自然保护区',
+    lastOnline: '2024-01-20 13:20:30',
+    description: '单兵执法记录仪，具备夜视功能和防水防震设计'
   }
 ];
 
-// 模拟告警数据
+// 模拟告警数据 - 更新为张家界森林公园区域坐标
 const mockAlarms = [
   {
     id: 1,
@@ -115,7 +155,7 @@ const mockAlarms = [
     message: '检测到异常移动',
     time: '2024-01-20 14:30:25',
     status: 'active',
-    position: [116.397428, 39.90923],
+    position: [110.3245, 29.2156], // 张家界森林公园入口区域
     description: '在监控区域内检测到可疑人员活动，请及时查看现场情况。建议立即查看实时视频画面并确认是否为正常活动。',
     handler: null,
     handleTime: null,
@@ -130,7 +170,7 @@ const mockAlarms = [
     message: '检测到未知人员',
     time: '2024-01-20 14:25:18',
     status: 'active',
-    position: [116.397428, 39.90923],
+    position: [110.3245, 29.2156], // 张家界森林公园入口区域
     description: '人脸识别系统检测到未授权人员，建议立即核实身份。该人员未在系统白名单中，可能存在安全风险。',
     handler: null,
     handleTime: null,
@@ -145,7 +185,7 @@ const mockAlarms = [
     message: '温度超过阈值',
     time: '2024-01-20 13:45:10',
     status: 'active',
-    position: [116.387428, 39.89923],
+    position: [110.2987, 29.1923], // 金鞭溪区域
     description: '当前温度为45°C，超过设定阈值40°C，可能存在设备过热风险。环境温度异常可能影响设备正常运行。',
     handler: null,
     handleTime: null,
@@ -160,11 +200,26 @@ const mockAlarms = [
     message: '信号强度低',
     time: '2024-01-20 14:20:30',
     status: 'active',
-    position: [116.427428, 39.88923],
+    position: [110.3789, 29.3012], // 天子山区域
     description: '基站信号强度低于-85dBm，可能影响通信质量。信号强度偏低可能导致通信中断或质量下降。',
     handler: null,
     handleTime: null,
     solution: '1. 检查天线连接状态\n2. 测试传输链路质量\n3. 检查周围是否有干扰源\n4. 调整天线方向或功率'
+  },
+  {
+    id: 5,
+    deviceId: 7,
+    deviceName: '单兵执法记录仪-007',
+    type: '设备离线告警',
+    level: 'error',
+    message: '设备失去连接',
+    time: '2024-01-20 13:20:30',
+    status: 'active',
+    position: [110.4456, 29.1789], // 杨家界区域
+    description: '执法记录仪设备失去网络连接，无法接收实时数据。可能是网络故障或设备电量不足。',
+    handler: null,
+    handleTime: null,
+    solution: '1. 检查设备电量状态\n2. 确认网络连接状态\n3. 联系现场执法人员\n4. 检查设备是否正常工作'
   }
 ];
 
@@ -287,11 +342,13 @@ export const getStatistics = async () => {
         offlineDevices: mockDevices.filter(d => d.status === 'offline').length,
         activeAlarms: mockAlarms.filter(a => a.status === 'active').length,
         handledAlarms: mockAlarms.filter(a => a.status === 'handled').length,
+        alarmDevices: mockDevices.filter(d => d.alarmCount > 0).length, // 有告警的设备数量
         deviceTypes: {
           camera: mockDevices.filter(d => d.type === 'camera').length,
           radio: mockDevices.filter(d => d.type === 'radio').length,
           sensor: mockDevices.filter(d => d.type === 'sensor').length,
-          base_station: mockDevices.filter(d => d.type === 'base_station').length
+          base_station: mockDevices.filter(d => d.type === 'base_station').length,
+          body_camera: mockDevices.filter(d => d.type === 'body_camera').length
         },
         alarmLevels: {
           info: mockAlarms.filter(a => a.level === 'info').length,
@@ -300,11 +357,69 @@ export const getStatistics = async () => {
           alarm: mockAlarms.filter(a => a.level === 'alarm').length
         }
       };
-      
+
       resolve({
         success: true,
         data: stats
       });
     }, 200);
+  });
+};
+
+// 模拟设备轨迹数据
+const generateTrackData = (deviceId, startTime, endTime) => {
+  const tracks = [];
+  const device = mockDevices.find(d => d.id === deviceId);
+  if (!device) return tracks;
+
+  // 基础位置
+  const basePosition = device.position;
+  const startTimestamp = new Date(startTime).getTime();
+  const endTimestamp = new Date(endTime).getTime();
+  const duration = endTimestamp - startTimestamp;
+
+  // 生成轨迹点（每10分钟一个点）
+  const pointCount = Math.min(Math.max(Math.floor(duration / (10 * 60 * 1000)), 2), 50);
+
+  for (let i = 0; i < pointCount; i++) {
+    const timeOffset = (duration / (pointCount - 1)) * i;
+    const timestamp = startTimestamp + timeOffset;
+
+    // 在基础位置周围生成随机轨迹点
+    const latOffset = (Math.random() - 0.5) * 0.01; // 约1km范围
+    const lngOffset = (Math.random() - 0.5) * 0.01;
+
+    tracks.push({
+      id: i + 1,
+      deviceId: deviceId,
+      position: [basePosition[0] + lngOffset, basePosition[1] + latOffset],
+      timestamp: timestamp,
+      time: new Date(timestamp).toLocaleString('zh-CN'),
+      speed: Math.random() * 60 + 10, // 10-70 km/h
+      direction: Math.random() * 360, // 0-360度
+      accuracy: Math.random() * 10 + 5 // 5-15米精度
+    });
+  }
+
+  return tracks;
+};
+
+// 获取设备轨迹数据
+export const getDeviceTrack = async (deviceId, startTime, endTime) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const trackData = generateTrackData(deviceId, startTime, endTime);
+
+      resolve({
+        success: true,
+        data: {
+          deviceId: deviceId,
+          startTime: startTime,
+          endTime: endTime,
+          totalPoints: trackData.length,
+          tracks: trackData
+        }
+      });
+    }, 500);
   });
 };

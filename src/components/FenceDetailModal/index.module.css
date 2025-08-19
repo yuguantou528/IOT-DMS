@@ -1,0 +1,223 @@
+/* 围栏详情弹窗样式 */
+.fenceDetailModal {
+  /* 弹窗整体样式 */
+}
+
+.fenceDetailModal :global(.ant-modal-content) {
+  border-radius: 8px;
+  overflow: hidden;
+  height: 80vh;
+  max-height: 800px;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+.fenceDetailModal :global(.ant-modal-header) {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-bottom: 1px solid #e6f7ff;
+  padding: 16px 24px;
+  flex-shrink: 0;
+}
+
+.fenceDetailModal :global(.ant-modal-title) {
+  color: #0958d9;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.fenceDetailModal :global(.ant-modal-close) {
+  color: #8c8c8c;
+}
+
+.fenceDetailModal :global(.ant-modal-close:hover) {
+  color: #262626;
+}
+
+.fenceDetailModal :global(.ant-modal-body) {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modalContent {
+  padding: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+.modalContent :global(.ant-row) {
+  flex: 1;
+  height: 100%;
+}
+
+.modalContent :global(.ant-col) {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 信息区域 */
+.infoSection {
+  padding: 0 8px;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.infoSection::-webkit-scrollbar {
+  width: 6px;
+}
+
+.infoSection::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.infoSection::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.infoSection::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* 信息卡片 */
+.infoCard {
+  margin-bottom: 8px;
+  border-radius: 6px;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+}
+
+.infoCard:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.infoCard :global(.ant-card-body) {
+  padding: 10px 12px;
+}
+
+/* 描述卡片 */
+.descriptionCard {
+  border-radius: 6px;
+  border: 1px solid #f0f0f0;
+  background: #fafafa;
+}
+
+.descriptionCard :global(.ant-card-body) {
+  padding: 10px 12px;
+}
+
+/* 地图区域 */
+.mapSection {
+  padding: 0 8px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.mapContainer {
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f0f0f0;
+  flex: 1;
+  min-height: 400px;
+  height: 100%;
+}
+
+/* 确保地图容器内的Leaflet地图正确显示 */
+.mapContainer :global(.leaflet-container) {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.mapContainer :global(.leaflet-map-pane) {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* 标题样式 */
+.infoSection :global(.ant-typography-h4),
+.mapSection :global(.ant-typography-h4) {
+  color: #0958d9;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px !important;
+  margin-top: 0 !important;
+  display: flex;
+  align-items: center;
+}
+
+.infoSection :global(.ant-typography-h4)::before,
+.mapSection :global(.ant-typography-h4)::before {
+  content: '';
+  width: 3px;
+  height: 14px;
+  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+  border-radius: 2px;
+  margin-right: 8px;
+}
+
+/* 分割线样式 */
+.infoSection :global(.ant-divider) {
+  margin: 12px 0;
+  border-color: #f0f0f0;
+}
+
+/* 标签和徽章样式 */
+.infoCard :global(.ant-tag) {
+  border-radius: 4px;
+  font-weight: 500;
+  padding: 2px 8px;
+}
+
+.infoCard :global(.ant-badge) {
+  font-weight: 500;
+}
+
+/* 文本样式 */
+.infoCard :global(.ant-typography) {
+  margin-bottom: 0 !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .modalContent {
+    flex-direction: column;
+  }
+  
+  .infoSection,
+  .mapSection {
+    width: 100%;
+    max-height: none;
+  }
+  
+  .mapContainer {
+    height: 400px;
+  }
+}
+
+/* 加载状态 */
+.mapContainer :global(.ant-spin-container) {
+  border-radius: 8px;
+}
+
+/* 地图工具栏隐藏 */
+.mapContainer :global(.leaflet-control-container) {
+  display: none;
+}
+
+/* 地图缩放控件位置调整 */
+.mapContainer :global(.leaflet-control-zoom) {
+  margin: 10px;
+}

@@ -235,6 +235,35 @@
   color: #ccc;
 }
 
+.professionalTopology:fullscreen .connectionSection {
+  border-top-color: #444;
+}
+
+.professionalTopology:fullscreen .connectionItem {
+  background: #333;
+  border-color: #444;
+}
+
+.professionalTopology:fullscreen .connectionNodeName {
+  color: #fff;
+}
+
+.professionalTopology:fullscreen .connectionDetails {
+  color: #ccc;
+}
+
+.professionalTopology:fullscreen .connectionDistance {
+  color: #40a9ff;
+}
+
+.professionalTopology:fullscreen .signalDirection {
+  color: #999;
+}
+
+.professionalTopology:fullscreen .signalValue {
+  color: #fff;
+}
+
 /* 全屏模式下的连线标签颜色 */
 .professionalTopology:fullscreen .connectionLabel {
   fill: #fff !important;
@@ -550,6 +579,134 @@
 .detailLabel {
   color: #8c8c8c;
   font-weight: 500;
+}
+
+/* 连接信息样式 */
+.connectionSection {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.connectionHeader {
+  margin-bottom: 12px;
+}
+
+.connectionList {
+  /* 移除滚动条，让内容自然展开 */
+}
+
+.connectionItem {
+  margin-bottom: 8px;
+  padding: 8px;
+  background: #fafafa;
+  border-radius: 6px;
+  border: 1px solid #f0f0f0;
+}
+
+.connectionItem:last-child {
+  margin-bottom: 0;
+}
+
+.connectionNodeInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.connectionNodeName {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.connectionNodeIndicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.connectionDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: #666;
+}
+
+.connectionDistance {
+  font-weight: 500;
+  color: #1890ff;
+}
+
+.bidirectionalInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.signalInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.signalDirection {
+  width: 30px;
+  font-size: 10px;
+  color: #8c8c8c;
+}
+
+.signalValue {
+  font-family: 'Courier New', monospace;
+  font-weight: 500;
+  color: #333;
+}
+
+.qualityBadge {
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.qualityBadge[data-quality="excellent"] {
+  background: #f6ffed;
+  color: #52c41a;
+  border: 1px solid #b7eb8f;
+}
+
+.qualityBadge[data-quality="good"] {
+  background: #fff7e6;
+  color: #fa8c16;
+  border: 1px solid #ffd591;
+}
+
+.qualityBadge[data-quality="fair"] {
+  background: #fff2e8;
+  color: #fa541c;
+  border: 1px solid #ffbb96;
+}
+
+.qualityBadge[data-quality="poor"] {
+  background: #fff1f0;
+  color: #ff4d4f;
+  border: 1px solid #ffa39e;
+}
+
+.unidirectionalInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.noConnections {
+  text-align: center;
+  padding: 12px;
+  color: #8c8c8c;
 }
 
 .noSelection {

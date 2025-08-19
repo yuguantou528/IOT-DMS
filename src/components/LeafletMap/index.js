@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import DeviceTrack from './DeviceTrack';
+import TrackPlayback from '../TrackPlayback';
 import styles from './index.module.css';
 
 // 修复Leaflet默认图标问题
@@ -22,9 +23,10 @@ const createDeviceIcon = (device) => {
   const getIconText = (type) => {
     const icons = {
       camera: '📹',
-      radio: '📡', 
+      radio: '📡',
       sensor: '🔧',
-      base_station: '📶'
+      base_station: '📶',
+      body_camera: '📷'
     };
     return icons[type] || '📱';
   };
@@ -46,9 +48,116 @@ const createDeviceIcon = (device) => {
   });
 };
 
-// 地图控制组件
-const MapController = ({ mapType, devices, onDeviceClick }) => {
+// 地图比例尺和层级显示组件
+const MapScaleAndZoom = ({ onScaleChange, onZoomChange }) => {
   const map = useMap();
+  const [scale, setScale] = useState('');
+  const [zoom, setZoom] = useState(map.getZoom());
+
+  useEffect(() => {
+    const updateScaleAndZoom = () => {
+      const currentZoom = map.getZoom();
+      setZoom(currentZoom);
+
+      // 计算比例尺
+      const center = map.getCenter();
+      const bounds = map.getBounds();
+      const distance = center.distanceTo(bounds.getNorthEast());
+
+      // 根据距离计算合适的比例尺显示
+      let scaleText = '';
+      if (distance > 10000) {
+        scaleText = `${Math.round(distance / 1000)}km`;
+      } else if (distance > 1000) {
+        scaleText = `${(distance / 1000).toFixed(1)}km`;
+      } else {
+        scaleText = `${Math.round(distance)}m`;
+      }
+
+      setScale(scaleText);
+
+      // 回调通知父组件
+      if (onScaleChange) onScaleChange(scaleText);
+      if (onZoomChange) onZoomChange(currentZoom);
+    };
+
+    // 监听地图缩放和移动事件
+    map.on('zoomend', updateScaleAndZoom);
+    map.on('moveend', updateScaleAndZoom);
+
+    // 初始化
+    updateScaleAndZoom();
+
+    return () => {
+      map.off('zoomend', updateScaleAndZoom);
+      map.off('moveend', updateScaleAndZoom);
+    };
+  }, [map, onScaleChange, onZoomChange]);
+
+  return null; // 这个组件不渲染任何内容，只负责数据更新
+};
+
+// 地图控制组件
+const MapController = ({ mapType, devices, onDeviceClick, mapCenter, mapZoom, trackData, isRealTimeTracking }) => {
+  const map = useMap();
+  const [hasSetInitialTrackingView, setHasSetInitialTrackingView] = useState(false);
+
+  // 控制地图视图变化
+  useEffect(() => {
+    if (mapCenter && mapZoom) {
+      if (isRealTimeTracking) {
+        // 实时跟踪模式：只在第一次设置时执行
+        if (!hasSetInitialTrackingView) {
+          map.setView(mapCenter, mapZoom, {
+            animate: true,
+            duration: 1.5
+          });
+          setHasSetInitialTrackingView(true);
+        }
+      } else {
+        // 非实时跟踪模式：正常执行
+        map.setView(mapCenter, mapZoom, {
+          animate: true,
+          duration: 1.5
+        });
+      }
+    }
+  }, [map, mapCenter, mapZoom, isRealTimeTracking, hasSetInitialTrackingView]);
+
+  // 重置实时跟踪视图标志
+  useEffect(() => {
+    if (!isRealTimeTracking) {
+      setHasSetInitialTrackingView(false);
+    }
+  }, [isRealTimeTracking]);
+
+  // 当轨迹数据变化时，自动调整地图视图以适应轨迹范围（仅限历史轨迹查询）
+  useEffect(() => {
+    // 只在非实时跟踪模式下才自动调整地图视图
+    if (!isRealTimeTracking && trackData && trackData.length > 1) {
+      try {
+        // 创建轨迹点的边界
+        const bounds = L.latLngBounds();
+        trackData.forEach(point => {
+          if (point.position && point.position.length >= 2) {
+            // 轨迹数据格式：[经度, 纬度]，需要转换为 [纬度, 经度]
+            bounds.extend([point.position[1], point.position[0]]);
+          }
+        });
+
+        if (bounds.isValid()) {
+          // 添加一些边距，确保轨迹完全可见
+          map.fitBounds(bounds, {
+            padding: [20, 20],
+            animate: true,
+            duration: 1.5
+          });
+        }
+      } catch (error) {
+        console.error('调整地图视图时出错:', error);
+      }
+    }
+  }, [map, trackData, isRealTimeTracking]);
 
   useEffect(() => {
     // 根据地图类型切换图层
@@ -108,18 +217,30 @@ const MapController = ({ mapType, devices, onDeviceClick }) => {
   return null;
 };
 
-const LeafletMap = ({ 
-  devices = [], 
-  onDeviceClick, 
+const LeafletMap = ({
+  devices = [],
+  onDeviceClick,
   mapType = 'normal',
-  center = [39.9042, 116.4074], // 北京坐标
-  zoom = 10,
+  center = [29.2500, 110.3500], // 张家界国家森林公园坐标
+  zoom = 12,
   height = '100%',
   className = '',
   showTracks = false,
-  selectedDeviceId = null
+  selectedDeviceId = null,
+  trackData = [],
+  mapCenter = null, // 动态地图中心点
+  mapZoom = null, // 动态地图缩放级别
+  showScaleAndZoom = true, // 是否显示比例尺和层级
+  isRealTimeTracking = false, // 是否为实时轨迹跟踪
+  enableTrackPlayback = false // 是否启用轨迹播放功能
 }) => {
+  const [currentScale, setCurrentScale] = useState('');
+  const [currentZoom, setCurrentZoom] = useState(zoom);
   const [mapInstance, setMapInstance] = useState(null);
+
+  // 轨迹播放状态
+  const [playbackState, setPlaybackState] = useState(null);
+  const [currentPlaybackPoint, setCurrentPlaybackPoint] = useState(null);
 
   // 处理设备点击事件
   const handleDeviceClick = (device) => {
@@ -137,30 +258,27 @@ const LeafletMap = ({
       sensor: '传感器',
       base_station: '基站'
     }[device.type] || '设备';
-    
+
     return `${typeText} - ${statusText}`;
   };
 
-  // 调试信息
-  console.log('LeafletMap 渲染:', { 
-    devices: devices.length, 
-    mapType, 
-    center, 
-    zoom,
-    showTracks,
-    selectedDeviceId,
-    devicesWithPosition: devices.filter(d => d.position && d.position.length >= 2).length
-  });
+  // 处理轨迹播放状态变化
+  const handlePlaybackChange = (newPlaybackState) => {
+    setPlaybackState(newPlaybackState);
+  };
 
-  // 调试轨迹渲染条件
-  if (showTracks) {
-    console.log('轨迹渲染条件检查:', {
-      showTracks,
-      selectedDeviceId,
-      devicesCount: devices.length,
-      devicesWithPosition: devices.filter(d => d.position && d.position.length >= 2).map(d => ({ id: d.id, name: d.name, position: d.position }))
-    });
-  }
+  // 处理当前播放点变化
+  const handleCurrentPointChange = (point, index) => {
+    setCurrentPlaybackPoint(point);
+  };
+
+  // 判断是否显示轨迹播放控制
+  const shouldShowPlaybackControl = enableTrackPlayback &&
+    !isRealTimeTracking &&
+    trackData &&
+    trackData.length > 1;
+
+
 
   return (
     <div className={`${styles.leafletMapContainer} ${className}`} style={{ height }}>
@@ -171,32 +289,49 @@ const LeafletMap = ({
         className={styles.mapContainer}
         whenCreated={setMapInstance}
       >
-        <MapController 
-          mapType={mapType} 
+        <MapController
+          mapType={mapType}
           devices={devices}
           onDeviceClick={onDeviceClick}
+          mapCenter={mapCenter}
+          mapZoom={mapZoom}
+          trackData={trackData}
+          isRealTimeTracking={isRealTimeTracking}
         />
+
+        {/* 比例尺和层级监控组件 */}
+        {showScaleAndZoom && (
+          <MapScaleAndZoom
+            onScaleChange={setCurrentScale}
+            onZoomChange={setCurrentZoom}
+          />
+        )}
         
         {/* 渲染设备轨迹 */}
-        {showTracks && devices.map((device, index) => {
-          // 如果指定了特定设备ID，只显示该设备的轨迹
-          if (selectedDeviceId && device.id !== selectedDeviceId) {
-            return null;
-          }
-          
-          // 如果没有指定设备ID，显示所有设备的轨迹
-          if (!device.position || device.position.length < 2) {
-            return null;
-          }
+        {showTracks && devices
+          .filter((device) => {
+            // 如果指定了特定设备ID，只显示该设备的轨迹
+            if (selectedDeviceId && device.id !== selectedDeviceId) {
+              return false;
+            }
 
-          return (
+            // 如果没有指定设备ID，显示所有设备的轨迹
+            if (!device.position || device.position.length < 2) {
+              return false;
+            }
+
+            return true;
+          })
+          .map((device, index) => (
             <DeviceTrack
               key={`track-${device.id || index}`}
               device={device}
               visible={true}
+              trackData={trackData}
+              playbackState={playbackState}
+              currentPlaybackPoint={currentPlaybackPoint}
             />
-          );
-        })}
+          ))}
 
         {/* 渲染设备标记 */}
         {devices.map((device, index) => {
@@ -256,6 +391,32 @@ const LeafletMap = ({
           );
         })}
       </MapContainer>
+
+      {/* 比例尺和层级显示 */}
+      {showScaleAndZoom && (
+        <div className={styles.mapScaleInfo}>
+          <div className={styles.mapScale}>
+            <div className={styles.scaleBar}>
+              <div className={styles.scaleBarLine}></div>
+              <div className={styles.scaleBarText}>{currentScale}</div>
+            </div>
+          </div>
+          <div className={styles.mapZoomLevel}>
+            缩放级别: {Math.round(currentZoom)}
+          </div>
+        </div>
+      )}
+
+      {/* 轨迹播放控制面板 */}
+      {shouldShowPlaybackControl && (
+        <TrackPlayback
+          trackData={trackData}
+          onPlaybackChange={handlePlaybackChange}
+          onCurrentPointChange={handleCurrentPointChange}
+          visible={true}
+          className={styles.trackPlaybackControl}
+        />
+      )}
     </div>
   );
 };

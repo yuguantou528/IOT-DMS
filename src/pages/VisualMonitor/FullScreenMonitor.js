@@ -13,7 +13,8 @@ import {
   Switch,
   Select,
   Tooltip,
-  Progress
+  Progress,
+  message
 } from 'antd';
 import {
   MonitorOutlined,
@@ -25,14 +26,16 @@ import {
   FullscreenExitOutlined,
   EyeOutlined,
   ReloadOutlined,
-  SettingOutlined
+  SettingOutlined,
+  PhoneOutlined
 } from '@ant-design/icons';
 import styles from './FullScreenMonitor.module.css';
-import { 
-  getDeviceList, 
-  getAlarmList, 
+import {
+  getDeviceList,
+  getAlarmList,
   getStatistics
 } from '../../services/visualMonitorService';
+import AudioCallModal from '../../components/AudioCallModal';
 
 const { Option } = Select;
 
@@ -56,6 +59,8 @@ const FullScreenMonitor = () => {
     offlineDevices: 0,
     activeAlarms: 0
   });
+  const [audioCallModalVisible, setAudioCallModalVisible] = useState(false);
+  const [selectedCallDevice, setSelectedCallDevice] = useState(null);
 
   // 加载数据
   const loadData = async () => {
@@ -88,17 +93,17 @@ const FullScreenMonitor = () => {
   // 初始化
   useEffect(() => {
     loadData();
-    
-    // 定时刷新数据
-    const dataInterval = setInterval(loadData, 30000); // 30秒刷新一次
-    
+
+    // 定时刷新数据 - 已注释掉自动刷新功能
+    // const dataInterval = setInterval(loadData, 30000); // 30秒刷新一次
+
     // 更新时间
     const timeInterval = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
 
     return () => {
-      clearInterval(dataInterval);
+      // clearInterval(dataInterval);
       clearInterval(timeInterval);
     };
   }, []);
@@ -138,7 +143,8 @@ const FullScreenMonitor = () => {
       camera: { name: '摄像头', count: 0 },
       radio: { name: '电台', count: 0 },
       sensor: { name: '传感器', count: 0 },
-      base_station: { name: '基站', count: 0 }
+      base_station: { name: '基站', count: 0 },
+      body_camera: { name: '执法仪', count: 0 }
     };
 
     devices.forEach(device => {
@@ -160,9 +166,26 @@ const FullScreenMonitor = () => {
       camera: '📹',
       radio: '📡',
       sensor: '🔧',
-      base_station: '📶'
+      base_station: '📶',
+      body_camera: '📷'
     };
     return icons[type] || '📱';
+  };
+
+  // 处理语音呼叫
+  const handleAudioCall = (device) => {
+    if (device.type === 'body_camera') {
+      setSelectedCallDevice(device);
+      setAudioCallModalVisible(true);
+    } else {
+      message.warning('该设备不支持语音呼叫功能');
+    }
+  };
+
+  // 处理呼叫状态变化
+  const handleCallStatusChange = (status, data) => {
+    console.log('呼叫状态变化:', status, data);
+    // 可以在这里更新设备状态或记录通话日志
   };
 
   // 获取设备类型颜色
@@ -171,7 +194,8 @@ const FullScreenMonitor = () => {
       camera: '#1890ff',
       radio: '#52c41a',
       sensor: '#faad14',
-      base_station: '#f5222d'
+      base_station: '#f5222d',
+      body_camera: '#13c2c2'
     };
     return colors[type] || '#722ed1';
   };
@@ -271,9 +295,9 @@ const FullScreenMonitor = () => {
             <Card className={styles.statCard} bodyStyle={{ padding: '20px' }}>
               <div className={styles.statContent}>
                 <div className={styles.statNumber} style={{ color: '#faad14' }}>
-                  {stats.activeAlarms}
+                  {stats.alarmDevices}
                 </div>
-                <div className={styles.statLabel}>活跃告警</div>
+                <div className={styles.statLabel}>告警设备</div>
                 <div className={styles.statIcon} style={{ color: '#faad14' }}>
                   <WarningOutlined />
                 </div>
@@ -427,17 +451,29 @@ const FullScreenMonitor = () => {
                             status={device.status === 'online' ? 'success' : 'error'}
                             text={device.name}
                           />
-                          {device.videoUrl && (
-                            <Button
-                              type="link"
-                              size="small"
-                              icon={<EyeOutlined />}
-                              onClick={() => {
-                                setSelectedDevice(device);
-                                setVideoModalVisible(true);
-                              }}
-                            />
-                          )}
+                          <div style={{ display: 'flex', gap: '4px' }}>
+                            {device.videoUrl && (
+                              <Button
+                                type="link"
+                                size="small"
+                                icon={<EyeOutlined />}
+                                onClick={() => {
+                                  setSelectedDevice(device);
+                                  setVideoModalVisible(true);
+                                }}
+                              />
+                            )}
+                            {device.type === 'body_camera' && (
+                              <Button
+                                type="link"
+                                size="small"
+                                icon={<PhoneOutlined />}
+                                onClick={() => handleAudioCall(device)}
+                                disabled={device.status !== 'online'}
+                                style={{ color: device.status === 'online' ? '#52c41a' : undefined }}
+                              />
+                            )}
+                          </div>
                         </div>
                         {device.alarmCount > 0 && (
                           <Badge count={device.alarmCount} size="small" />
@@ -488,6 +524,14 @@ const FullScreenMonitor = () => {
           </Col>
         </Row>
       </div>
+
+      {/* 语音呼叫弹窗 */}
+      <AudioCallModal
+        visible={audioCallModalVisible}
+        onCancel={() => setAudioCallModalVisible(false)}
+        device={selectedCallDevice}
+        onCallStatusChange={handleCallStatusChange}
+      />
     </div>
   );
 };

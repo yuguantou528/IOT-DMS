@@ -1,0 +1,312 @@
+.associatedDevicesModal {
+  /* 弹窗样式 */
+}
+
+.modalContent {
+  padding: 0;
+}
+
+/* 统计信息区域 */
+.statisticsSection {
+  padding: 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #e8e8e8;
+}
+
+.statContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 16px;
+  width: 100%;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  min-width: 0;
+}
+
+.statIcon {
+  font-size: 24px;
+  color: #1890ff;
+  margin-right: 12px;
+}
+
+.statContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statNumber {
+  font-size: 24px;
+  font-weight: bold;
+  color: #262626;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: #8c8c8c;
+  text-align: center;
+}
+
+/* 设备列表区域 */
+.deviceListSection {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #f0f0f0;
+}
+
+/* 表格样式优化 */
+:global(.ant-table-thead > tr > th) {
+  background: #fafafa;
+  font-weight: 600;
+  font-size: 13px;
+  color: #262626;
+}
+
+:global(.ant-table-tbody > tr > td) {
+  font-size: 12px;
+  padding: 12px 8px;
+}
+
+:global(.ant-table-tbody > tr:hover > td) {
+  background: #f5f5f5;
+}
+
+/* 状态标签样式 */
+:global(.ant-tag) {
+  margin: 0;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+:global(.ant-tag-green) {
+  background: #f6ffed;
+  border-color: #b7eb8f;
+  color: #52c41a;
+}
+
+:global(.ant-tag-red) {
+  background: #fff2f0;
+  border-color: #ffccc7;
+  color: #ff4d4f;
+}
+
+:global(.ant-tag-orange) {
+  background: #fff7e6;
+  border-color: #ffd591;
+  color: #fa8c16;
+}
+
+:global(.ant-tag-blue) {
+  background: #e6f7ff;
+  border-color: #91d5ff;
+  color: #1890ff;
+}
+
+/* 弹窗标题样式 */
+:global(.ant-modal-header) {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 16px 24px;
+}
+
+:global(.ant-modal-title) {
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+}
+
+/* 弹窗内容样式 */
+:global(.ant-modal-body) {
+  padding: 24px;
+  overflow-x: hidden;
+}
+
+/* 分页样式 */
+:global(.ant-pagination) {
+  margin-top: 16px;
+  text-align: right;
+}
+
+:global(.ant-pagination-total-text) {
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+/* 空状态样式 */
+:global(.ant-empty) {
+  color: #8c8c8c;
+}
+
+:global(.ant-empty-description) {
+  color: #bfbfbf;
+}
+
+/* 表格边框样式 */
+:global(.ant-table-bordered .ant-table-thead > tr > th),
+:global(.ant-table-bordered .ant-table-tbody > tr > td) {
+  border-right: 1px solid #f0f0f0;
+}
+
+:global(.ant-table-bordered .ant-table-thead > tr > th:last-child),
+:global(.ant-table-bordered .ant-table-tbody > tr > td:last-child) {
+  border-right: none;
+}
+
+/* 文本样式 */
+:global(.ant-typography-caption) {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  background: #f5f5f5;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .statisticsSection {
+    padding: 16px;
+  }
+
+  .statContainer {
+    gap: 12px;
+  }
+
+  .statItem {
+    padding: 8px 12px;
+    min-width: 0;
+  }
+
+  .statIcon {
+    font-size: 20px;
+    margin-right: 8px;
+  }
+
+  .statNumber {
+    font-size: 20px;
+  }
+
+  .statLabel {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 768px) {
+  .statisticsSection {
+    padding: 12px;
+  }
+
+  .statContainer {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .statItem {
+    flex-direction: column;
+    padding: 8px;
+    min-width: 0;
+    flex: 1 1 calc(50% - 4px);
+  }
+
+  .statIcon {
+    margin-right: 0;
+    margin-bottom: 4px;
+  }
+
+  .statNumber {
+    font-size: 18px;
+  }
+
+  .statLabel {
+    font-size: 10px;
+  }
+
+  :global(.ant-table-thead > tr > th),
+  :global(.ant-table-tbody > tr > td) {
+    padding: 8px 4px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .statContainer {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .statItem {
+    flex: none;
+    flex-direction: row;
+  }
+
+  .statIcon {
+    margin-right: 12px;
+    margin-bottom: 0;
+  }
+}
+
+/* 修复弹窗水平滚动条问题 */
+:global(.ant-modal-content) {
+  overflow: hidden;
+}
+
+:global(.ant-table-wrapper) {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+:global(.ant-table) {
+  min-width: 100%;
+}
+
+/* 表格滚动条样式 */
+:global(.ant-table-body)::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+:global(.ant-table-body)::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+:global(.ant-table-body)::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+:global(.ant-table-body)::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* 统计卡片动画效果 */
+.statItem {
+  transition: all 0.3s ease;
+}
+
+.statItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 数字动画效果 */
+.statNumber {
+  transition: color 0.3s ease;
+}
+
+.statItem:hover .statNumber {
+  color: #1890ff;
+}

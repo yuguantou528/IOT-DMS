@@ -71,13 +71,13 @@ const ThingModelManagement = () => {
   const [currentAssociatedProducts, setCurrentAssociatedProducts] = useState([]);
   const [currentThingModelName, setCurrentThingModelName] = useState('');
 
-  // 获取产品选项
+  // 获取模板选项
   const fetchProductOptions = async () => {
     try {
       const response = await getProductList({ page: 1, pageSize: 1000 });
       if (response.success) {
         const options = response.data.list
-          .filter(product => !product.thingModelId) // 只显示未关联物模型的产品
+          .filter(product => !product.thingModelId) // 只显示未关联物模型的模板
           .map(product => ({
             value: product.id,
             label: product.name,
@@ -86,7 +86,7 @@ const ThingModelManagement = () => {
         setProductOptions(options);
       }
     } catch (error) {
-      console.error('获取产品选项失败:', error);
+      console.error('获取模板选项失败:', error);
     }
   };
 
@@ -224,22 +224,22 @@ const ThingModelManagement = () => {
       message.error('导出失败');
     }
   };
-  // 查看关联产品
+  // 查看关联模板
   const handleViewAssociatedProducts = async (record) => {
     try {
       setCurrentThingModelName(record.name);
       setIsAssociatedProductsModalVisible(true);
       setAssociatedProductsLoading(true);
 
-      // 获取关联产品的详细信息
+      // 获取关联模板的详细信息
       const response = await getProductList({ page: 1, pageSize: 1000 });
       if (response.success) {
-        // 筛选出使用该物模型的产品
+        // 筛选出使用该物模型的模板
         const associatedProducts = response.data.list.filter(product =>
           product.thingModelId === record.id
         );
 
-        console.log('🔍 [ThingModel] 获取关联产品:', {
+        console.log('🔍 [ThingModel] 获取关联模板:', {
           thingModelId: record.id,
           thingModelName: record.name,
           associatedProductsCount: associatedProducts.length,
@@ -253,12 +253,12 @@ const ThingModelManagement = () => {
 
         setCurrentAssociatedProducts(associatedProducts);
       } else {
-        message.error('获取关联产品失败');
+        message.error('获取关联模板失败');
         setCurrentAssociatedProducts([]);
       }
     } catch (error) {
-      console.error('获取关联产品失败:', error);
-      message.error('获取关联产品失败');
+      console.error('获取关联模板失败:', error);
+      message.error('获取关联模板失败');
       setCurrentAssociatedProducts([]);
     } finally {
       setAssociatedProductsLoading(false);
@@ -323,7 +323,7 @@ const ThingModelManagement = () => {
       )
     },
     {
-      title: '产品数',
+      title: '模板数',
       key: 'productCount',
       width: 100,
       render: (_, record) => {
@@ -579,12 +579,12 @@ const ThingModelManagement = () => {
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                label="关联产品"
+                label="关联模板"
                 name="productId"
-                tooltip="选择要关联的产品，一个物模型只能关联一个产品"
+                tooltip="选择要关联的模板，一个物模型只能关联一个模板"
               >
                 <Select
-                  placeholder="请选择产品（可选）"
+                  placeholder="请选择模板（可选）"
                   allowClear
                   showSearch
                   filterOption={(input, option) =>
@@ -653,9 +653,9 @@ const ThingModelManagement = () => {
         }}
       />
 
-      {/* 关联产品弹窗 */}
+      {/* 关联模板弹窗 */}
       <Modal
-        title={`${currentThingModelName} - 关联产品`}
+        title={`${currentThingModelName} - 关联模板`}
         open={isAssociatedProductsModalVisible}
         onCancel={() => setIsAssociatedProductsModalVisible(false)}
         footer={[
@@ -669,17 +669,17 @@ const ThingModelManagement = () => {
         <div style={{ minHeight: '300px' }}>
           {associatedProductsLoading ? (
             <div style={{ textAlign: 'center', padding: '60px 0' }}>
-              <div>正在加载关联产品...</div>
+              <div>正在加载关联模板...</div>
             </div>
           ) : currentAssociatedProducts.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '60px 0', color: '#999' }}>
-              <div style={{ fontSize: '16px', marginBottom: '8px' }}>暂无关联产品</div>
-              <div style={{ fontSize: '14px' }}>该物模型尚未被任何产品使用</div>
+              <div style={{ fontSize: '16px', marginBottom: '8px' }}>暂无关联模板</div>
+              <div style={{ fontSize: '14px' }}>该物模型尚未被任何模板使用</div>
             </div>
           ) : (
             <div>
               <div style={{ marginBottom: '16px', color: '#666' }}>
-                共找到 <strong>{currentAssociatedProducts.length}</strong> 个关联产品
+                共找到 <strong>{currentAssociatedProducts.length}</strong> 个关联模板
               </div>
               <Table
                 dataSource={currentAssociatedProducts}
@@ -688,7 +688,7 @@ const ThingModelManagement = () => {
                 size="small"
                 columns={[
                   {
-                    title: '产品名称',
+                    title: '模板名称',
                     dataIndex: 'name',
                     key: 'name',
                     width: 200,
@@ -710,7 +710,7 @@ const ThingModelManagement = () => {
                     )
                   },
                   {
-                    title: '产品状态',
+                    title: '模板状态',
                     dataIndex: 'status',
                     key: 'status',
                     width: 100,

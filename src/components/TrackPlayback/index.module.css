@@ -1,0 +1,307 @@
+/* 轨迹播放控制面板样式 */
+.trackPlayback {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1005;
+  pointer-events: auto;
+}
+
+.playbackPanel {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 8px 32px rgba(30, 41, 59, 0.8), 0 0 50px rgba(59, 130, 246, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 500px;
+}
+
+/* 控制按钮区域 */
+.controlButtons {
+  flex-shrink: 0;
+}
+
+.controlBtn {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 6px !important;
+  background: rgba(59, 130, 246, 0.1) !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  transition: all 0.3s ease;
+}
+
+.controlBtn:hover {
+  background: rgba(59, 130, 246, 0.2) !important;
+  border-color: rgba(59, 130, 246, 0.5) !important;
+  color: #ffffff !important;
+  transform: scale(1.05);
+}
+
+.controlBtn:disabled {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: rgba(255, 255, 255, 0.3) !important;
+  transform: none;
+}
+
+/* 停止按钮特殊样式 */
+.stopBtn {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 6px !important;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%) !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+  color: rgba(239, 68, 68, 0.8) !important;
+  transition: all 0.3s ease;
+}
+
+.stopBtn:hover {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%) !important;
+  border-color: rgba(239, 68, 68, 0.5) !important;
+  color: rgba(239, 68, 68, 1) !important;
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.playBtn {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 6px !important;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%) !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.playBtn:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%) !important;
+  transform: scale(1.1);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.5);
+}
+
+/* 进度条区域 */
+.progressSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.progressInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progressText {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+.currentTime {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'Courier New', monospace;
+}
+
+.progressSlider {
+  margin: 0 !important;
+}
+
+.progressSlider :global(.ant-slider) {
+  padding: 4px 0 !important;
+}
+
+.progressSlider :global(.ant-slider:hover .ant-slider-rail) {
+  background: rgba(255, 255, 255, 0.15) !important;
+}
+
+.progressSlider :global(.ant-slider:hover .ant-slider-track) {
+  background: linear-gradient(90deg, #2563eb 0%, #7c3aed 100%) !important;
+}
+
+.progressSlider :global(.ant-slider-rail) {
+  background: rgba(255, 255, 255, 0.1) !important;
+  height: 6px !important;
+}
+
+.progressSlider :global(.ant-slider-track) {
+  background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%) !important;
+  height: 6px !important;
+}
+
+.progressSlider :global(.ant-slider-handle) {
+  background: #ffffff !important;
+  border: 2px solid #3b82f6 !important;
+  border-radius: 50% !important;
+  width: 16px !important;
+  height: 16px !important;
+  margin-top: -5px !important;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4) !important;
+  opacity: 1 !important;
+}
+
+.progressSlider :global(.ant-slider-handle::before) {
+  display: none !important;
+}
+
+.progressSlider :global(.ant-slider-handle::after) {
+  display: none !important;
+}
+
+.progressSlider :global(.ant-slider-handle-dragging) {
+  border-radius: 50% !important;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2) !important;
+}
+
+.progressSlider :global(.ant-slider-handle:hover) {
+  border-color: #2563eb !important;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.6) !important;
+  transform: scale(1.1) !important;
+}
+
+.progressSlider :global(.ant-slider-handle:focus) {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2) !important;
+  outline: none !important;
+}
+
+.progressSlider :global(.ant-slider-handle:active) {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3) !important;
+}
+
+/* 速度控制区域 */
+.speedControl {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.speedLabel {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+.speedSelect {
+  width: 60px;
+}
+
+.speedSelect :global(.ant-select-selector) {
+  background: rgba(59, 130, 246, 0.1) !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  border-radius: 6px !important;
+}
+
+.speedSelect :global(.ant-select-selector:hover) {
+  background: rgba(59, 130, 246, 0.15) !important;
+  border-color: rgba(59, 130, 246, 0.5) !important;
+}
+
+.speedSelect :global(.ant-select-arrow) {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* 当前播放信息 */
+.currentInfo {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 12px;
+  display: flex;
+  gap: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.infoLabel {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+}
+
+.infoValue {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .playbackPanel {
+    min-width: 400px;
+    padding: 12px 16px;
+    gap: 16px;
+  }
+  
+  .controlBtn,
+  .stopBtn {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .playBtn {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 14px;
+  }
+  
+  .progressText,
+  .currentTime,
+  .speedLabel,
+  .infoLabel,
+  .infoValue {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .trackPlayback {
+    bottom: 60px;
+    left: 10px;
+    right: 10px;
+    transform: none;
+  }
+  
+  .playbackPanel {
+    min-width: auto;
+    width: 100%;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .progressSection {
+    order: 1;
+  }
+  
+  .controlButtons {
+    order: 2;
+  }
+  
+  .speedControl {
+    order: 3;
+  }
+  
+  .currentInfo {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

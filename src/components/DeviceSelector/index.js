@@ -44,8 +44,8 @@ const DeviceSelector = ({
   const [linkedDeviceIds, setLinkedDeviceIds] = useState([]);
   const [searchParams, setSearchParams] = useState({
     name: '',
-    manufacturerId: '',
-    status: ''
+    manufacturerId: undefined,
+    status: undefined
   });
   const [pagination, setPagination] = useState({
     current: 1,
@@ -124,7 +124,7 @@ const DeviceSelector = ({
         }
 
         if (isLinkedToOther) {
-          return <Text type="warning">已被其他产品关联</Text>;
+          return <Text type="warning">已被其他模板关联</Text>;
         }
 
         if (isWrongType) {
@@ -217,8 +217,8 @@ const DeviceSelector = ({
   const handleReset = () => {
     setSearchParams({
       name: '',
-      manufacturerId: '',
-      status: ''
+      manufacturerId: undefined,
+      status: undefined
     });
     setPagination(prev => ({ ...prev, current: 1 }));
     fetchData({ page: 1 });
@@ -290,7 +290,7 @@ const DeviceSelector = ({
             </Col>
             <Col span={6}>
               <Select
-                placeholder="厂商"
+                placeholder="请选择厂商"
                 value={searchParams.manufacturerId}
                 onChange={(value) => setSearchParams(prev => ({ ...prev, manufacturerId: value }))}
                 allowClear
@@ -305,7 +305,7 @@ const DeviceSelector = ({
             </Col>
             <Col span={6}>
               <Select
-                placeholder="状态"
+                placeholder="请选择状态"
                 value={searchParams.status}
                 onChange={(value) => setSearchParams(prev => ({ ...prev, status: value }))}
                 allowClear

@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Form, Input, Button, Card, message, Space, Typography, Divider } from 'antd';
-import { UserOutlined, LockOutlined, ReloadOutlined, LoginOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Card, message, Space, Typography } from 'antd';
+import { UserOutlined, LockOutlined, ReloadOutlined } from '@ant-design/icons';
 import styles from './index.module.css';
 
 const { Title, Text } = Typography;
 
 const Login = ({ onLogin }) => {
   const [loading, setLoading] = useState(false);
-  const [autoLoginLoading, setAutoLoginLoading] = useState(false);
   const [captcha, setCaptcha] = useState('ABCD');
   const navigate = useNavigate();
   const [form] = Form.useForm();
@@ -50,18 +49,7 @@ const Login = ({ onLogin }) => {
     
     setLoading(false);
   };
-  
-  // 一键自动登录
-  const handleAutoLogin = () => {
-    setAutoLoginLoading(true);
-    
-    setTimeout(() => {
-      onLogin();
-      message.success('演示账号登录成功！');
-      navigate('/dashboard');
-      setAutoLoginLoading(false);
-    }, 800);
-  };
+
 
   return (
     <div className={styles.loginContainer}>
@@ -147,21 +135,6 @@ const Login = ({ onLogin }) => {
                 className={styles.loginBtn}
               >
                 登录
-              </Button>
-            </Form.Item>
-            
-            <Divider style={{ margin: '16px 0' }}>或者</Divider>
-            
-            <Form.Item>
-              <Button
-                type="default"
-                block
-                icon={<LoginOutlined />}
-                onClick={handleAutoLogin}
-                loading={autoLoginLoading}
-                className={styles.autoLoginBtn}
-              >
-                一键登录演示账号
               </Button>
             </Form.Item>
           </Form>

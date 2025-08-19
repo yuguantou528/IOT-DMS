@@ -1,0 +1,348 @@
+/* 坐标输入组件样式 */
+.coordinateInput {
+  width: 100%;
+}
+
+.coordinateInput :global(.ant-collapse) {
+  background: transparent;
+  border: none;
+}
+
+.coordinateInput :global(.ant-collapse-header-text) {
+  pointer-events: none;
+}
+
+.coordinateInput :global(.ant-collapse-arrow) {
+  pointer-events: auto;
+}
+
+.coordinateInput :global(.ant-collapse-item) {
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  margin-bottom: 0;
+}
+
+.coordinateInput :global(.ant-collapse-header) {
+  background: #fafafa;
+  border-radius: 6px 6px 0 0;
+  padding: 12px 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.coordinateInput :global(.ant-collapse-content) {
+  border-top: 1px solid #e8e8e8;
+}
+
+.coordinateInput :global(.ant-collapse-content-box) {
+  padding: 16px;
+}
+
+/* 输入区域头部 */
+.inputHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* 多边形输入区域 */
+.polygonInput {
+  width: 100%;
+}
+
+.pointsList {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.pointCard {
+  margin-bottom: 8px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.pointCard:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pointCard :global(.ant-card-head) {
+  min-height: auto;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.pointCard :global(.ant-card-head-title) {
+  font-size: 13px;
+  font-weight: 500;
+  color: #495057;
+}
+
+.pointCard :global(.ant-card-body) {
+  padding: 12px;
+}
+
+/* 圆形输入区域 */
+.circleInput {
+  width: 100%;
+}
+
+.circleCard {
+  border-radius: 6px;
+}
+
+.circleCard :global(.ant-card-body) {
+  padding: 16px;
+}
+
+/* 输入组样式 */
+.inputGroup {
+  margin-bottom: 8px;
+}
+
+.inputLabel {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #6c757d;
+}
+
+.inputGroup :global(.ant-input-number) {
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.inputGroup :global(.ant-input-number:focus) {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.inputGroup :global(.ant-input-number-status-error) {
+  border-color: #ff4d4f;
+}
+
+.inputGroup :global(.ant-input-number-status-error:focus) {
+  border-color: #ff4d4f;
+  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
+}
+
+/* 格式说明 */
+.formatInfo {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.formatInfo > div {
+  margin-bottom: 4px;
+}
+
+.formatInfo > div:last-child {
+  margin-bottom: 0;
+}
+
+.formatInfo strong {
+  color: #262626;
+  font-weight: 500;
+}
+
+/* 滚动条样式 */
+.pointsList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.pointsList::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.pointsList::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.pointsList::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .coordinateInput :global(.ant-collapse-header) {
+    padding: 10px 12px;
+  }
+  
+  .coordinateInput :global(.ant-collapse-content-box) {
+    padding: 12px;
+  }
+  
+  .inputHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .pointCard :global(.ant-card-head) {
+    padding: 6px 10px;
+  }
+  
+  .pointCard :global(.ant-card-body) {
+    padding: 10px;
+  }
+  
+  .circleCard :global(.ant-card-body) {
+    padding: 12px;
+  }
+  
+  .inputLabel {
+    font-size: 11px;
+  }
+  
+  .formatInfo {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pointsList {
+    max-height: 250px;
+  }
+  
+  .inputGroup {
+    margin-bottom: 6px;
+  }
+  
+  .inputLabel {
+    margin-bottom: 2px;
+  }
+}
+
+/* 暗色主题适配 */
+.coordinateInput.dark :global(.ant-collapse-item) {
+  border-color: #434343;
+}
+
+.coordinateInput.dark :global(.ant-collapse-header) {
+  background: #262626;
+  color: #d9d9d9;
+}
+
+.coordinateInput.dark :global(.ant-collapse-content) {
+  border-top-color: #434343;
+  background: #1f1f1f;
+}
+
+.coordinateInput.dark .inputHeader {
+  border-bottom-color: #434343;
+}
+
+.coordinateInput.dark .pointCard {
+  background: #262626;
+  border-color: #434343;
+}
+
+.coordinateInput.dark .pointCard :global(.ant-card-head) {
+  background: #1a1a1a;
+  border-bottom-color: #434343;
+  color: #d9d9d9;
+}
+
+.coordinateInput.dark .circleCard {
+  background: #262626;
+  border-color: #434343;
+}
+
+.coordinateInput.dark .inputLabel {
+  color: #bfbfbf;
+}
+
+.coordinateInput.dark .formatInfo {
+  color: #bfbfbf;
+}
+
+.coordinateInput.dark .formatInfo strong {
+  color: #d9d9d9;
+}
+
+/* 动画效果 */
+.pointCard {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 输入验证状态 */
+.inputGroup :global(.ant-input-number-status-error) {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+/* 按钮样式优化 */
+.inputHeader :global(.ant-btn) {
+  border-radius: 4px;
+  font-size: 12px;
+  height: 28px;
+  padding: 0 12px;
+}
+
+.pointCard :global(.ant-btn) {
+  border-radius: 4px;
+  font-size: 12px;
+  height: 24px;
+  width: 24px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 卡片标题样式 */
+.pointCard :global(.ant-card-head-title) {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pointCard :global(.ant-card-head-title)::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1890ff;
+  display: inline-block;
+}
+
+/* Alert 样式优化 */
+.coordinateInput :global(.ant-alert) {
+  border-radius: 6px;
+  border-color: #91caff;
+  background-color: #f0f9ff;
+}
+
+.coordinateInput :global(.ant-alert-message) {
+  color: #0958d9;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.coordinateInput :global(.ant-alert-description) {
+  color: #595959;
+  font-size: 12px;
+}

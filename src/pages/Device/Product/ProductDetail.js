@@ -58,13 +58,13 @@ const ProductDetail = () => {
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [editForm] = Form.useForm();
 
-  // 获取产品详情
+  // 获取模板详情
   useEffect(() => {
     fetchProductDetail();
     fetchThingModelOptions();
   }, [id]);
 
-  // 当产品数据更新时，获取物模型详情
+  // 当模板数据更新时，获取物模型详情
   useEffect(() => {
     if (product) {
       fetchCurrentThingModel();
@@ -76,7 +76,7 @@ const ProductDetail = () => {
       setLoading(true);
       const response = await getProductDetail(id);
       if (response.success) {
-        console.log('📄 [ProductDetail] 获取产品详情数据:', {
+        console.log('📄 [ProductDetail] 获取模板详情数据:', {
           productId: response.data.id,
           productName: response.data.name,
           linkedDevicesCount: response.data.linkedDevices?.length || 0,
@@ -87,7 +87,7 @@ const ProductDetail = () => {
         message.error(response.message);
       }
     } catch (error) {
-      message.error('获取产品详情失败');
+      message.error('获取模板详情失败');
     } finally {
       setLoading(false);
     }
@@ -98,7 +98,7 @@ const ProductDetail = () => {
     navigate('/device/product');
   };
 
-  // 编辑产品
+  // 编辑模板
   const handleEdit = () => {
     setIsEditModalVisible(true);
     editForm.setFieldsValue(product);
@@ -111,7 +111,7 @@ const ProductDetail = () => {
       const response = await updateProduct(product.id, values);
 
       if (response.success) {
-        message.success('产品更新成功');
+        message.success('模板更新成功');
         setIsEditModalVisible(false);
         setProduct({ ...product, ...values });
       } else {
@@ -131,7 +131,7 @@ const ProductDetail = () => {
     try {
       const response = await getThingModelOptions();
       if (response.success) {
-        // 过滤掉已被其他产品关联的物模型（除了当前产品）
+        // 过滤掉已被其他模板关联的物模型（除了当前模板）
         const availableModels = response.data.filter(model =>
           !model.productId || model.productId === parseInt(id)
         );
@@ -142,7 +142,7 @@ const ProductDetail = () => {
     }
   };
 
-  // 获取当前产品的物模型详情
+  // 获取当前模板的物模型详情
   const fetchCurrentThingModel = async () => {
     if (!product?.thingModelId) {
       setCurrentThingModel(null);
@@ -241,7 +241,7 @@ const ProductDetail = () => {
         newLinkedDevices: updatedProductData.linkedDevices.length
       });
 
-      // 获取原有的产品数据以比较变化
+      // 获取原有的模板数据以比较变化
       const originalProduct = product;
       const originalLinkedDeviceIds = (originalProduct?.linkedDevices || []).map(d => d.id);
       const newLinkedDeviceIds = updatedProductData.linkedDevices.map(d => d.id);
@@ -253,23 +253,23 @@ const ProductDetail = () => {
         removedDevices: originalLinkedDeviceIds.filter(id => !newLinkedDeviceIds.includes(id))
       });
 
-      // 1. 先更新产品数据
+      // 1. 先更新模板数据
       const response = await updateProduct(updatedProductData.id, updatedProductData);
       if (!response.success) {
         message.error(response.message || '更新失败');
         return;
       }
 
-      console.log('✅ [ProductDetail] 产品数据更新成功');
+      console.log('✅ [ProductDetail] 模板数据更新成功');
 
-      // 2. 同步更新设备的产品关联信息
+      // 2. 同步更新设备的模板关联信息
       const { updateDevice, getDeviceList } = await import('../../../services/deviceManagement');
 
       // 获取当前所有设备数据，确保我们有最新的设备信息
       const deviceListResponse = await getDeviceList({ page: 1, pageSize: 1000 });
       const allDevices = deviceListResponse.success ? deviceListResponse.data.list : [];
 
-      // 3. 为新关联的设备设置产品信息
+      // 3. 为新关联的设备设置模板信息
       const addedDeviceIds = newLinkedDeviceIds.filter(id => !originalLinkedDeviceIds.includes(id));
       for (const deviceId of addedDeviceIds) {
         try {
@@ -285,39 +285,39 @@ const ProductDetail = () => {
             });
 
             if (updateResult.success) {
-              console.log('✅ [ProductDetail] 已为设备设置产品关联:', {
+              console.log('✅ [ProductDetail] 已为设备设置模板关联:', {
                 deviceId,
                 deviceName: device.name,
                 productId: updatedProductData.id,
                 productName: updatedProductData.name
               });
             } else {
-              console.error('❌ [ProductDetail] 设备产品关联设置失败:', updateResult.message);
+              console.error('❌ [ProductDetail] 设备模板关联设置失败:', updateResult.message);
             }
           }
         } catch (deviceUpdateError) {
-          console.error('❌ [ProductDetail] 设备产品信息更新异常:', {
+          console.error('❌ [ProductDetail] 设备模板信息更新异常:', {
             deviceId,
             error: deviceUpdateError
           });
         }
       }
 
-      // 4. 为移除关联的设备清除产品信息
+      // 4. 为移除关联的设备清除模板信息
       const removedDeviceIds = originalLinkedDeviceIds.filter(id => !newLinkedDeviceIds.includes(id));
-      console.log('🗑️ [ProductDetail] 准备清除设备产品关联:', {
+      console.log('🗑️ [ProductDetail] 准备清除设备模板关联:', {
         removedDeviceIds,
         removedCount: removedDeviceIds.length
       });
 
       for (const deviceId of removedDeviceIds) {
         try {
-          // 从原产品数据或当前设备列表中获取设备信息
+          // 从原模板数据或当前设备列表中获取设备信息
           const removedDevice = originalProduct.linkedDevices.find(d => d.id === deviceId) ||
                                allDevices.find(d => d.id === deviceId);
 
           if (removedDevice) {
-            console.log('🔄 [ProductDetail] 正在清除设备产品关联:', {
+            console.log('🔄 [ProductDetail] 正在清除设备模板关联:', {
               deviceId,
               deviceName: removedDevice.name,
               currentProductId: removedDevice.productId
@@ -331,20 +331,20 @@ const ProductDetail = () => {
             });
 
             if (updateResult.success) {
-              console.log('✅ [ProductDetail] 已清除设备的产品关联信息:', {
+              console.log('✅ [ProductDetail] 已清除设备的模板关联信息:', {
                 deviceId,
                 deviceName: removedDevice.name,
                 updatedDevice: updateResult.data
               });
             } else {
-              console.error('❌ [ProductDetail] 清除设备产品关联失败:', updateResult.message);
-              message.warning(`清除设备 "${removedDevice.name}" 的产品关联失败: ${updateResult.message}`);
+              console.error('❌ [ProductDetail] 清除设备模板关联失败:', updateResult.message);
+              message.warning(`清除设备 "${removedDevice.name}" 的模板关联失败: ${updateResult.message}`);
             }
           } else {
             console.warn('⚠️ [ProductDetail] 未找到要移除关联的设备:', { deviceId });
           }
         } catch (deviceUpdateError) {
-          console.error('❌ [ProductDetail] 清除设备产品信息异常:', {
+          console.error('❌ [ProductDetail] 清除设备模板信息异常:', {
             deviceId,
             error: deviceUpdateError
           });
@@ -388,7 +388,7 @@ const ProductDetail = () => {
 
       message.success(`子设备更新成功！${addedDeviceIds.length > 0 ? `新增关联 ${addedDeviceIds.length} 个设备，` : ''}${removedDeviceIds.length > 0 ? `移除关联 ${removedDeviceIds.length} 个设备` : ''}`);
       setIsSubDeviceManagerVisible(false);
-      fetchProductDetail(); // 刷新产品详情数据
+      fetchProductDetail(); // 刷新模板详情数据
 
       console.log('✅ [ProductDetail] 子设备更新完成');
 
@@ -412,9 +412,9 @@ const ProductDetail = () => {
         <Card>
           <div style={{ textAlign: 'center', padding: '40px 0' }}>
             <InfoCircleOutlined style={{ fontSize: 48, color: '#ccc', marginBottom: 16 }} />
-            <p>产品不存在或已被删除</p>
+            <p>模板不存在或已被删除</p>
             <Button type="primary" onClick={handleBack}>
-              返回产品列表
+              返回模板列表
             </Button>
           </div>
         </Card>
@@ -456,7 +456,7 @@ const ProductDetail = () => {
               icon={<EditOutlined />}
               onClick={handleEdit}
             >
-              编辑产品
+              编辑模板
             </Button>
           </div>
         </div>
@@ -467,11 +467,11 @@ const ProductDetail = () => {
         <Tabs defaultActiveKey="basic" type="card">
           <TabPane tab="基本信息" key="basic">
             <Descriptions title="基本信息" bordered column={2}>
-              <Descriptions.Item label="产品名称" span={2}>{product.name}</Descriptions.Item>
-              <Descriptions.Item label="产品编码">{product.code}</Descriptions.Item>
-              <Descriptions.Item label="产品版本">{product.version}</Descriptions.Item>
+              <Descriptions.Item label="模板名称" span={2}>{product.name}</Descriptions.Item>
+              <Descriptions.Item label="模板编码">{product.code}</Descriptions.Item>
+              <Descriptions.Item label="模板版本">{product.version}</Descriptions.Item>
               <Descriptions.Item label="设备类型">{product.deviceTypeName}</Descriptions.Item>
-              <Descriptions.Item label="产品状态">
+              <Descriptions.Item label="模板状态">
                 <Badge
                   status={productStatuses.find(s => s.value === product.status)?.color || 'default'}
                   text={productStatuses.find(s => s.value === product.status)?.label || product.status}
@@ -485,7 +485,7 @@ const ProductDetail = () => {
               </Descriptions.Item>
               <Descriptions.Item label="创建时间">{product.createTime}</Descriptions.Item>
               <Descriptions.Item label="更新时间">{product.updateTime}</Descriptions.Item>
-              <Descriptions.Item label="产品描述" span={2}>{product.description || '-'}</Descriptions.Item>
+              <Descriptions.Item label="模板描述" span={2}>{product.description || '-'}</Descriptions.Item>
             </Descriptions>
           </TabPane>
 
@@ -499,7 +499,7 @@ const ProductDetail = () => {
                 >
                   管理关联设备
                 </Button>
-                <Text type="secondary">管理产品的关联设备</Text>
+                <Text type="secondary">管理模板的关联设备</Text>
               </Space>
             </div>
 
@@ -786,7 +786,7 @@ const ProductDetail = () => {
                   <InfoCircleOutlined style={{ fontSize: 64, marginBottom: 16, color: '#d9d9d9' }} />
                   <Title level={4} style={{ color: '#8c8c8c', marginBottom: 8 }}>未关联物模型</Title>
                   <Text type="secondary" style={{ marginBottom: 32, display: 'block' }}>
-                    物模型定义了产品的数据结构和接口规范，关联后可实现统一的数据格式输出
+                    物模型定义了模板的数据结构和接口规范，关联后可实现统一的数据格式输出
                   </Text>
 
                   {thingModelOptions.length > 0 ? (
@@ -831,7 +831,7 @@ const ProductDetail = () => {
                                     title: '确认关联物模型',
                                     content: (
                                       <div>
-                                        <p>确定要将产品 <strong>{product?.name}</strong> 关联到物模型 <strong>{selectedModel.label}</strong> 吗？</p>
+                                        <p>确定要将模板 <strong>{product?.name}</strong> 关联到物模型 <strong>{selectedModel.label}</strong> 吗？</p>
                                         <div style={{ background: '#f5f5f5', padding: '12px', borderRadius: '6px', marginTop: '12px' }}>
                                           <div><strong>物模型信息：</strong></div>
                                           <div>名称：{selectedModel.label}</div>
@@ -849,11 +849,30 @@ const ProductDetail = () => {
                             >
                               {thingModelOptions.map(model => (
                                 <Select.Option key={model.value} value={model.value}>
-                                  <div>
-                                    <div style={{ fontWeight: 500 }}>{model.label}</div>
-                                    <div style={{ fontSize: '12px', color: '#666' }}>
+                                  <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '12px',
+                                    padding: '4px 0',
+                                    width: '100%'
+                                  }}>
+                                    <span style={{
+                                      flex: 1,
+                                      minWidth: 0,
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                      fontWeight: 500
+                                    }}>
+                                      {model.label}
+                                    </span>
+                                    <span style={{
+                                      fontSize: '12px',
+                                      color: '#8c8c8c',
+                                      whiteSpace: 'nowrap'
+                                    }}>
                                       {model.code} - v{model.version}
-                                    </div>
+                                    </span>
                                   </div>
                                 </Select.Option>
                               ))}
@@ -892,9 +911,9 @@ const ProductDetail = () => {
         title={`${product?.name} - 子设备管理`}
       />
 
-      {/* 编辑产品模态框 */}
+      {/* 编辑模板模态框 */}
       <Modal
-        title="编辑产品"
+        title="编辑模板"
         open={isEditModalVisible}
         onOk={handleSaveEdit}
         onCancel={() => setIsEditModalVisible(false)}
@@ -908,20 +927,20 @@ const ProductDetail = () => {
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                label="产品名称"
+                label="模板名称"
                 name="name"
-                rules={[{ required: true, message: '请输入产品名称' }]}
+                rules={[{ required: true, message: '请输入模板名称' }]}
               >
-                <Input placeholder="请输入产品名称" />
+                <Input placeholder="请输入模板名称" />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                label="产品编码"
+                label="模板编码"
                 name="code"
-                rules={[{ required: true, message: '请输入产品编码' }]}
+                rules={[{ required: true, message: '请输入模板编码' }]}
               >
-                <Input placeholder="请输入产品编码" />
+                <Input placeholder="请输入模板编码" />
               </Form.Item>
             </Col>
           </Row>
@@ -929,20 +948,20 @@ const ProductDetail = () => {
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                label="产品版本"
+                label="模板版本"
                 name="version"
-                rules={[{ required: true, message: '请输入产品版本' }]}
+                rules={[{ required: true, message: '请输入模板版本' }]}
               >
-                <Input placeholder="请输入产品版本，如：v1.0.0" />
+                <Input placeholder="请输入模板版本，如：v1.0.0" />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                label="产品状态"
+                label="模板状态"
                 name="status"
-                rules={[{ required: true, message: '请选择产品状态' }]}
+                rules={[{ required: true, message: '请选择模板状态' }]}
               >
-                <Select placeholder="请选择产品状态">
+                <Select placeholder="请选择模板状态">
                   {productStatuses.map(status => (
                     <Select.Option key={status.value} value={status.value}>
                       {status.label}
@@ -954,10 +973,10 @@ const ProductDetail = () => {
           </Row>
 
           <Form.Item
-            label="产品描述"
+            label="模板描述"
             name="description"
           >
-            <Input.TextArea rows={4} placeholder="请输入产品描述" />
+            <Input.TextArea rows={4} placeholder="请输入模板描述" />
           </Form.Item>
         </Form>
       </Modal>

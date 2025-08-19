@@ -58,7 +58,7 @@ const SubDeviceManager = ({
     message.success('设备关联已移除');
   };
 
-  // 保存所有关联设备到产品
+  // 保存所有关联设备到模板
   const handleSaveAll = () => {
     const updatedProductData = {
       ...productData,
@@ -87,8 +87,8 @@ const SubDeviceManager = ({
       >
         <div className={styles.subDeviceManager}>
           <div className={styles.header}>
-            <div className={styles.productInfo}>
-              <Title level={5}>产品：{productData?.name}</Title>
+            <div className={styles.templateInfo}>
+              <Title level={5}>模板：{productData?.name}</Title>
               <Text type="secondary">设备类型：{productData?.deviceTypeName}</Text>
             </div>
             <Button
@@ -166,7 +166,7 @@ const SubDeviceManager = ({
         productDeviceType={productData?.deviceType}
         productId={productData?.id}
         excludeDeviceIds={linkedDevices.map(device => device.id)}
-        title={`为产品 "${productData?.name}" 选择关联设备`}
+        title={`为模板 "${productData?.name}" 选择关联设备`}
       />
     </>
   );

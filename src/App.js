@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Layout } from 'antd';
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
+
+// 配置 dayjs 为中文
+dayjs.locale('zh-cn');
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import VisualMonitor from './pages/VisualMonitor';
@@ -15,6 +20,7 @@ import TopologyManagement from './pages/Topology/Management';
 import TopologyManagement2 from './pages/Topology/Management2';
 import AlarmMessages from './pages/Alarm/Messages';
 import AlarmRules from './pages/Alarm/Rules';
+import ElectronicFence from './pages/Alarm/ElectronicFence';
 import NavigationBar from './components/NavigationBar';
 import HeaderBar from './components/HeaderBar';
 import Breadcrumb from './components/Breadcrumb';
@@ -90,8 +96,9 @@ function App() {
               <Route path="/device/management" element={<DeviceManagement />} />
               <Route path="/device/management/detail/:id" element={<DeviceDetail />} />
               <Route path="/device/thing-model" element={<ThingModelManagement />} />
-              <Route path="/topology/management" element={<TopologyManagement />} />
+              {/* <Route path="/topology/management" element={<TopologyManagement />} /> */}
               <Route path="/topology/management2" element={<TopologyManagement2 />} />
+              <Route path="/alarm/electronic-fence" element={<ElectronicFence />} />
               <Route path="/alarm/messages" element={<AlarmMessages />} />
               <Route path="/alarm/rules" element={<AlarmRules />} />
               <Route path="/system/users" element={<Dashboard title="用户列表" />} />

@@ -5,7 +5,8 @@ import {
 import {
   NodeIndexOutlined, AimOutlined, DownloadOutlined, FullscreenOutlined, FullscreenExitOutlined,
   ZoomInOutlined, ZoomOutOutlined, EyeOutlined, EyeInvisibleOutlined, InfoCircleOutlined,
-  CloseOutlined, SettingOutlined, DragOutlined, FolderOutlined, FolderOpenOutlined, FileOutlined
+  CloseOutlined, SettingOutlined, DragOutlined, FolderOutlined, FolderOpenOutlined, FileOutlined,
+  VideoCameraOutlined
 } from '@ant-design/icons';
 import styles from './index.module.css';
 
@@ -44,12 +45,12 @@ const TopologyManagement2 = () => {
 
   // 网络统计数据
   const [networkStats, setNetworkStats] = useState({
-    total: 6,
-    online: 4,
+    total: 7, // 增加了执法仪设备
+    online: 5, // 执法仪在线
     warning: 1,
     offline: 1,
-    coverage: 67,
-    avgLatency: 215
+    coverage: 71, // 覆盖率稍有提升
+    avgLatency: 210 // 平均延迟稍有改善
   });
 
   // 树形数据结构
@@ -129,18 +130,28 @@ const TopologyManagement2 = () => {
   useEffect(() => {
     const mockNodes = [
       { id: 'GATEWAY-001', name: 'GATEWAY-001', type: 'gateway', status: 'online', x: 400, y: 200, ip: '192.168.1.1', mac: '00:11:22:33:44:55', frequency: 2400, rssi: -45, links: ['REPEATER-001', 'REPEATER-002'] },
-      { id: 'REPEATER-001', name: 'REPEATER-001', type: 'repeater', status: 'online', x: 200, y: 300, ip: '192.168.1.2', mac: '00:11:22:33:44:56', frequency: 2400, rssi: -65, links: ['GATEWAY-001', 'TERMINAL-001'] },
+      { id: 'REPEATER-001', name: 'REPEATER-001', type: 'repeater', status: 'online', x: 200, y: 300, ip: '192.168.1.2', mac: '00:11:22:33:44:56', frequency: 2400, rssi: -65, links: ['GATEWAY-001', 'TERMINAL-001', 'BODYCAM-001'] },
       { id: 'REPEATER-002', name: 'REPEATER-002', type: 'repeater', status: 'warning', x: 600, y: 300, ip: '192.168.1.3', mac: '00:11:22:33:44:57', frequency: 2400, rssi: -70, links: ['GATEWAY-001', 'TERMINAL-002'] },
       { id: 'TERMINAL-001', name: 'TERMINAL-001', type: 'terminal', status: 'online', x: 100, y: 450, ip: '192.168.1.4', mac: '00:11:22:33:44:58', frequency: 2400, rssi: -75, links: ['REPEATER-001'] },
       { id: 'TERMINAL-002', name: 'TERMINAL-002', type: 'terminal', status: 'online', x: 700, y: 450, ip: '192.168.1.5', mac: '00:11:22:33:44:59', frequency: 2400, rssi: -80, links: ['REPEATER-002'] },
-      { id: 'TERMINAL-003', name: 'TERMINAL-003', type: 'terminal', status: 'offline', x: 500, y: 450, ip: '192.168.1.6', mac: '00:11:22:33:44:60', frequency: 2400, rssi: -90, links: [] }
+      { id: 'TERMINAL-003', name: 'TERMINAL-003', type: 'terminal', status: 'offline', x: 500, y: 450, ip: '192.168.1.6', mac: '00:11:22:33:44:60', frequency: 2400, rssi: -90, links: [] },
+      { id: 'BODYCAM-001', name: '执法仪-001', type: 'bodycam', status: 'online', x: 150, y: 150, ip: '192.168.1.7', mac: '00:11:22:33:44:61', frequency: 2400, rssi: -68, links: ['REPEATER-001'],
+        // 执法仪特有属性
+        batteryLevel: 85,
+        recordingStatus: 'recording',
+        storageUsed: 45,
+        gpsLocation: { lat: 39.9042, lng: 116.4074 },
+        officerId: 'OFF001',
+        officerName: '张警官'
+      }
     ];
 
     const mockLinks = [
       { id: 'link1', source: 'GATEWAY-001', target: 'REPEATER-001', latency: 12, distance: 150, rssi: -55, bandwidth: 54 },
       { id: 'link2', source: 'GATEWAY-001', target: 'REPEATER-002', latency: 15, distance: 180, rssi: -60, bandwidth: 48 },
       { id: 'link3', source: 'REPEATER-001', target: 'TERMINAL-001', latency: 8, distance: 100, rssi: -65, bandwidth: 36 },
-      { id: 'link4', source: 'REPEATER-002', target: 'TERMINAL-002', latency: 10, distance: 120, rssi: -70, bandwidth: 24 }
+      { id: 'link4', source: 'REPEATER-002', target: 'TERMINAL-002', latency: 10, distance: 120, rssi: -70, bandwidth: 24 },
+      { id: 'link5', source: 'REPEATER-001', target: 'BODYCAM-001', latency: 6, distance: 80, rssi: -68, bandwidth: 42 }
     ];
 
     setNodes(mockNodes);
@@ -162,7 +173,8 @@ const TopologyManagement2 = () => {
     const configs = {
       gateway: { color: '#1890ff', text: '网关', size: 20 },
       repeater: { color: '#722ed1', text: '中继器', size: 16 },
-      terminal: { color: '#13c2c2', text: '终端', size: 12 }
+      terminal: { color: '#13c2c2', text: '终端', size: 12 },
+      bodycam: { color: '#f5222d', text: '执法仪', size: 14 }
     };
     return configs[type] || configs.terminal;
   };
@@ -828,6 +840,56 @@ const TopologyManagement2 = () => {
                       </div>
                     </div>
 
+                    {/* 执法仪特殊信息 */}
+                    {selectedNode.type === 'bodycam' && (
+                      <div style={{ marginBottom: 16 }}>
+                        <Text strong style={{ fontSize: 13, color: '#1890ff' }}>执法仪信息</Text>
+                        <div style={{ marginTop: 8, fontSize: 12 }}>
+                          <div style={{ marginBottom: 6 }}>
+                            <Text strong>执法人员: </Text>
+                            <Text>{selectedNode.officerName} ({selectedNode.officerId})</Text>
+                          </div>
+                          <div style={{ marginBottom: 6 }}>
+                            <Text strong>电池电量: </Text>
+                            <div style={{ marginTop: 4 }}>
+                              <Text>{selectedNode.batteryLevel}%</Text>
+                              <Progress
+                                percent={selectedNode.batteryLevel}
+                                size="small"
+                                status={selectedNode.batteryLevel > 20 ? 'success' : 'exception'}
+                                style={{ marginTop: 4 }}
+                              />
+                            </div>
+                          </div>
+                          <div style={{ marginBottom: 6 }}>
+                            <Text strong>录制状态: </Text>
+                            <Badge
+                              status={selectedNode.recordingStatus === 'recording' ? 'processing' : 'default'}
+                              text={selectedNode.recordingStatus === 'recording' ? '录制中' : '待机'}
+                            />
+                          </div>
+                          <div style={{ marginBottom: 6 }}>
+                            <Text strong>存储使用: </Text>
+                            <div style={{ marginTop: 4 }}>
+                              <Text>{selectedNode.storageUsed}%</Text>
+                              <Progress
+                                percent={selectedNode.storageUsed}
+                                size="small"
+                                status={selectedNode.storageUsed > 80 ? 'exception' : 'normal'}
+                                style={{ marginTop: 4 }}
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <Text strong>GPS位置: </Text>
+                            <Text code style={{ fontSize: 10 }}>
+                              {selectedNode.gpsLocation.lat.toFixed(4)}, {selectedNode.gpsLocation.lng.toFixed(4)}
+                            </Text>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
                     <div>
                       <Text strong style={{ fontSize: 13, color: '#1890ff' }}>连接信息</Text>
                       <div style={{ marginTop: 8, fontSize: 12 }}>
@@ -1048,6 +1110,35 @@ const TopologyManagement2 = () => {
                         stroke={statusConfig.color}
                         strokeWidth={2}
                       />
+                      {/* 执法仪特殊图标 */}
+                      {node.type === 'bodycam' && (
+                        <>
+                          {/* 摄像头图标 */}
+                          <rect
+                            x={node.x - 6}
+                            y={node.y - 4}
+                            width={12}
+                            height={8}
+                            fill="white"
+                            rx={2}
+                          />
+                          <circle
+                            cx={node.x + 2}
+                            cy={node.y}
+                            r={2}
+                            fill={typeConfig.color}
+                          />
+                          {/* 录制指示灯 */}
+                          {node.recordingStatus === 'recording' && (
+                            <circle
+                              cx={node.x - 3}
+                              cy={node.y - 2}
+                              r={1.5}
+                              fill="#ff4d4f"
+                            />
+                          )}
+                        </>
+                      )}
                       {/* 节点名称 */}
                       <text
                         x={node.x + typeConfig.size + 6}
@@ -1064,7 +1155,10 @@ const TopologyManagement2 = () => {
                         fill="#8c8c8c"
                         fontSize={10}
                       >
-                        {typeConfig.text} · RSSI {node.rssi}dBm
+                        {node.type === 'bodycam'
+                          ? `${typeConfig.text} · 电量${node.batteryLevel}% · ${node.recordingStatus === 'recording' ? '录制中' : '待机'}`
+                          : `${typeConfig.text} · RSSI ${node.rssi}dBm`
+                        }
                       </text>
                     </g>
                   );

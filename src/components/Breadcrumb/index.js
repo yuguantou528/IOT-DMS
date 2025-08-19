@@ -45,7 +45,7 @@ const Breadcrumb = () => {
       path: '/device/model'
     },
     '/device/product': {
-      title: '产品管理',
+      title: '设备模板',
       icon: <AppstoreOutlined />,
       parent: '/dashboard',
       path: '/device/product'
@@ -62,17 +62,23 @@ const Breadcrumb = () => {
       parent: '/dashboard',
       path: '/device/thing-model'
     },
-    '/topology/management': {
-      title: '拓扑图',
-      icon: <NodeIndexOutlined />,
-      parent: '/dashboard',
-      path: '/topology/management'
-    },
+    // '/topology/management': {
+    //   title: '拓扑图',
+    //   icon: <NodeIndexOutlined />,
+    //   parent: '/dashboard',
+    //   path: '/topology/management'
+    // },
     '/topology/management2': {
       title: '拓扑图二',
       icon: <NodeIndexOutlined />,
       parent: '/dashboard',
       path: '/topology/management2'
+    },
+    '/alarm/electronic-fence': {
+      title: '电子围栏管理',
+      icon: <AlertOutlined />,
+      parent: '/dashboard',
+      path: '/alarm/electronic-fence'
     },
     '/alarm/messages': {
       title: '告警消息管理',

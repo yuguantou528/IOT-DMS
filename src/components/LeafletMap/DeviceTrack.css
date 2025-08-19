@@ -1,0 +1,52 @@
+/* 轨迹播放动画效果 */
+
+/* 播放中的移动点动画 */
+.playback-moving-point {
+  animation: playbackPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes playbackPulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 当前播放点的脉冲效果 */
+.current-playback-point {
+  animation: currentPointGlow 2s ease-in-out infinite;
+}
+
+@keyframes currentPointGlow {
+  0% {
+    box-shadow: 0 0 5px rgba(250, 173, 20, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(250, 173, 20, 0.8), 0 0 30px rgba(250, 173, 20, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(250, 173, 20, 0.5);
+  }
+}
+
+/* 轨迹线条在播放时的动画效果 */
+.track-line-playing {
+  animation: trackLineFlow 3s linear infinite;
+}
+
+@keyframes trackLineFlow {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 20;
+  }
+}

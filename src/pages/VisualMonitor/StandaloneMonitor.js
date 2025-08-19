@@ -17,8 +17,11 @@ import {
   message,
   Tabs,
   Input,
-  Divider
+  Divider,
+  DatePicker,
+  Dropdown
 } from 'antd';
+import dayjs from 'dayjs';
 import LeafletMap from '../../components/LeafletMap';
 import {
   MonitorOutlined,
@@ -37,14 +40,22 @@ import {
   SearchOutlined,
   PlayCircleOutlined,
   DesktopOutlined,
-  NodeIndexOutlined
+  NodeIndexOutlined,
+  PhoneOutlined,
+  LineOutlined,
+  BorderInnerOutlined,
+  MoreOutlined,
+  CloseOutlined
 } from '@ant-design/icons';
 import styles from './StandaloneMonitor.module.css';
-import { 
-  getDeviceList, 
-  getAlarmList, 
-  getStatistics
+import {
+  getDeviceList,
+  getAlarmList,
+  getStatistics,
+  getDeviceTrack
 } from '../../services/visualMonitorService';
+import AudioCallModal from '../../components/AudioCallModal';
+import DeviceOverviewCharts from '../../components/DeviceOverviewCharts';
 
 const { Option } = Select;
 const { Search } = Input;
@@ -64,8 +75,8 @@ const StandaloneMonitor = () => {
     humidity: '65%',
     icon: '☀️'
   });
-  const [showDevicePanel, setShowDevicePanel] = useState(true);
-  const [showAlarmPanel, setShowAlarmPanel] = useState(true);
+  const [showDevicePanel, setShowDevicePanel] = useState(false);
+  const [showAlarmPanel, setShowAlarmPanel] = useState(false);
   const [mapType, setMapType] = useState('normal'); // 'normal', 'satellite', 'dark', 'tianditu'
   const [deviceInfoVisible, setDeviceInfoVisible] = useState(false);
   const [alarmDetailVisible, setAlarmDetailVisible] = useState(false);
@@ -74,9 +85,33 @@ const StandaloneMonitor = () => {
   const [deviceFilter, setDeviceFilter] = useState('all'); // 'all', 'online', 'offline', 'camera'
   const [selectedVideoDevice, setSelectedVideoDevice] = useState(null);
   const [mapSearchText, setMapSearchText] = useState('');
-  const [mapDeviceFilter, setMapDeviceFilter] = useState('all');
+  const [searchResults, setSearchResults] = useState([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
   const [showDeviceTracks, setShowDeviceTracks] = useState(false);
   const [selectedTrackDevice, setSelectedTrackDevice] = useState(null);
+  const [trackTimeModalVisible, setTrackTimeModalVisible] = useState(false);
+  const [audioCallModalVisible, setAudioCallModalVisible] = useState(false);
+  const [selectedCallDevice, setSelectedCallDevice] = useState(null);
+  const [isCallMinimized, setIsCallMinimized] = useState(false);
+  const [callStatus, setCallStatus] = useState('idle');
+  const [dragPosition, setDragPosition] = useState({ x: 20, y: 120 }); // 默认位置：右下角
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [dragStartPos, setDragStartPos] = useState({ x: 0, y: 0 });
+  const [hasMoved, setHasMoved] = useState(false);
+  const [trackStartTime, setTrackStartTime] = useState(null);
+  const [trackEndTime, setTrackEndTime] = useState(null);
+  const [currentTrackDevice, setCurrentTrackDevice] = useState(null);
+  const [deviceTrackData, setDeviceTrackData] = useState([]);
+  const [quickTrackModalVisible, setQuickTrackModalVisible] = useState(false);
+  const [currentQuickTrackDevice, setCurrentQuickTrackDevice] = useState(null);
+  const [isRealTimeTracking, setIsRealTimeTracking] = useState(false);
+  const [realTimeTrackData, setRealTimeTrackData] = useState([]);
+  const [trackingStartTime, setTrackingStartTime] = useState(null);
+
+  // 地图控制状态
+  const [mapCenter, setMapCenter] = useState(null);
+  const [mapZoom, setMapZoom] = useState(null);
 
   const [stats, setStats] = useState({
     totalDevices: 0,
@@ -143,21 +178,21 @@ const StandaloneMonitor = () => {
     loadData();
     updateWeather();
 
-    // 定时刷新数据
-    const dataInterval = setInterval(loadData, 30000); // 30秒刷新一次
+    // 定时刷新数据 - 已注释掉自动刷新功能
+    // const dataInterval = setInterval(loadData, 30000); // 30秒刷新一次
 
     // 更新时间
     const timeInterval = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
 
-    // 更新天气（每10分钟）
-    const weatherInterval = setInterval(updateWeather, 600000);
+    // 更新天气（每10分钟） - 已注释掉自动刷新功能
+    // const weatherInterval = setInterval(updateWeather, 600000);
 
     return () => {
-      clearInterval(dataInterval);
+      // clearInterval(dataInterval);
       clearInterval(timeInterval);
-      clearInterval(weatherInterval);
+      // clearInterval(weatherInterval);
     };
   }, []);
 
@@ -186,6 +221,67 @@ const StandaloneMonitor = () => {
     };
   }, []);
 
+  // 实时轨迹跟踪
+  useEffect(() => {
+    let trackingInterval = null;
+
+    if (isRealTimeTracking && selectedTrackDevice) {
+      // 每10秒模拟接收一个新的位置点
+      trackingInterval = setInterval(() => {
+        setDevices(prevDevices => {
+          const currentDevice = prevDevices.find(d => d.id === selectedTrackDevice);
+          if (!currentDevice || currentDevice.status !== 'online') {
+            // 设备离线，停止跟踪
+            setIsRealTimeTracking(false);
+            message.warning('设备已离线，轨迹跟踪已停止');
+            return prevDevices;
+          }
+
+          // 生成新的位置点（模拟设备移动）
+          setRealTimeTrackData(prevTrackData => {
+            const lastPoint = prevTrackData[prevTrackData.length - 1];
+            if (lastPoint) {
+              // 在上一个位置基础上生成新位置（模拟移动）
+              const basePosition = lastPoint.position;
+              const moveDistance = 0.001; // 约100米的移动距离
+              const angle = Math.random() * 2 * Math.PI; // 随机方向
+
+              const newPosition = [
+                basePosition[0] + Math.cos(angle) * moveDistance, // 经度
+                basePosition[1] + Math.sin(angle) * moveDistance  // 纬度
+              ];
+
+              const newTrackPoint = {
+                id: prevTrackData.length + 1,
+                position: newPosition,
+                timestamp: new Date().toISOString(),
+                speed: Math.random() * 30 + 10, // 10-40 km/h
+                status: Math.random() > 0.9 ? 'alert' : 'normal'
+              };
+
+              // 更新轨迹数据
+              setDeviceTrackData(prev => [...prev, newTrackPoint]);
+
+              // 在实时跟踪时，不更新devices数组中的设备位置，避免触发地图重新渲染
+              // 设备的实时位置通过轨迹数据来体现
+
+              return [...prevTrackData, newTrackPoint];
+            }
+            return prevTrackData;
+          });
+
+          return prevDevices;
+        });
+      }, 10000); // 每10秒更新一次
+    }
+
+    return () => {
+      if (trackingInterval) {
+        clearInterval(trackingInterval);
+      }
+    };
+  }, [isRealTimeTracking, selectedTrackDevice]);
+
   // 返回主系统
   const goToMainSystem = () => {
     window.close(); // 尝试关闭当前标签页
@@ -205,7 +301,8 @@ const StandaloneMonitor = () => {
       camera: { name: '摄像头', count: 0 },
       radio: { name: '电台', count: 0 },
       sensor: { name: '传感器', count: 0 },
-      base_station: { name: '基站', count: 0 }
+      base_station: { name: '基站', count: 0 },
+      body_camera: { name: '执法仪', count: 0 }
     };
 
     devices.forEach(device => {
@@ -227,7 +324,8 @@ const StandaloneMonitor = () => {
       camera: '📹',
       radio: '📡',
       sensor: '🔧',
-      base_station: '📶'
+      base_station: '📶',
+      body_camera: '📷'
     };
     return icons[type] || '📱';
   };
@@ -238,7 +336,8 @@ const StandaloneMonitor = () => {
       camera: '#1890ff',
       radio: '#52c41a',
       sensor: '#faad14',
-      base_station: '#f5222d'
+      base_station: '#f5222d',
+      body_camera: '#13c2c2'
     };
     return colors[type] || '#722ed1';
   };
@@ -253,19 +352,169 @@ const StandaloneMonitor = () => {
     });
   };
 
-  // 处理设备点击
-  const handleDeviceClick = (device) => {
+  // 处理地图设备点击（只显示白色气泡框，不显示Modal）
+  const handleMapDeviceClick = (device) => {
+    setSelectedDevice(device);
+    // 不设置 setDeviceInfoVisible(true)，只让Leaflet的Popup显示
+  };
+
+  // 处理监控列表设备详情点击（显示Modal弹窗）
+  const handleDeviceDetailClick = (device) => {
     setSelectedDevice(device);
     setDeviceInfoVisible(true);
   };
 
   // 处理单个设备轨迹查看
   const handleDeviceTrack = (device) => {
-    console.log('处理设备轨迹:', device);
-    setSelectedTrackDevice(device.id);
+    setCurrentTrackDevice(device);
+    setTrackTimeModalVisible(true);
+
+    // 设置默认时间范围（最近24小时）
+    const now = dayjs();
+    const yesterday = dayjs().subtract(24, 'hour');
+    setTrackStartTime(yesterday);
+    setTrackEndTime(now);
+  };
+
+  // 快速轨迹跟踪（显示最近2小时轨迹）
+  const handleQuickTrack = (device) => {
+    setCurrentQuickTrackDevice(device);
+    setQuickTrackModalVisible(true);
+  };
+
+  // 确认快速轨迹跟踪 - 开始实时跟踪
+  const handleConfirmQuickTrack = () => {
+    if (!currentQuickTrackDevice) return;
+
+    // 初始化实时跟踪
+    const startTime = new Date();
+    setTrackingStartTime(startTime);
+    setIsRealTimeTracking(true);
+    setSelectedTrackDevice(currentQuickTrackDevice.id);
     setShowDeviceTracks(true);
-    console.log('轨迹状态更新:', { showDeviceTracks: true, selectedTrackDevice: device.id });
-    message.success(`已显示 ${device.name} 的轨迹`);
+    setQuickTrackModalVisible(false);
+
+    // 初始化轨迹数据，以设备当前位置作为起点
+    const initialTrackPoint = {
+      id: 1,
+      position: currentQuickTrackDevice.position, // [经度, 纬度]
+      timestamp: startTime.toISOString(),
+      speed: 0,
+      status: 'normal'
+    };
+
+    setRealTimeTrackData([initialTrackPoint]);
+    setDeviceTrackData([initialTrackPoint]);
+
+    // 自动将地图居中到设备当前位置（开始跟踪时执行）
+    if (currentQuickTrackDevice.position && currentQuickTrackDevice.position.length >= 2) {
+      setMapCenter([currentQuickTrackDevice.position[1], currentQuickTrackDevice.position[0]]); // [纬度, 经度]
+      setMapZoom(16);
+
+      // 短暂延迟后清除地图控制状态
+      setTimeout(() => {
+        setMapCenter(null);
+        setMapZoom(null);
+      }, 2000);
+    }
+
+    message.success(`开始实时跟踪 ${currentQuickTrackDevice.name} 的移动轨迹`);
+    setCurrentQuickTrackDevice(null);
+  };
+
+  // 取消快速轨迹跟踪
+  const handleCancelQuickTrack = () => {
+    setQuickTrackModalVisible(false);
+    setCurrentQuickTrackDevice(null);
+  };
+
+  // 查询设备轨迹
+  const handleTrackQuery = async () => {
+    if (!currentTrackDevice || !trackStartTime || !trackEndTime) {
+      message.warning('请选择完整的时间范围');
+      return;
+    }
+
+    if (trackStartTime >= trackEndTime) {
+      message.warning('开始时间必须早于结束时间');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await getDeviceTrack(
+        currentTrackDevice.id,
+        trackStartTime.toISOString(),
+        trackEndTime.toISOString()
+      );
+
+      if (response.success) {
+        setDeviceTrackData(response.data.tracks);
+        setSelectedTrackDevice(currentTrackDevice.id);
+        setShowDeviceTracks(true);
+        setTrackTimeModalVisible(false);
+
+        // 自动将地图居中到轨迹终点位置
+        if (response.data.tracks && response.data.tracks.length > 0) {
+          const lastTrackPoint = response.data.tracks[response.data.tracks.length - 1];
+          if (lastTrackPoint && lastTrackPoint.position && lastTrackPoint.position.length >= 2) {
+            // 轨迹数据格式：[经度, 纬度]，地图需要 [纬度, 经度]
+            const centerPoint = [lastTrackPoint.position[1], lastTrackPoint.position[0]];
+
+            // 设置地图中心点为轨迹终点，并调整缩放级别以显示完整轨迹
+            setMapCenter(centerPoint);
+            setMapZoom(14); // 适合查看轨迹细节的缩放级别
+
+            // 延迟一下再清除地图控制状态，让动画完成
+            setTimeout(() => {
+              setMapCenter(null);
+              setMapZoom(null);
+            }, 2000);
+          }
+        }
+
+        message.success(`已加载 ${currentTrackDevice.name} 的轨迹数据，共 ${response.data.totalPoints} 个点`);
+      } else {
+        message.error('获取轨迹数据失败');
+      }
+    } catch (error) {
+      console.error('获取轨迹数据错误:', error);
+      message.error('获取轨迹数据失败');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 取消轨迹查询
+  const handleTrackCancel = () => {
+    setTrackTimeModalVisible(false);
+    setCurrentTrackDevice(null);
+    setTrackStartTime(null);
+    setTrackEndTime(null);
+  };
+
+  // 清除轨迹显示
+  const clearDeviceTracks = () => {
+    const deviceName = devices.find(d => d.id === selectedTrackDevice)?.name || '设备';
+
+    // 停止实时跟踪
+    setIsRealTimeTracking(false);
+    setRealTimeTrackData([]);
+    setTrackingStartTime(null);
+
+    // 重置所有轨迹相关状态
+    setShowDeviceTracks(false);
+    setSelectedTrackDevice(null);
+    setDeviceTrackData([]);
+
+    // 重置时间选择器相关状态
+    setTrackTimeModalVisible(false);
+    setCurrentTrackDevice(null);
+    setTrackStartTime(null);
+    setTrackEndTime(null);
+
+    const actionText = isRealTimeTracking ? '已停止轨迹跟踪' : '已清除轨迹显示';
+    message.success(`${deviceName} ${actionText}`);
   };
 
   // 定位到设备
@@ -277,86 +526,55 @@ const StandaloneMonitor = () => {
       return;
     }
 
-    console.log('🎯 [定位设备] 开始定位设备:', {
-      deviceId,
-      deviceName: device.name,
-      position: device.position,
-      status: device.status
-    });
+    // 使用地图控制状态来居中显示设备
+    if (device.position && device.position.length >= 2) {
+      // 设备位置格式：[经度, 纬度]，地图需要 [纬度, 经度]
+      const deviceCenter = [device.position[1], device.position[0]];
 
-    // 在地图上定位设备标记
-    const deviceMarker = document.querySelector(`[data-device-id="${deviceId}"]`);
-    if (deviceMarker) {
-      // 添加高亮效果到地图标记
-      deviceMarker.classList.add(styles.deviceHighlight);
-
-      // 平滑滚动地图容器到设备位置
-      const mapContainer = document.querySelector(`.${styles.mapContainer}`);
-      if (mapContainer) {
-        // 计算设备在地图中的相对位置（这里是模拟计算）
-        const containerRect = mapContainer.getBoundingClientRect();
-        const markerRect = deviceMarker.getBoundingClientRect();
-
-        // 计算需要滚动的距离，使设备居中显示
-        const scrollX = markerRect.left - containerRect.left - containerRect.width / 2;
-        const scrollY = markerRect.top - containerRect.top - containerRect.height / 2;
-
-        // 平滑滚动到设备位置
-        mapContainer.scrollTo({
-          left: mapContainer.scrollLeft + scrollX,
-          top: mapContainer.scrollTop + scrollY,
-          behavior: 'smooth'
-        });
-      }
+      // 设置地图中心点为设备位置，并调整缩放级别
+      setMapCenter(deviceCenter);
+      setMapZoom(16); // 高缩放级别，确保设备标记清晰可见
 
       // 显示定位成功消息
       message.success(`已定位到设备：${device.name}`);
 
-      // 添加定位指示器
-      const locateIndicator = document.createElement('div');
-      locateIndicator.className = styles.locateIndicator;
-      locateIndicator.innerHTML = '📍';
-      locateIndicator.style.position = 'absolute';
-      locateIndicator.style.top = '-10px';
-      locateIndicator.style.right = '-10px';
-      locateIndicator.style.zIndex = '25';
-      locateIndicator.style.fontSize = '20px';
-      locateIndicator.style.animation = 'bounce 0.5s ease-in-out 3';
-      deviceMarker.appendChild(locateIndicator);
-
-      // 3秒后移除高亮效果和指示器
+      // 延迟一下再清除地图控制状态，让动画完成
       setTimeout(() => {
-        deviceMarker.classList.remove(styles.deviceHighlight);
-        if (locateIndicator.parentNode) {
-          locateIndicator.parentNode.removeChild(locateIndicator);
-        }
-      }, 3000);
-    } else {
-      // 如果在地图上找不到设备标记，尝试模拟地图缩放和移动
-      console.log('📍 [定位设备] 地图标记未找到，模拟地图操作');
+        setMapCenter(null);
+        setMapZoom(null);
+      }, 2000);
 
-      // 显示定位信息
-      message.info(`正在定位设备：${device.name}`, 2);
+      // 添加设备高亮效果（如果设备标记存在）
+      setTimeout(() => {
+        const deviceMarker = document.querySelector(`[data-device-id="${deviceId}"]`);
+        if (deviceMarker) {
+          // 添加高亮效果到地图标记
+          deviceMarker.classList.add(styles.deviceHighlight);
 
-      // 模拟地图缩放和移动动画
-      const mapContainer = document.querySelector(`.${styles.mapContainer}`);
-      if (mapContainer) {
-        // 添加定位动画效果
-        mapContainer.style.transition = 'transform 1s ease-in-out';
-        mapContainer.style.transform = 'scale(1.1)';
+          // 添加定位指示器
+          const locateIndicator = document.createElement('div');
+          locateIndicator.className = styles.locateIndicator;
+          locateIndicator.innerHTML = '📍';
+          locateIndicator.style.position = 'absolute';
+          locateIndicator.style.top = '-10px';
+          locateIndicator.style.right = '-10px';
+          locateIndicator.style.zIndex = '25';
+          locateIndicator.style.fontSize = '20px';
+          locateIndicator.style.animation = 'bounce 0.5s ease-in-out 3';
+          deviceMarker.appendChild(locateIndicator);
 
-        setTimeout(() => {
-          mapContainer.style.transform = 'scale(1)';
+          // 3秒后移除高亮效果和指示器
           setTimeout(() => {
-            mapContainer.style.transition = '';
-          }, 1000);
-        }, 1000);
-      }
-
-      // 显示设备位置信息
-      setTimeout(() => {
-        message.success(`设备位置：${device.address || '位置信息不详'}`);
-      }, 1500);
+            deviceMarker.classList.remove(styles.deviceHighlight);
+            if (locateIndicator.parentNode) {
+              locateIndicator.parentNode.removeChild(locateIndicator);
+            }
+          }, 3000);
+        }
+      }, 500); // 等待地图移动动画开始后再添加高亮效果
+    } else {
+      // 如果设备位置信息不完整，显示错误信息
+      message.error(`设备 ${device.name} 的位置信息不完整`);
     }
   };
 
@@ -392,35 +610,219 @@ const StandaloneMonitor = () => {
     }
   };
 
+  // 处理语音呼叫
+  const handleAudioCall = (device) => {
+    if (device.type === 'body_camera') {
+      // 只在开始新通话时重置状态（不是从最小化恢复）
+      if (!audioCallModalVisible || !isCallMinimized) {
+        setCallStatus('idle');
+      }
+      setIsCallMinimized(false);
+      setSelectedCallDevice(device);
+      setAudioCallModalVisible(true);
+    } else {
+      message.warning('该设备不支持语音呼叫功能');
+    }
+  };
 
+  // 处理呼叫状态变化
+  const handleCallStatusChange = (status, data) => {
+    console.log('呼叫状态变化:', status, data);
+    // 同步更新父组件的通话状态，确保最小化浮窗显示正确
+    setCallStatus(status);
+    // 可以在这里更新设备状态或记录通话日志
+  };
 
-  // 筛选地图上显示的设备
+  // 最小化语音呼叫
+  const handleMinimizeCall = () => {
+    setIsCallMinimized(true);
+  };
+
+  // 恢复语音呼叫
+  const handleRestoreCall = () => {
+    // 只恢复显示状态，不重置通话状态
+    setIsCallMinimized(false);
+    // 不调用 setCallStatus，保持当前通话状态
+  };
+
+  // 处理浮窗点击
+  const handleFloatClick = (e) => {
+    e.stopPropagation();
+    // 只有在没有拖动的情况下才执行点击操作
+    if (!hasMoved) {
+      handleRestoreCall();
+    }
+  };
+
+  // 关闭语音呼叫
+  const handleCloseCall = () => {
+    // 完全关闭通话，重置所有状态
+    setAudioCallModalVisible(false);
+    setIsCallMinimized(false);
+    setSelectedCallDevice(null);
+    setCallStatus('idle');
+    // 重置拖动位置
+    setDragPosition({ x: 20, y: 120 });
+  };
+
+  // 拖动处理函数
+  const handleMouseDown = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    setIsDragging(true);
+    setHasMoved(false);
+
+    // 记录拖动开始位置
+    setDragStartPos({ x: clientX, y: clientY });
+
+    // 计算鼠标在浮窗内的相对位置
+    setDragOffset({
+      x: clientX - rect.left,
+      y: clientY - rect.top
+    });
+  };
+
+  // 触摸开始处理
+  const handleTouchStart = (e) => {
+    e.preventDefault();
+    handleMouseDown(e);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    // 检查是否真的移动了（移动距离超过5px才算拖动）
+    const moveDistance = Math.sqrt(
+      Math.pow(clientX - dragStartPos.x, 2) + Math.pow(clientY - dragStartPos.y, 2)
+    );
+
+    if (moveDistance > 5) {
+      setHasMoved(true);
+    }
+
+    // 只有真正移动时才更新位置
+    if (hasMoved || moveDistance > 5) {
+      // 计算新位置（基于鼠标位置减去拖动偏移）
+      const newX = clientX - dragOffset.x;
+      const newY = clientY - dragOffset.y;
+
+      // 浮窗尺寸
+      const floatWidth = 280;
+      const floatHeight = 100;
+
+      // 限制拖动范围，确保浮窗不会超出屏幕
+      const boundedX = Math.max(0, Math.min(newX, window.innerWidth - floatWidth));
+      const boundedY = Math.max(0, Math.min(newY, window.innerHeight - floatHeight));
+
+      // 转换为 right 和 bottom 定位
+      const rightPos = window.innerWidth - boundedX - floatWidth;
+      const bottomPos = window.innerHeight - boundedY - floatHeight;
+
+      setDragPosition({ x: rightPos, y: bottomPos });
+    }
+  };
+
+  const handleMouseUp = () => {
+    if (isDragging) {
+      setIsDragging(false);
+      // 重置移动状态
+      setTimeout(() => {
+        setHasMoved(false);
+      }, 100);
+    }
+  };
+
+  // 触摸移动和结束处理
+  const handleTouchMove = (e) => {
+    e.preventDefault(); // 防止页面滚动
+    handleMouseMove(e);
+  };
+
+  const handleTouchEnd = () => {
+    handleMouseUp();
+  };
+
+  // 添加全局鼠标和触摸事件监听
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.addEventListener('touchmove', handleTouchMove, { passive: false });
+      document.addEventListener('touchend', handleTouchEnd);
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+        document.removeEventListener('touchmove', handleTouchMove);
+        document.removeEventListener('touchend', handleTouchEnd);
+      };
+    }
+  }, [isDragging, dragOffset]);
+
+  // 筛选地图上显示的设备（简化版，只保留搜索功能）
   const getFilteredMapDevices = () => {
-    let filtered = devices;
-
-    // 按状态筛选
-    if (mapDeviceFilter === 'online') {
-      filtered = filtered.filter(device => device.status === 'online');
-    } else if (mapDeviceFilter === 'offline') {
-      filtered = filtered.filter(device => device.status === 'offline');
-    } else if (mapDeviceFilter === 'alarm') {
-      filtered = filtered.filter(device => device.alarmCount > 0);
+    // 如果没有搜索文本，显示所有设备
+    if (!mapSearchText) {
+      return devices;
     }
 
     // 按搜索文本筛选
-    if (mapSearchText) {
-      const searchText = mapSearchText.toLowerCase();
-      filtered = filtered.filter(device => {
-        const deviceName = device.name ? device.name.toLowerCase() : '';
-        const deviceId = device.id ? String(device.id).toLowerCase() : '';
-        const deviceLocation = device.location ? device.location.toLowerCase() : '';
-        return deviceName.includes(searchText) ||
-               deviceId.includes(searchText) ||
-               deviceLocation.includes(searchText);
-      });
+    const searchText = mapSearchText.toLowerCase();
+    return devices.filter(device => {
+      const deviceName = device.name ? device.name.toLowerCase() : '';
+      const deviceId = device.id ? String(device.id).toLowerCase() : '';
+      const deviceLocation = device.location ? device.location.toLowerCase() : '';
+      return deviceName.includes(searchText) ||
+             deviceId.includes(searchText) ||
+             deviceLocation.includes(searchText);
+    });
+  };
+
+  // 获取搜索结果（用于下拉选择）
+  const getSearchResults = (searchText) => {
+    if (!searchText || searchText.length < 1) {
+      return [];
     }
 
-    return filtered;
+    const text = searchText.toLowerCase();
+    return devices.filter(device => {
+      const deviceName = device.name ? device.name.toLowerCase() : '';
+      const deviceId = device.id ? String(device.id).toLowerCase() : '';
+      const deviceLocation = device.location ? device.location.toLowerCase() : '';
+      return deviceName.includes(text) ||
+             deviceId.includes(text) ||
+             deviceLocation.includes(text);
+    }).slice(0, 8); // 限制显示最多8个结果
+  };
+
+  // 处理搜索输入变化
+  const handleSearchChange = (value) => {
+    setMapSearchText(value);
+    const results = getSearchResults(value);
+    setSearchResults(results);
+    setShowSearchResults(value.length > 0 && results.length > 0);
+  };
+
+  // 处理搜索结果选择
+  const handleSearchResultSelect = (device) => {
+    setMapSearchText(device.name);
+    setShowSearchResults(false);
+    // 自动定位到选中的设备
+    locateDevice(device.id);
+  };
+
+  // 处理搜索框失焦
+  const handleSearchBlur = () => {
+    // 延迟隐藏搜索结果，以便用户能够点击选项
+    setTimeout(() => {
+      setShowSearchResults(false);
+    }, 200);
   };
 
   return (
@@ -439,32 +841,32 @@ const StandaloneMonitor = () => {
         <div className={styles.headerRight}>
           <Space size="large">
             {/* 控制按钮 */}
-            <Space>
+            <Space size="large">
               <Button
-                icon={<HomeOutlined />}
+                icon={<HomeOutlined style={{ fontSize: '22px' }} />}
                 onClick={goToMainSystem}
                 type="text"
-                className={styles.headerBtn}
-              >
-                返回主系统
-              </Button>
+                className={styles.headerIconBtn}
+                title="返回主系统"
+              />
               <Button
-                icon={<ReloadOutlined />}
+                icon={<ReloadOutlined style={{ fontSize: '22px' }} />}
                 onClick={loadData}
                 loading={loading}
                 type="text"
-                className={styles.headerBtn}
-              >
-                刷新数据
-              </Button>
+                className={styles.headerIconBtn}
+                title="刷新数据"
+              />
               <Button
-                icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+                icon={isFullscreen ?
+                  <FullscreenExitOutlined style={{ fontSize: '22px' }} /> :
+                  <FullscreenOutlined style={{ fontSize: '22px' }} />
+                }
                 onClick={toggleFullscreen}
                 type="text"
-                className={styles.headerBtn}
-              >
-                {isFullscreen ? '退出全屏' : '全屏显示'}
-              </Button>
+                className={styles.headerIconBtn}
+                title={isFullscreen ? '退出全屏' : '全屏显示'}
+              />
             </Space>
 
             {/* 天气信息 */}
@@ -499,56 +901,88 @@ const StandaloneMonitor = () => {
             {/* Leaflet地图 */}
             <LeafletMap
               devices={getFilteredMapDevices()}
-              onDeviceClick={handleDeviceClick}
+              onDeviceClick={handleMapDeviceClick}
               mapType={mapType}
               height="100%"
               className={styles.leafletMapWrapper}
               showTracks={showDeviceTracks}
               selectedDeviceId={selectedTrackDevice}
+              trackData={deviceTrackData}
+              mapCenter={mapCenter}
+              mapZoom={mapZoom}
+              isRealTimeTracking={isRealTimeTracking}
+              enableTrackPlayback={showDeviceTracks && !isRealTimeTracking}
             />
-            {/* 调试信息 */}
-            {showDeviceTracks && (
-              <div style={{ 
-                position: 'absolute', 
-                top: '10px', 
-                right: '10px', 
-                background: 'rgba(0,0,0,0.7)', 
-                color: 'white', 
-                padding: '8px', 
-                borderRadius: '4px',
-                fontSize: '12px',
-                zIndex: 1000
-              }}>
-                轨迹调试: 显示={showDeviceTracks ? '是' : '否'}, 设备ID={selectedTrackDevice}
-              </div>
-            )}
 
             {/* 地图搜索控制面板 */}
             <div className={styles.mapSearchPanel}>
               <div className={styles.searchPanelContent}>
-                <Input
-                  placeholder="搜索设备名称、ID或位置"
-                  value={mapSearchText}
-                  onChange={(e) => setMapSearchText(e.target.value)}
-                  className={styles.mapSearchInput}
-                  size="small"
-                  prefix={<SearchOutlined style={{ color: 'rgba(255, 255, 255, 0.5)' }} />}
-                  allowClear
-                />
-                <Select
-                  value={mapDeviceFilter}
-                  onChange={setMapDeviceFilter}
-                  size="small"
-                  className={styles.mapFilterSelect}
-                >
-                  <Option value="all">全部设备</Option>
-                  <Option value="online">在线设备</Option>
-                  <Option value="offline">离线设备</Option>
-                  <Option value="alarm">告警设备</Option>
-                </Select>
-              </div>
-              <div className={styles.searchStats}>
-                显示 {getFilteredMapDevices().length} / {devices.length} 个设备
+                <div className={styles.searchContainer}>
+                  <Input
+                    placeholder="搜索设备名称、ID或位置..."
+                    value={mapSearchText}
+                    onChange={(e) => handleSearchChange(e.target.value)}
+                    onBlur={handleSearchBlur}
+                    onFocus={() => {
+                      if (mapSearchText && searchResults.length > 0) {
+                        setShowSearchResults(true);
+                      }
+                    }}
+                    className={styles.mapSearchInput}
+                    size="medium"
+                    prefix={<SearchOutlined style={{ color: 'rgba(255, 255, 255, 0.6)' }} />}
+                    allowClear
+                    onClear={() => {
+                      setMapSearchText('');
+                      setSearchResults([]);
+                      setShowSearchResults(false);
+                    }}
+                  />
+
+                  {/* 搜索结果下拉列表 */}
+                  {showSearchResults && searchResults.length > 0 && (
+                    <div className={styles.searchResultsDropdown}>
+                      {searchResults.map((device) => (
+                        <div
+                          key={device.id}
+                          className={styles.searchResultItem}
+                          onClick={() => handleSearchResultSelect(device)}
+                        >
+                          <div className={styles.searchResultIcon}>
+                            {device.type === 'camera' ? '📹' :
+                             device.type === 'radio' ? '📡' :
+                             device.type === 'sensor' ? '🔧' :
+                             device.type === 'body_camera' ? '📷' : '📶'}
+                          </div>
+                          <div className={styles.searchResultInfo}>
+                            <div className={styles.searchResultName}>{device.name}</div>
+                            <div className={styles.searchResultLocation}>
+                              {device.location || '位置未知'}
+                            </div>
+                          </div>
+                          <div className={styles.searchResultStatus}>
+                            <Badge
+                              status={device.status === 'online' ? 'success' : 'error'}
+                              text={device.status === 'online' ? '在线' : '离线'}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {showDeviceTracks && (
+                  <Button
+                    size="small"
+                    type="primary"
+                    danger
+                    onClick={clearDeviceTracks}
+                    className={styles.clearTrackBtn}
+                  >
+                    {isRealTimeTracking ? '取消跟踪' : '清除轨迹'}
+                  </Button>
+                )}
               </div>
             </div>
 
@@ -570,6 +1004,80 @@ const StandaloneMonitor = () => {
                 </div>
               </div>
             </div>
+
+            {/* 轨迹控制面板 - 只在显示轨迹时出现 */}
+            {showDeviceTracks && selectedTrackDevice && (
+              <div className={styles.trackControlPanel}>
+                <div className={styles.trackControlHeader}>
+                  <div className={styles.trackControlTitle}>
+                    <NodeIndexOutlined style={{ marginRight: '6px', color: '#1890ff' }} />
+                    <span>{isRealTimeTracking ? '实时轨迹跟踪' : '历史轨迹查询'}</span>
+                    {isRealTimeTracking && (
+                      <span className={styles.trackingStatus}>
+                        <span className={styles.trackingDot}></span>
+                        跟踪中
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className={styles.trackControlContent}>
+                  <div className={styles.trackInfo}>
+                    <div className={styles.trackDeviceName}>
+                      {devices.find(d => d.id === selectedTrackDevice)?.name || '未知设备'}
+                    </div>
+                    <div className={styles.trackStats}>
+                      <span className={styles.trackPointCount}>
+                        轨迹点: {deviceTrackData.length}
+                      </span>
+                      {deviceTrackData.length > 0 && (
+                        <span className={styles.trackTimeRange}>
+                          {isRealTimeTracking ? (
+                            trackingStartTime ?
+                              `跟踪时长: ${Math.round((new Date() - new Date(trackingStartTime)) / (1000 * 60))}分钟` :
+                              '实时跟踪'
+                          ) : (
+                            deviceTrackData.length > 1 ?
+                              `时长: ${Math.round((new Date(deviceTrackData[deviceTrackData.length - 1].timestamp) -
+                                               new Date(deviceTrackData[0].timestamp)) / (1000 * 60))}分钟` :
+                              '历史查询'
+                          )}
+                        </span>
+                      )}
+                    </div>
+                    {deviceTrackData.length > 0 && (
+                      <div className={styles.trackDetails}>
+                        <div className={styles.trackDetailItem}>
+                          <span className={styles.trackDetailLabel}>起始时间:</span>
+                          <span className={styles.trackDetailValue}>
+                            {new Date(deviceTrackData[0].timestamp).toLocaleTimeString('zh-CN')}
+                          </span>
+                        </div>
+                        <div className={styles.trackDetailItem}>
+                          <span className={styles.trackDetailLabel}>
+                            {isRealTimeTracking ? '最新时间:' : '结束时间:'}
+                          </span>
+                          <span className={styles.trackDetailValue}>
+                            {new Date(deviceTrackData[deviceTrackData.length - 1].timestamp).toLocaleTimeString('zh-CN')}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className={styles.trackActions}>
+                    <Button
+                      type="primary"
+                      danger
+                      size="small"
+                      icon={<CloseCircleOutlined />}
+                      onClick={clearDeviceTracks}
+                      className={styles.clearTrackButton}
+                    >
+                      {isRealTimeTracking ? '取消跟踪' : '关闭轨迹'}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* 地图上的叠加面板 */}
             {/* 左侧面板 - 标签页形式 */}
@@ -601,114 +1109,12 @@ const StandaloneMonitor = () => {
                         label: (
                           <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <MonitorOutlined />
-                            <span>系统状态</span>
+                            <span>设备概览</span>
                           </span>
                         ),
                         children: (
-                          <div>
-                      {/* 主要统计数据 */}
-                      <div className={styles.mainStatsGrid}>
-                        <div className={styles.mainStatItem}>
-                          <div className={styles.mainStatIcon}>
-                            <MonitorOutlined style={{ color: '#1890ff' }} />
-                          </div>
-                          <div className={styles.mainStatInfo}>
-                            <div className={styles.mainStatNumber}>{stats.totalDevices}</div>
-                            <div className={styles.mainStatLabel}>设备总数</div>
-                          </div>
-                        </div>
-                        <div className={styles.mainStatItem}>
-                          <div className={styles.mainStatIcon}>
-                            <CheckCircleOutlined style={{ color: '#52c41a' }} />
-                          </div>
-                          <div className={styles.mainStatInfo}>
-                            <div className={styles.mainStatNumber} style={{ color: '#52c41a' }}>
-                              {stats.onlineDevices}
-                            </div>
-                            <div className={styles.mainStatLabel}>在线设备</div>
-                          </div>
-                        </div>
-                        <div className={styles.mainStatItem}>
-                          <div className={styles.mainStatIcon}>
-                            <CloseCircleOutlined style={{ color: '#ff4d4f' }} />
-                          </div>
-                          <div className={styles.mainStatInfo}>
-                            <div className={styles.mainStatNumber} style={{ color: '#ff4d4f' }}>
-                              {stats.offlineDevices}
-                            </div>
-                            <div className={styles.mainStatLabel}>离线设备</div>
-                          </div>
-                        </div>
-                        <div className={styles.mainStatItem}>
-                          <div className={styles.mainStatIcon}>
-                            <WarningOutlined style={{ color: '#faad14' }} />
-                          </div>
-                          <div className={styles.mainStatInfo}>
-                            <div className={styles.mainStatNumber} style={{ color: '#faad14' }}>
-                              {stats.activeAlarms}
-                            </div>
-                            <div className={styles.mainStatLabel}>活跃告警</div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 在线率显示 */}
-                      <div className={styles.onlineRateSection}>
-                        <div className={styles.onlineRateHeader}>
-                          <span className={styles.onlineRateLabel}>设备在线率</span>
-                          <span className={styles.onlineRateValue}>{onlineRate}%</span>
-                        </div>
-                        <Progress
-                          percent={onlineRate}
-                          size="small"
-                          strokeColor={onlineRate >= 90 ? '#52c41a' : onlineRate >= 70 ? '#faad14' : '#ff4d4f'}
-                          showInfo={false}
-                          strokeWidth={8}
-                        />
-                        <div className={styles.onlineRateStatus}>
-                          {onlineRate >= 90 ? '系统运行良好' : onlineRate >= 70 ? '系统运行正常' : '需要关注'}
-                        </div>
-                      </div>
-
-                      {/* 设备类型分布 */}
-                      <div className={styles.deviceTypeSection}>
-                        <div className={styles.sectionTitle}>
-                          <SettingOutlined style={{ marginRight: '8px' }} />
-                          设备类型分布
-                        </div>
-                        <div className={styles.deviceTypeChart}>
-                          {getDeviceTypeStats().length > 0 ? (
-                            getDeviceTypeStats().map((item, index) => (
-                              <div key={item.type} className={styles.compactDeviceTypeItem}>
-                                <div className={styles.deviceTypeIcon}>
-                                  {getDeviceTypeIcon(item.type)}
-                                </div>
-                                <div className={styles.deviceTypeInfo}>
-                                  <div className={styles.deviceTypeName}>{item.name}</div>
-                                  <div className={styles.deviceTypeCount}>{item.count}</div>
-                                </div>
-                                <div className={styles.deviceTypeBar}>
-                                  <div
-                                    className={styles.deviceTypeProgress}
-                                    style={{
-                                      width: `${stats.totalDevices > 0 ? (item.count / stats.totalDevices) * 100 : 0}%`,
-                                      backgroundColor: getDeviceTypeColor(item.type)
-                                    }}
-                                  />
-                                </div>
-                                <div className={styles.deviceTypePercent}>
-                                  {stats.totalDevices > 0 ? Math.round((item.count / stats.totalDevices) * 100) : 0}%
-                                </div>
-                              </div>
-                            ))
-                          ) : (
-                            <div className={styles.emptyState}>
-                              <MonitorOutlined style={{ fontSize: '20px', color: '#8c8c8c', marginBottom: '6px' }} />
-                              <div>暂无设备数据</div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                          <div style={{ height: '100%', overflow: 'hidden' }}>
+                            <DeviceOverviewCharts stats={stats} />
                           </div>
                         )
                       },
@@ -745,53 +1151,75 @@ const StandaloneMonitor = () => {
                                 {getDeviceTypeIcon(device.type)}
                               </div>
                               <div className={styles.deviceInfo}>
-                                <div className={styles.deviceName}>{device.name}</div>
+                                <div className={styles.deviceHeader}>
+                                  <div className={styles.deviceName}>{device.name}</div>
+                                  <Badge
+                                    status={device.status === 'online' ? 'success' : 'error'}
+                                    text={device.status === 'online' ? '在线' : '离线'}
+                                    className={styles.deviceStatusBadge}
+                                  />
+                                </div>
                                 <div className={styles.deviceLocation}>
                                   {device.location || '位置未知'}
                                 </div>
                               </div>
-                              <div className={styles.deviceStatus}>
-                                <Badge
-                                  status={device.status === 'online' ? 'success' : 'error'}
-                                  text={device.status === 'online' ? '在线' : '离线'}
-                                />
-                              </div>
                               <div className={styles.deviceActions}>
-                                <Tooltip title="查看详情">
-                                  <Button
-                                    type="text"
-                                    size="small"
-                                    icon={<InfoCircleOutlined />}
-                                    onClick={() => handleDeviceClick(device)}
-                                  />
-                                </Tooltip>
-                                <Tooltip title="查看轨迹">
-                                  <Button
-                                    type="text"
-                                    size="small"
-                                    icon={<NodeIndexOutlined />}
-                                    onClick={() => handleDeviceTrack(device)}
-                                  />
-                                </Tooltip>
-                                {device.type === 'camera' && (
-                                  <Tooltip title="查看视频">
+                                <Space size="small">
+                                  <Dropdown
+                                    menu={{
+                                      items: [
+                                        {
+                                          key: 'detail',
+                                          label: '查看详情',
+                                          icon: <InfoCircleOutlined />,
+                                          onClick: () => handleDeviceDetailClick(device)
+                                        },
+                                        {
+                                          key: 'quickTrack',
+                                          label: '轨迹跟踪',
+                                          icon: <NodeIndexOutlined />,
+                                          disabled: device.status !== 'online',
+                                          onClick: () => handleQuickTrack(device)
+                                        },
+                                        {
+                                          key: 'track',
+                                          label: '轨迹查询',
+                                          icon: <NodeIndexOutlined />,
+                                          onClick: () => handleDeviceTrack(device)
+                                        },
+                                        ...(device.type === 'camera' ? [{
+                                          key: 'video',
+                                          label: '查看视频',
+                                          icon: <PlayCircleOutlined />,
+                                          disabled: device.status !== 'online',
+                                          onClick: () => handleVideoView(device)
+                                        }] : []),
+                                        ...(device.type === 'body_camera' ? [{
+                                          key: 'call',
+                                          label: '语音呼叫',
+                                          icon: <PhoneOutlined />,
+                                          disabled: device.status !== 'online',
+                                          onClick: () => handleAudioCall(device)
+                                        }] : []),
+                                        {
+                                          key: 'locate',
+                                          label: '定位设备',
+                                          icon: <EyeOutlined />,
+                                          onClick: () => locateDevice(device.id)
+                                        }
+                                      ]
+                                    }}
+                                    placement="bottomRight"
+                                    trigger={['click']}
+                                  >
                                     <Button
                                       type="text"
                                       size="small"
-                                      icon={<PlayCircleOutlined />}
-                                      onClick={() => handleVideoView(device)}
-                                      disabled={device.status !== 'online'}
+                                      icon={<MoreOutlined />}
+                                      className={styles.deviceActionBtn}
                                     />
-                                  </Tooltip>
-                                )}
-                                <Tooltip title="定位设备">
-                                  <Button
-                                    type="text"
-                                    size="small"
-                                    icon={<EyeOutlined />}
-                                    onClick={() => locateDevice(device.id)}
-                                  />
-                                </Tooltip>
+                                  </Dropdown>
+                                </Space>
                               </div>
                             </div>
                           ))
@@ -813,7 +1241,7 @@ const StandaloneMonitor = () => {
 
             {/* 实时告警面板 - 右侧 */}
             {showAlarmPanel && (
-              <div className={`${styles.overlayPanel} ${styles.alarmPanel}`} style={{ top: '20px', right: '20px' }}>
+              <div className={`${styles.overlayPanel} ${styles.alarmPanel}`} style={{ top: '68px', right: '20px' }}>
                 <div className={styles.panelHeader}>
                   <Space>
                     <WarningOutlined />
@@ -876,23 +1304,39 @@ const StandaloneMonitor = () => {
           </div>
         </div>
 
+
+
+        {/* 测量工具按钮 - 右下角上方 */}
+        <div className={styles.measurementControls}>
+          <Space direction="vertical" size={8}>
+            <Tooltip title="测距工具">
+              <Button
+                type="default"
+                icon={<LineOutlined />}
+                onClick={() => message.info('测距功能开发中')}
+                className={styles.controlBtn}
+              />
+            </Tooltip>
+            <Tooltip title="测面积工具">
+              <Button
+                type="default"
+                icon={<BorderInnerOutlined />}
+                onClick={() => message.info('测面积功能开发中')}
+                className={styles.controlBtn}
+              />
+            </Tooltip>
+          </Space>
+        </div>
+
         {/* 面板控制按钮 - 右下角 */}
         <div className={styles.bottomRightControls}>
-          <Space direction="vertical">
+          <Space direction="vertical" size={8}>
             <Tooltip title="设备状态面板">
               <Button
                 type={showDevicePanel ? 'primary' : 'default'}
                 icon={<MonitorOutlined />}
                 onClick={() => setShowDevicePanel(!showDevicePanel)}
                 className={styles.controlBtn}
-              />
-            </Tooltip>
-            <Tooltip title="告警面板">
-              <Button
-                type={showAlarmPanel ? 'primary' : 'default'}
-                icon={<WarningOutlined />}
-                onClick={() => setShowAlarmPanel(!showAlarmPanel)}
-                className={`${styles.controlBtn} ${stats.activeAlarms > 0 ? styles.alarmBlinking : ''}`}
               />
             </Tooltip>
             <Tooltip title={`当前：${mapType === 'normal' ? '标准地图' : mapType === 'satellite' ? '卫星地图' : '暗色地图'} - 点击切换`}>
@@ -937,7 +1381,8 @@ const StandaloneMonitor = () => {
               <div className={styles.deviceIcon}>
                 {selectedDevice.type === 'camera' ? '📹' :
                  selectedDevice.type === 'radio' ? '📡' :
-                 selectedDevice.type === 'sensor' ? '🔧' : '📶'}
+                 selectedDevice.type === 'sensor' ? '🔧' :
+                 selectedDevice.type === 'body_camera' ? '📷' : '📶'}
               </div>
               <div className={styles.deviceBasicInfo}>
                 <h3 className={styles.deviceName}>{selectedDevice.name}</h3>
@@ -964,7 +1409,8 @@ const StandaloneMonitor = () => {
                     <span className={styles.infoValue}>
                       {selectedDevice.type === 'camera' ? '摄像头' :
                        selectedDevice.type === 'radio' ? '电台' :
-                       selectedDevice.type === 'sensor' ? '传感器' : '基站'}
+                       selectedDevice.type === 'sensor' ? '传感器' :
+                       selectedDevice.type === 'body_camera' ? '执法仪' : '基站'}
                     </span>
                   </div>
                 </Col>
@@ -1192,6 +1638,262 @@ const StandaloneMonitor = () => {
           </div>
         )}
       </Modal>
+
+      {/* 轨迹时间选择器 Modal */}
+      <Modal
+        title={
+          <Space>
+            <NodeIndexOutlined />
+            <span>轨迹查询</span>
+          </Space>
+        }
+        open={trackTimeModalVisible}
+        onOk={handleTrackQuery}
+        onCancel={handleTrackCancel}
+        confirmLoading={loading}
+        okText="查询轨迹"
+        cancelText="取消"
+        width={500}
+        className={`${styles.trackTimeModal} track-time-modal`}
+      >
+        {currentTrackDevice && (
+          <div className={styles.trackTimeContent}>
+            <div className={styles.deviceInfo}>
+              <div className={styles.deviceIcon}>
+                {getDeviceTypeIcon(currentTrackDevice.type)}
+              </div>
+              <div className={styles.deviceDetails}>
+                <div className={styles.deviceName}>{currentTrackDevice.name}</div>
+                <div className={styles.deviceLocation}>{currentTrackDevice.location}</div>
+              </div>
+            </div>
+
+            <Divider />
+
+            <div className={styles.timeRangeSelector}>
+              <Row gutter={[16, 16]}>
+                <Col span={24}>
+                  <div className={styles.timeLabel}>选择查询时间范围：</div>
+                </Col>
+                <Col span={12}>
+                  <div className={styles.timeInputGroup}>
+                    <label>开始时间：</label>
+                    <DatePicker
+                      showTime
+                      value={trackStartTime}
+                      onChange={setTrackStartTime}
+                      placeholder="选择开始时间"
+                      format="YYYY-MM-DD HH:mm:ss"
+                      style={{ width: '100%' }}
+                      size="small"
+                    />
+                  </div>
+                </Col>
+                <Col span={12}>
+                  <div className={styles.timeInputGroup}>
+                    <label>结束时间：</label>
+                    <DatePicker
+                      showTime
+                      value={trackEndTime}
+                      onChange={setTrackEndTime}
+                      placeholder="选择结束时间"
+                      format="YYYY-MM-DD HH:mm:ss"
+                      style={{ width: '100%' }}
+                      size="small"
+                    />
+                  </div>
+                </Col>
+                <Col span={24}>
+                  <div className={styles.quickTimeButtons}>
+                    <Space wrap>
+                      <Button
+                        size="small"
+                        onClick={() => {
+                          const now = dayjs();
+                          const oneHourAgo = dayjs().subtract(1, 'hour');
+                          setTrackStartTime(oneHourAgo);
+                          setTrackEndTime(now);
+                        }}
+                      >
+                        最近1小时
+                      </Button>
+                      <Button
+                        size="small"
+                        onClick={() => {
+                          const now = dayjs();
+                          const sixHoursAgo = dayjs().subtract(6, 'hour');
+                          setTrackStartTime(sixHoursAgo);
+                          setTrackEndTime(now);
+                        }}
+                      >
+                        最近6小时
+                      </Button>
+                      <Button
+                        size="small"
+                        onClick={() => {
+                          const now = dayjs();
+                          const oneDayAgo = dayjs().subtract(1, 'day');
+                          setTrackStartTime(oneDayAgo);
+                          setTrackEndTime(now);
+                        }}
+                      >
+                        最近24小时
+                      </Button>
+                      <Button
+                        size="small"
+                        onClick={() => {
+                          const now = dayjs();
+                          const threeDaysAgo = dayjs().subtract(3, 'day');
+                          setTrackStartTime(threeDaysAgo);
+                          setTrackEndTime(now);
+                        }}
+                      >
+                        最近3天
+                      </Button>
+                    </Space>
+                  </div>
+                </Col>
+              </Row>
+            </div>
+
+            <div className={styles.trackTips}>
+              <div className={styles.tipsTitle}>提示：</div>
+              <ul className={styles.tipsList}>
+                <li>轨迹查询时间范围不能超过7天</li>
+                <li>查询结果将在地图上以线条形式显示</li>
+                <li>轨迹点包含时间、位置、速度等信息</li>
+                <li>可以点击轨迹点查看详细信息</li>
+              </ul>
+            </div>
+          </div>
+        )}
+      </Modal>
+
+      {/* 告警按钮 - 右上角 */}
+      <div className={styles.alarmButtonContainer}>
+        <Tooltip title="告警面板">
+          <Button
+            type={showAlarmPanel ? 'primary' : 'default'}
+            icon={<WarningOutlined />}
+            onClick={() => setShowAlarmPanel(!showAlarmPanel)}
+            className={`${styles.controlBtn} ${styles.alarmButton} ${stats.activeAlarms > 0 ? styles.alarmBlinking : ''}`}
+          />
+        </Tooltip>
+      </div>
+
+      {/* 最小化语音呼叫浮动按钮 */}
+      {audioCallModalVisible && isCallMinimized && selectedCallDevice && (
+        <div
+          className={`${styles.minimizedCallFloat} ${isDragging ? styles.dragging : ''}`}
+          style={{
+            right: `${dragPosition.x}px`,
+            bottom: `${dragPosition.y}px`
+          }}
+        >
+          <div
+            className={styles.minimizedCallContent}
+            onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}
+            onClick={handleFloatClick}
+          >
+            <div className={styles.minimizedCallHeader}>
+              <PhoneOutlined className={styles.minimizedCallIcon} />
+              <div className={styles.minimizedCallInfo}>
+                <div className={styles.minimizedCallDevice}>{selectedCallDevice.name}</div>
+                <div className={styles.minimizedCallStatus}>
+                  {callStatus === 'calling' && (
+                    <>
+                      <div className={styles.callingIndicator}></div>
+                      <span>呼叫中...</span>
+                    </>
+                  )}
+                  {callStatus === 'talking' && (
+                    <>
+                      <div className={styles.talkingIndicator}></div>
+                      <span>通话中</span>
+                    </>
+                  )}
+                  {callStatus === 'idle' && <span>准备呼叫</span>}
+                </div>
+              </div>
+            </div>
+            <Button
+              type="text"
+              size="small"
+              icon={<CloseOutlined />}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCloseCall();
+              }}
+              className={styles.minimizedCallClose}
+              title="结束通话"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* 轨迹跟踪确认弹窗 */}
+      <Modal
+        title={
+          <Space>
+            <NodeIndexOutlined />
+            <span>轨迹跟踪</span>
+          </Space>
+        }
+        open={quickTrackModalVisible}
+        onOk={handleConfirmQuickTrack}
+        onCancel={handleCancelQuickTrack}
+        confirmLoading={loading}
+        okText="开始跟踪"
+        cancelText="取消"
+        width={450}
+        className={`${styles.trackTimeModal} track-time-modal`}
+      >
+        {currentQuickTrackDevice && (
+          <div className={styles.trackTimeContent}>
+            <div className={styles.deviceInfo}>
+              <div className={styles.deviceIcon}>
+                {getDeviceTypeIcon(currentQuickTrackDevice.type)}
+              </div>
+              <div className={styles.deviceDetails}>
+                <div className={styles.deviceName}>{currentQuickTrackDevice.name}</div>
+                <div className={styles.deviceLocation}>
+                  {currentQuickTrackDevice.location || '位置未知'}
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.trackDescription}>
+              <div className={styles.trackDescTitle}>功能说明：</div>
+              <div className={styles.trackDescContent}>
+                轨迹跟踪将从当前时刻开始，实时接收并显示该设备的移动轨迹。
+                通过连续的位置点连线，动态呈现设备的实时移动路径。
+              </div>
+            </div>
+
+            <div className={styles.trackTips}>
+              <div className={styles.tipsTitle}>提示：</div>
+              <ul className={styles.tipsList}>
+                <li>从当前时刻开始实时跟踪设备移动</li>
+                <li>轨迹将以彩色线条在地图上动态显示</li>
+                <li>设备离线时自动停止跟踪</li>
+                <li>可随时停止轨迹跟踪</li>
+              </ul>
+            </div>
+          </div>
+        )}
+      </Modal>
+
+      {/* 语音呼叫弹窗 */}
+      <AudioCallModal
+        visible={audioCallModalVisible}
+        onCancel={handleCloseCall}
+        device={selectedCallDevice}
+        onCallStatusChange={handleCallStatusChange}
+        isMinimized={isCallMinimized}
+        onMinimize={handleMinimizeCall}
+        onRestore={handleRestoreCall}
+      />
     </div>
   );
 };

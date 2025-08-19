@@ -9,7 +9,7 @@
   margin-bottom: 16px;
 }
 
-.productInfo h5 {
+.templateInfo h5 {
   margin-bottom: 4px;
   color: #262626;
 }
@@ -161,7 +161,7 @@
     align-items: stretch;
   }
   
-  .productInfo {
+  .templateInfo {
     text-align: center;
   }
   

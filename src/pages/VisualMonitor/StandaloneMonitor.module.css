@@ -187,6 +187,169 @@
   box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4), 0 0 30px rgba(139, 92, 246, 0.3);
 }
 
+/* 新的图标按钮样式 */
+.headerIconBtn {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 14px !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+  border: 2px solid rgba(59, 130, 246, 0.5) !important;
+  background: linear-gradient(135deg,
+    rgba(59, 130, 246, 0.2) 0%,
+    rgba(139, 92, 246, 0.15) 50%,
+    rgba(16, 185, 129, 0.1) 100%) !important;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow:
+    0 6px 20px rgba(59, 130, 246, 0.25),
+    0 0 40px rgba(139, 92, 246, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 20px !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 图标按钮内部光晕效果 */
+.headerIconBtn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent);
+  transition: left 0.6s;
+}
+
+.headerIconBtn:hover::before {
+  left: 100%;
+}
+
+.headerIconBtn:hover {
+  color: #ffffff !important;
+  border-color: rgba(59, 130, 246, 0.9) !important;
+  background: linear-gradient(135deg,
+    rgba(59, 130, 246, 0.4) 0%,
+    rgba(139, 92, 246, 0.35) 50%,
+    rgba(16, 185, 129, 0.3) 100%) !important;
+  transform: translateY(-4px) scale(1.08) !important;
+  box-shadow:
+    0 12px 35px rgba(59, 130, 246, 0.4),
+    0 0 60px rgba(139, 92, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+
+.headerIconBtn:active {
+  transform: translateY(-2px) scale(1.05) !important;
+  box-shadow:
+    0 8px 25px rgba(59, 130, 246, 0.35),
+    0 0 45px rgba(139, 92, 246, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+/* 加载状态的脉冲效果 */
+.headerIconBtn:global(.ant-btn-loading) {
+  animation: iconButtonPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconButtonPulse {
+  0%, 100% {
+    box-shadow:
+      0 6px 20px rgba(59, 130, 246, 0.25),
+      0 0 40px rgba(139, 92, 246, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+  50% {
+    box-shadow:
+      0 8px 30px rgba(59, 130, 246, 0.45),
+      0 0 70px rgba(139, 92, 246, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+}
+
+/* 特定按钮的颜色主题 */
+/* 返回主系统按钮 - 橙色主题 */
+.headerIconBtn:nth-child(1) {
+  border-color: rgba(249, 115, 22, 0.5) !important;
+  background: linear-gradient(135deg,
+    rgba(249, 115, 22, 0.2) 0%,
+    rgba(251, 146, 60, 0.15) 50%,
+    rgba(253, 186, 116, 0.1) 100%) !important;
+  box-shadow:
+    0 6px 20px rgba(249, 115, 22, 0.25),
+    0 0 40px rgba(251, 146, 60, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.headerIconBtn:nth-child(1):hover {
+  border-color: rgba(249, 115, 22, 0.9) !important;
+  background: linear-gradient(135deg,
+    rgba(249, 115, 22, 0.4) 0%,
+    rgba(251, 146, 60, 0.35) 50%,
+    rgba(253, 186, 116, 0.3) 100%) !important;
+  box-shadow:
+    0 12px 35px rgba(249, 115, 22, 0.4),
+    0 0 60px rgba(251, 146, 60, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+
+/* 刷新数据按钮 - 绿色主题 */
+.headerIconBtn:nth-child(2) {
+  border-color: rgba(34, 197, 94, 0.5) !important;
+  background: linear-gradient(135deg,
+    rgba(34, 197, 94, 0.2) 0%,
+    rgba(74, 222, 128, 0.15) 50%,
+    rgba(134, 239, 172, 0.1) 100%) !important;
+  box-shadow:
+    0 6px 20px rgba(34, 197, 94, 0.25),
+    0 0 40px rgba(74, 222, 128, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.headerIconBtn:nth-child(2):hover {
+  border-color: rgba(34, 197, 94, 0.9) !important;
+  background: linear-gradient(135deg,
+    rgba(34, 197, 94, 0.4) 0%,
+    rgba(74, 222, 128, 0.35) 50%,
+    rgba(134, 239, 172, 0.3) 100%) !important;
+  box-shadow:
+    0 12px 35px rgba(34, 197, 94, 0.4),
+    0 0 60px rgba(74, 222, 128, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+
+/* 全屏按钮 - 紫色主题 */
+.headerIconBtn:nth-child(3) {
+  border-color: rgba(147, 51, 234, 0.5) !important;
+  background: linear-gradient(135deg,
+    rgba(147, 51, 234, 0.2) 0%,
+    rgba(168, 85, 247, 0.15) 50%,
+    rgba(196, 181, 253, 0.1) 100%) !important;
+  box-shadow:
+    0 6px 20px rgba(147, 51, 234, 0.25),
+    0 0 40px rgba(168, 85, 247, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.headerIconBtn:nth-child(3):hover {
+  border-color: rgba(147, 51, 234, 0.9) !important;
+  background: linear-gradient(135deg,
+    rgba(147, 51, 234, 0.4) 0%,
+    rgba(168, 85, 247, 0.35) 50%,
+    rgba(196, 181, 253, 0.3) 100%) !important;
+  box-shadow:
+    0 12px 35px rgba(147, 51, 234, 0.4),
+    0 0 60px rgba(168, 85, 247, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+
 /* 主要内容区域 */
 .content {
   padding: 0;
@@ -678,21 +841,29 @@
 .searchPanelContent {
   display: flex;
   gap: 16px;
-  margin-bottom: 12px;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
 }
 
+/* 搜索容器 */
+.searchContainer {
+  position: relative;
+  flex: 1;
+  max-width: 360px;
+  min-width: 320px;
+}
+
 .mapSearchInput {
-  flex: 2;
+  width: 100%;
   background: rgba(15, 23, 42, 0.9) !important;
   border: 1px solid rgba(59, 130, 246, 0.6) !important;
   border-radius: 8px !important;
   color: #ffffff !important;
   transition: all 0.3s ease;
-  height: 36px !important;
+  height: 40px !important;
   display: flex !important;
   align-items: center !important;
+  font-size: 14px !important;
 }
 
 .mapSearchInput:hover {
@@ -712,7 +883,7 @@
   font-size: 14px !important;
   height: 36px !important;
   line-height: 22px !important;
-  padding: 7px 11px !important;
+  padding: 7px 12px !important;
 }
 
 .mapSearchInput :global(.ant-input::placeholder) {
@@ -732,6 +903,111 @@
 
 .mapSearchInput :global(.ant-input-affix-wrapper-focused) {
   box-shadow: none !important;
+}
+
+/* 清空图标样式 */
+.mapSearchInput :global(.ant-input-clear-icon) {
+  color: rgba(255, 255, 255, 0.5) !important;
+  font-size: 12px !important;
+  transition: all 0.3s ease !important;
+  margin-right: 8px !important;
+}
+
+.mapSearchInput :global(.ant-input-clear-icon:hover) {
+  color: rgba(255, 255, 255, 0.8) !important;
+  background: rgba(59, 130, 246, 0.2) !important;
+  border-radius: 4px !important;
+  transform: scale(1.1) !important;
+}
+
+.mapSearchInput :global(.ant-input-clear-icon-hidden) {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.mapSearchInput :global(.ant-input-clear-icon-has-suffix) {
+  margin-right: 8px !important;
+}
+
+/* 搜索结果下拉列表 */
+.searchResultsDropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  border-radius: 8px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.8), 0 0 20px rgba(59, 130, 246, 0.2);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 4px;
+}
+
+.searchResultItem {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.searchResultItem:last-child {
+  border-bottom: none;
+}
+
+.searchResultItem:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%);
+  transform: translateX(2px);
+}
+
+.searchResultIcon {
+  font-size: 16px;
+  margin-right: 12px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%);
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.searchResultInfo {
+  flex: 1;
+  margin-right: 12px;
+  min-width: 0;
+}
+
+.searchResultName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.searchResultLocation {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.searchResultStatus {
+  flex-shrink: 0;
+}
+
+.searchResultStatus :global(.ant-badge-status-text) {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 11px !important;
 }
 
 .mapFilterSelect {
@@ -1102,17 +1378,17 @@
   max-height: calc(100vh - 240px);
 }
 
-/* 告警面板专用尺寸 - 更矮一�?*/
+/* 告警面板专用尺寸 - 调整高度以显示三条告警数据 */
 .alarmPanel {
   width: 380px;
   max-width: 380px;
   height: auto;
-  max-height: 480px;
+  max-height: 550px;
 }
 
 /* 告警面板内容区域 */
 .alarmPanelContent {
-  max-height: 280px;
+  max-height: 350px;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -1377,14 +1653,42 @@
   z-index: 15;
 }
 
-/* 右下角控制按�?*/
+/* 告警按钮容器 - 右侧上方位置，在实时告警面板上方 */
+.alarmButtonContainer {
+  position: fixed;
+  top: 10%;
+  right: 80px;
+  z-index: 1004;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+/* 测量工具控制按钮 - 右下角上方 */
+.measurementControls {
+  position: fixed;
+  bottom: 120px;
+  right: 80px;
+  z-index: 1002;
+}
+
+/* 右下角控制按钮 */
 .bottomRightControls {
   position: fixed;
   bottom: 20px;
   right: 80px;
   z-index: 1002;
+}
+
+/* 右上角控制按钮 */
+.topRightControls {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1002;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 8px;
 }
 
@@ -1398,7 +1702,6 @@
   -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   transition: all 0.3s ease;
-  margin-bottom: 8px;
   box-shadow: 0 4px 15px rgba(30, 41, 59, 0.6);
 }
 
@@ -1415,6 +1718,29 @@
   border-color: #3b82f6 !important;
   color: #ffffff !important;
   box-shadow: 0 4px 20px rgba(59, 130, 246, 0.6);
+}
+
+/* 告警按钮基础样式 */
+.controlBtn.alarmButton {
+  background: linear-gradient(135deg, rgba(255, 77, 79, 0.8) 0%, rgba(255, 77, 79, 0.9) 100%) !important;
+  border: 1px solid #ff4d4f !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 15px rgba(255, 77, 79, 0.6);
+}
+
+.controlBtn.alarmButton:hover {
+  background: linear-gradient(135deg, rgba(255, 77, 79, 0.9) 0%, rgba(255, 77, 79, 1) 100%) !important;
+  border-color: #ff4d4f !important;
+  color: #ffffff !important;
+  transform: scale(1.05);
+  box-shadow: 0 6px 25px rgba(255, 77, 79, 0.8);
+}
+
+.controlBtn.alarmButton.ant-btn-primary {
+  background: linear-gradient(135deg, rgba(255, 77, 79, 1) 0%, rgba(220, 38, 38, 0.9) 100%) !important;
+  border-color: #ff4d4f !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 20px rgba(255, 77, 79, 0.8);
 }
 
 /* 告警按钮闪烁动画 */
@@ -1726,17 +2052,17 @@
 
 /* 设备信息弹窗样式 */
 .deviceInfoModal :global(.ant-modal-content) {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 50%, rgba(15, 23, 42, 0.98) 100%) !important;
-  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
   border-radius: 12px !important;
   -webkit-backdrop-filter: blur(25px);
   backdrop-filter: blur(25px);
-  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.8), 0 0 50px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 .deviceInfoModal :global(.ant-modal-header) {
-  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.8) 100%) !important;
-  border-bottom: 1px solid rgba(59, 130, 246, 0.4) !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2) !important;
   border-radius: 12px 12px 0 0 !important;
 }
 
@@ -1746,7 +2072,7 @@
 }
 
 .deviceInfoModal :global(.ant-modal-close) {
-  color: rgba(255, 255, 255, 0.6) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
 .deviceInfoModal :global(.ant-modal-close:hover) {
@@ -1857,17 +2183,17 @@
 
 /* 告警详情弹窗样式 */
 .alarmDetailModal :global(.ant-modal-content) {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 50%, rgba(15, 23, 42, 0.98) 100%) !important;
-  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
   border-radius: 12px !important;
   -webkit-backdrop-filter: blur(25px);
   backdrop-filter: blur(25px);
-  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.8), 0 0 50px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 .alarmDetailModal :global(.ant-modal-header) {
-  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.8) 100%) !important;
-  border-bottom: 1px solid rgba(59, 130, 246, 0.4) !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2) !important;
   border-radius: 12px 12px 0 0 !important;
 }
 
@@ -1877,7 +2203,7 @@
 }
 
 .alarmDetailModal :global(.ant-modal-close) {
-  color: rgba(255, 255, 255, 0.6) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
 .alarmDetailModal :global(.ant-modal-close:hover) {
@@ -2137,6 +2463,31 @@
   align-items: center;
 }
 
+/* 轨迹跟踪按钮样式 */
+.trackButton {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(16, 185, 129, 0.2) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  color: #3b82f6 !important;
+  border-radius: 4px !important;
+  font-size: 11px !important;
+  height: 24px !important;
+  padding: 0 8px !important;
+  transition: all 0.3s ease !important;
+}
+
+.trackButton:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(16, 185, 129, 0.3) 100%) !important;
+  border-color: rgba(59, 130, 246, 0.6) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+.trackButton:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 1px 4px rgba(59, 130, 246, 0.2) !important;
+}
+
 .deviceSearch {
   width: 100%;
 }
@@ -2334,15 +2685,37 @@
   min-width: 0;
 }
 
+/* 设备信息头部布局 */
+.deviceHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  gap: 8px;
+}
+
+/* 设备状态徽章样式 */
+.deviceStatusBadge {
+  flex-shrink: 0;
+}
+
+.deviceStatusBadge :global(.ant-badge-status-text) {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 11px !important;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
 .deviceItem .deviceName {
   font-size: 13px;
   font-weight: 600;
   color: #ffffff;
-  margin-bottom: 3px;
   line-height: 1.3;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  flex: 1;
+  margin-right: 8px;
 }
 
 .deviceItem .deviceLocation {
@@ -2354,6 +2727,7 @@
   white-space: nowrap;
 }
 
+/* 旧的设备状态样式 - 已移到设备信息区域内
 .deviceItem .deviceStatus {
   margin-right: 12px;
   display: flex;
@@ -2382,7 +2756,6 @@
   top: 0;
 }
 
-/* 强制修复设备状态对�?*/
 .deviceItem .deviceStatus :global(.ant-badge-status-success::before) {
   margin-top: 0 !important;
   vertical-align: middle !important;
@@ -2397,44 +2770,83 @@
   margin-top: 0 !important;
   vertical-align: middle !important;
 }
+*/
 
 .deviceActions {
   display: flex;
-  gap: 4px;
   align-items: center;
   flex-shrink: 0;
   height: 36px;
+  gap: 4px;
+  justify-content: flex-end;
 }
 
-.deviceActions :global(.ant-btn) {
+/* 设备操作按钮样式 */
+.deviceActionBtn {
   color: rgba(255, 255, 255, 0.6) !important;
   border: none !important;
   background: transparent !important;
-  width: 28px !important;
-  height: 28px !important;
+  width: 32px !important;
+  height: 32px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  border-radius: 6px !important;
+  transition: all 0.3s ease !important;
 }
 
-.deviceActions :global(.ant-btn:hover) {
+.deviceActionBtn:hover {
   color: #3b82f6 !important;
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%) !important;
+  transform: scale(1.1);
+}
+
+.deviceActionBtn:active {
+  transform: scale(0.95);
+}
+
+/* 下拉菜单样式 */
+.deviceActions :global(.ant-dropdown-menu) {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.8) !important;
+}
+
+.deviceActions :global(.ant-dropdown-menu-item) {
+  color: rgba(255, 255, 255, 0.9) !important;
+  padding: 8px 12px !important;
+  transition: all 0.3s ease !important;
+}
+
+.deviceActions :global(.ant-dropdown-menu-item:hover) {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%) !important;
+  color: #ffffff !important;
+}
+
+.deviceActions :global(.ant-dropdown-menu-item-disabled) {
+  color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.deviceActions :global(.ant-dropdown-menu-item-disabled:hover) {
+  background: transparent !important;
+  color: rgba(255, 255, 255, 0.3) !important;
 }
 
 /* 视频弹窗样式 */
 .videoModal :global(.ant-modal-content) {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 50%, rgba(15, 23, 42, 0.98) 100%) !important;
-  border: 1px solid rgba(59, 130, 246, 0.4) !important;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
   border-radius: 12px !important;
   -webkit-backdrop-filter: blur(25px);
   backdrop-filter: blur(25px);
-  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.8), 0 0 50px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 .videoModal :global(.ant-modal-header) {
-  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.8) 100%) !important;
-  border-bottom: 1px solid rgba(59, 130, 246, 0.4) !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2) !important;
   border-radius: 12px 12px 0 0 !important;
 }
 
@@ -2444,7 +2856,7 @@
 }
 
 .videoModal :global(.ant-modal-close) {
-  color: rgba(255, 255, 255, 0.6) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
 .videoModal :global(.ant-modal-close:hover) {
@@ -2452,8 +2864,8 @@
 }
 
 .videoModal :global(.ant-modal-footer) {
-  background: linear-gradient(135deg, rgba(51, 65, 85, 0.9) 0%, rgba(71, 85, 105, 0.8) 100%) !important;
-  border-top: 1px solid rgba(59, 130, 246, 0.4) !important;
+  background: transparent !important;
+  border-top: 1px solid rgba(59, 130, 246, 0.2) !important;
   border-radius: 0 0 12px 12px !important;
 }
 
@@ -2531,11 +2943,11 @@
     width: 320px;
     max-width: 320px;
     height: auto;
-    max-height: 400px;
+    max-height: 470px;
   }
 
   .alarmPanelContent {
-    max-height: 240px;
+    max-height: 300px;
   }
 
   .weatherInfo {
@@ -2570,8 +2982,37 @@
   }
 
   .headerRight {
-    flex-direction: column;
-    gap: 12px;
+    flex-direction: row;
+    gap: 16px;
+    justify-content: center;
+  }
+
+  .headerIconBtn {
+    width: 42px !important;
+    height: 42px !important;
+    font-size: 18px !important;
+  }
+
+  .headerIconBtn .anticon {
+    font-size: 18px !important;
+  }
+
+  .minimizedCallFloat {
+    /* 移动端默认位置，但仍可拖动 */
+  }
+
+  .minimizedCallContent {
+    min-width: 180px;
+    max-width: 240px;
+    padding: 10px 12px;
+  }
+
+  .minimizedCallDevice {
+    font-size: 13px;
+  }
+
+  .minimizedCallStatus {
+    font-size: 11px;
   }
 
   .content {
@@ -2598,7 +3039,7 @@
   }
 
   .alarmPanelContent {
-    max-height: 35vh !important;
+    max-height: 45vh !important;
   }
 
   .panelTabs :global(.ant-tabs-content-holder) {
@@ -2693,6 +3134,549 @@
 .deviceFilter :global(.ant-select-item-option-selected) {
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(139, 92, 246, 0.25) 100%) !important;
   color: #ffffff !important;
+}
+
+/* 轨迹时间选择器样式 */
+.trackTimeModal :global(.ant-modal-content) {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.trackTimeModal :global(.ant-modal-header) {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2) !important;
+}
+
+.trackTimeModal :global(.ant-modal-title) {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.trackTimeModal :global(.ant-modal-close) {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.trackTimeModal :global(.ant-modal-close:hover) {
+  color: #ffffff !important;
+}
+
+.trackTimeContent {
+  color: #ffffff;
+}
+
+.trackTimeContent .deviceInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+  border-radius: 8px;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.trackTimeContent .deviceIcon {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%);
+  border-radius: 8px;
+}
+
+.trackTimeContent .deviceDetails {
+  flex: 1;
+}
+
+.trackTimeContent .deviceName {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.trackTimeContent .deviceLocation {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.timeRangeSelector {
+  margin-top: 16px;
+}
+
+.timeLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+
+.timeInputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.timeInputGroup label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+.quickTimeButtons {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.trackDescription {
+  margin-top: 16px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+  border-radius: 8px;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.trackDescTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.trackDescContent {
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.trackTips {
+  margin-top: 20px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+  border-radius: 8px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.tipsTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #10b981;
+  margin-bottom: 8px;
+}
+
+.tipsList {
+  margin: 0;
+  padding-left: 16px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.tipsList li {
+  font-size: 12px;
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+
+/* 清除轨迹按钮样式 */
+.clearTrackBtn {
+  margin-left: 8px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border: none;
+  border-radius: 6px;
+  color: #ffffff;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.clearTrackBtn:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* 时间选择器样式覆盖 */
+.trackTimeModal :global(.ant-picker) {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 6px;
+  color: #ffffff;
+}
+
+.trackTimeModal :global(.ant-picker:hover) {
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.trackTimeModal :global(.ant-picker-focused) {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.trackTimeModal :global(.ant-picker-input > input) {
+  color: #ffffff;
+  background: transparent;
+}
+
+.trackTimeModal :global(.ant-picker-input > input::placeholder) {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.trackTimeModal :global(.ant-picker-suffix) {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 轨迹控制面板样式 */
+.trackControlPanel {
+  position: absolute;
+  top: 20px;
+  left: 420px;
+  width: 280px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 100%);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 50px rgba(59, 130, 246, 0.2);
+  z-index: 1002;
+  color: #ffffff;
+  animation: slideInFromLeft 0.3s ease-out;
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.trackControlHeader {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+  border-radius: 12px 12px 0 0;
+}
+
+.trackControlTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.trackingStatus {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #52c41a;
+  font-weight: 500;
+}
+
+.trackingDot {
+  width: 8px;
+  height: 8px;
+  background: #52c41a;
+  border-radius: 50%;
+  animation: trackingPulse 2s infinite;
+}
+
+@keyframes trackingPulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.trackControlContent {
+  padding: 16px;
+}
+
+.trackInfo {
+  margin-bottom: 16px;
+}
+
+.trackDeviceName {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.trackDeviceName::before {
+  content: '📍';
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+.trackStats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.trackPointCount {
+  padding: 4px 8px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(34, 197, 94, 0.15) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.trackTimeRange {
+  padding: 4px 8px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.trackDetails {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.trackDetailItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 11px;
+}
+
+.trackDetailItem:last-child {
+  margin-bottom: 0;
+}
+
+.trackDetailLabel {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+.trackDetailValue {
+  color: #ffffff;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
+
+.trackActions {
+  display: flex;
+  justify-content: center;
+}
+
+.clearTrackButton {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border: none;
+  border-radius: 8px;
+  color: #ffffff;
+  font-weight: 600;
+  height: 36px;
+  padding: 0 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.clearTrackButton:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+  color: #ffffff;
+}
+
+.clearTrackButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .trackControlPanel {
+    width: 240px;
+    left: 10px;
+    top: 10px;
+  }
+
+  .trackControlContent {
+    padding: 12px;
+  }
+
+  .clearTrackButton {
+    height: 32px;
+    padding: 0 16px;
+    font-size: 12px;
+  }
+}
+
+/* 平板设备响应式样式 */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .header {
+    padding: 18px 32px;
+  }
+
+  .title {
+    font-size: 30px;
+  }
+
+  .headerIconBtn {
+    width: 46px !important;
+    height: 46px !important;
+    font-size: 20px !important;
+  }
+
+  .headerIconBtn .anticon {
+    font-size: 20px !important;
+  }
+}
+
+/* 最小化语音呼叫浮动按钮 */
+.minimizedCallFloat {
+  position: fixed;
+  z-index: 1005;
+  animation: slideInFromRight 0.3s ease-out;
+  user-select: none;
+}
+
+.minimizedCallFloat.dragging {
+  z-index: 1010;
+}
+
+.minimizedCallContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: linear-gradient(135deg,
+    rgba(30, 41, 59, 0.95) 0%,
+    rgba(51, 65, 85, 0.9) 100%);
+  border: 2px solid rgba(59, 130, 246, 0.6);
+  border-radius: 16px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 60px rgba(59, 130, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  cursor: move;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 200px;
+  max-width: 280px;
+}
+
+.dragging .minimizedCallContent {
+  cursor: grabbing;
+  transform: scale(1.05);
+  box-shadow:
+    0 15px 50px rgba(0, 0, 0, 0.6),
+    0 0 100px rgba(59, 130, 246, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: none;
+}
+
+.minimizedCallContent:hover {
+  transform: translateY(-2px) scale(1.02);
+  border-color: rgba(59, 130, 246, 0.8);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.5),
+    0 0 80px rgba(59, 130, 246, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.minimizedCallHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.minimizedCallIcon {
+  font-size: 18px;
+  color: #3b82f6;
+  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.6));
+}
+
+.minimizedCallInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.minimizedCallDevice {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.minimizedCallStatus {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.callingIndicator {
+  width: 8px;
+  height: 8px;
+  background: #faad14;
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.talkingIndicator {
+  width: 8px;
+  height: 8px;
+  background: #52c41a;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.minimizedCallClose {
+  color: rgba(255, 255, 255, 0.7) !important;
+  border: none !important;
+  background: transparent !important;
+  padding: 4px !important;
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease !important;
+}
+
+.minimizedCallClose:hover {
+  color: #ff4d4f !important;
+  background: rgba(255, 77, 79, 0.1) !important;
+  transform: scale(1.1) !important;
 }
 
 /* 删除全局样式覆盖 */

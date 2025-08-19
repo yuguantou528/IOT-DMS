@@ -1,12 +1,12 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Polyline, Popup, CircleMarker } from 'react-leaflet';
 import L from 'leaflet';
+import './DeviceTrack.css';
 
 // 生成模拟轨迹数据
 const generateTrackData = (device) => {
   try {
     if (!device || !device.position || device.position.length < 2) {
-      console.warn('设备位置信息无效:', device);
       return [];
     }
 
@@ -34,61 +34,70 @@ const generateTrackData = (device) => {
     });
   }
   
-  console.log(`生成设备 ${device.name} 的轨迹数据:`, trackPoints.length, '个点');
-
     return trackPoints;
   } catch (error) {
-    console.error('生成轨迹数据时出错:', error, device);
     return [];
   }
 };
 
-const DeviceTrack = ({ device, visible = true }) => {
-  console.log('DeviceTrack 渲染:', { device: device?.name, visible, hasPosition: !!device?.position });
-  
-  if (!visible || !device) {
-    console.log('DeviceTrack 跳过:', { visible, hasDevice: !!device });
-    return null;
-  }
-
-  // 使用useMemo缓存轨迹数据，避免重复计算
+const DeviceTrack = ({
+  device,
+  visible = true,
+  trackData: externalTrackData,
+  playbackState = null, // 播放状态：{ isPlaying, currentIndex, progress, playSpeed }
+  currentPlaybackPoint = null // 当前播放点信息
+}) => {
+  // 使用外部传入的轨迹数据，如果没有则生成模拟数据
   const trackData = useMemo(() => {
-    try {
-      const data = generateTrackData(device);
-      console.log(`设备 ${device.name} 轨迹数据生成:`, data.length, '个点');
-      return data;
-    } catch (error) {
-      console.error('DeviceTrack: 生成轨迹数据失败:', error);
+    if (!visible || !device) {
       return [];
     }
-  }, [device?.id, device?.position]);
-  
-  if (!trackData || trackData.length < 2) {
-    console.log(`设备 ${device.name} 轨迹数据不足:`, trackData?.length);
-    return null;
-  }
+
+    try {
+      if (externalTrackData && externalTrackData.length > 0) {
+        // 使用外部传入的轨迹数据，转换格式
+        const convertedData = externalTrackData.map(point => ({
+          position: [point.position[1], point.position[0]], // 转换为 [纬度, 经度]
+          timestamp: new Date(point.timestamp),
+          speed: point.speed || 0,
+          status: 'normal'
+        }));
+        return convertedData;
+      } else {
+        // 使用模拟数据
+        const data = generateTrackData(device);
+        return data;
+      }
+    } catch (error) {
+      return [];
+    }
+  }, [visible, device?.id, device?.position, externalTrackData]);
 
   // 轨迹线的位置数组
   const positions = useMemo(() => trackData.map(point => point.position), [trackData]);
 
   // 根据设备状态确定轨迹颜色
-  const getTrackColor = () => {
+  const getTrackColor = useMemo(() => {
+    if (!device) return '#faad14';
     if (device.status === 'online') return '#52c41a';
     if (device.alarmCount > 0) return '#ff4d4f';
     return '#faad14';
-  };
+  }, [device?.status, device?.alarmCount]);
 
   // 轨迹样式
   const pathOptions = useMemo(() => ({
-    color: getTrackColor(),
+    color: getTrackColor,
     weight: 4,
     opacity: 0.9,
-    dashArray: device.status === 'offline' ? '8, 4' : null,
+    dashArray: device?.status === 'offline' ? '8, 4' : null,
     lineCap: 'round',
     lineJoin: 'round'
-  }), [device.status, device.alarmCount]);
+  }), [getTrackColor, device?.status]);
 
-  console.log(`渲染设备 ${device.name} 的轨迹:`, { positions: positions.length, pathOptions });
+  // 如果不应该显示轨迹，返回null
+  if (!visible || !device || !trackData || trackData.length < 2) {
+    return null;
+  }
 
   return (
     <>
@@ -107,55 +116,116 @@ const DeviceTrack = ({ device, visible = true }) => {
               <div><strong>时间范围:</strong> 过去2小时</div>
               <div><strong>总距离:</strong> 约 {(Math.random() * 50 + 10).toFixed(1)} km</div>
               <div><strong>平均速度:</strong> {Math.round(trackData.reduce((sum, p) => sum + p.speed, 0) / trackData.length)} km/h</div>
-              <div style={{ marginTop: '8px', fontSize: '11px', color: '#666' }}>
-                💡 这是模拟轨迹数据，实际应用中应从后端获取真实轨迹
-              </div>
             </div>
           </div>
         </Popup>
       </Polyline>
 
-      {/* 轨迹起点和终点标记 */}
-      {trackData.length > 0 && (
-        <>
-          {/* 起点 */}
+      {/* 所有轨迹点标记 */}
+      {trackData.length > 0 && trackData.map((point, index) => {
+        const isStartPoint = index === 0;
+        const isEndPoint = index === trackData.length - 1;
+        const isMiddlePoint = !isStartPoint && !isEndPoint;
+        const isCurrentPlaybackPoint = playbackState && playbackState.currentIndex === index;
+
+        // 根据点的类型确定样式
+        let pointStyle;
+        let pointLabel;
+        let pointRadius;
+
+        if (isCurrentPlaybackPoint) {
+          // 当前播放点 - 高亮显示
+          pointStyle = {
+            color: '#faad14',
+            fillColor: '#faad14',
+            fillOpacity: 1,
+            weight: 3
+          };
+          pointLabel = `当前播放点 (${index + 1})`;
+          pointRadius = 8;
+        } else if (isStartPoint) {
+          pointStyle = {
+            color: '#52c41a',
+            fillColor: '#52c41a',
+            fillOpacity: 0.8,
+            weight: 2
+          };
+          pointLabel = '轨迹起点';
+          pointRadius = 6;
+        } else if (isEndPoint) {
+          pointStyle = {
+            color: '#ff4d4f',
+            fillColor: '#ff4d4f',
+            fillOpacity: 0.8,
+            weight: 2
+          };
+          pointLabel = '轨迹终点';
+          pointRadius = 6;
+        } else {
+          pointStyle = {
+            color: '#1890ff',
+            fillColor: '#1890ff',
+            fillOpacity: 0.6,
+            weight: 1.5
+          };
+          pointLabel = `轨迹点 ${index + 1}`;
+          pointRadius = 4;
+        }
+
+        return (
           <CircleMarker
-            center={trackData[0].position}
-            radius={6}
-            pathOptions={{
-              color: '#52c41a',
-              fillColor: '#52c41a',
-              fillOpacity: 0.8,
-              weight: 2
-            }}
+            key={`track-point-${index}`}
+            center={point.position}
+            radius={pointRadius}
+            pathOptions={pointStyle}
           >
             <Popup>
-              <div style={{ textAlign: 'center' }}>
-                <strong>轨迹起点</strong><br/>
-                {trackData[0].timestamp.toLocaleString()}
+              <div style={{ textAlign: 'center', minWidth: '150px' }}>
+                <strong>{pointLabel}</strong><br/>
+                <div style={{ fontSize: '12px', marginTop: '4px' }}>
+                  <div>时间: {point.timestamp.toLocaleString()}</div>
+                  {point.speed && <div>速度: {point.speed.toFixed(1)} km/h</div>}
+                  {point.status && <div>状态: {point.status === 'normal' ? '正常' : '告警'}</div>}
+                  {isCurrentPlaybackPoint && (
+                    <div style={{ color: '#faad14', fontWeight: 'bold', marginTop: '4px' }}>
+                      正在播放...
+                    </div>
+                  )}
+                </div>
               </div>
             </Popup>
           </CircleMarker>
-          
-          {/* 终点 */}
-          <CircleMarker
-            center={trackData[trackData.length - 1].position}
-            radius={6}
-            pathOptions={{
-              color: '#ff4d4f',
-              fillColor: '#ff4d4f',
-              fillOpacity: 0.8,
-              weight: 2
-            }}
-          >
-            <Popup>
-              <div style={{ textAlign: 'center' }}>
-                <strong>轨迹终点</strong><br/>
-                {trackData[trackData.length - 1].timestamp.toLocaleString()}
+        );
+      })}
+
+      {/* 播放过程中的移动图标 */}
+      {playbackState && playbackState.isPlaying && currentPlaybackPoint && (
+        <CircleMarker
+          center={currentPlaybackPoint.position}
+          radius={10}
+          pathOptions={{
+            color: '#faad14',
+            fillColor: '#faad14',
+            fillOpacity: 0.9,
+            weight: 3,
+            className: 'playback-moving-point'
+          }}
+        >
+          <Popup>
+            <div style={{ textAlign: 'center', minWidth: '150px' }}>
+              <strong>播放中</strong><br/>
+              <div style={{ fontSize: '12px', marginTop: '4px' }}>
+                <div>时间: {new Date(currentPlaybackPoint.timestamp).toLocaleString()}</div>
+                {currentPlaybackPoint.speed && (
+                  <div>速度: {currentPlaybackPoint.speed.toFixed(1)} km/h</div>
+                )}
+                <div style={{ color: '#faad14', fontWeight: 'bold', marginTop: '4px' }}>
+                  播放速度: {playbackState.playSpeed}x
+                </div>
               </div>
-            </Popup>
-          </CircleMarker>
-        </>
+            </div>
+          </Popup>
+        </CircleMarker>
       )}
     </>
   );

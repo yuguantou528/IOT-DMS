@@ -99,7 +99,7 @@ const RecordedVideoManager = ({ device }) => {
           recordType,
           quality,
           status: i === 0 && j === 0 ? 'recording' : status, // 最新的一个设为录制中
-          thumbnailUrl: `/api/placeholder/160/90?id=${id}`,
+          thumbnailUrl: `https://picsum.photos/160/90?random=${id}`,
           description: recordType === 'alarm' ? '检测到异常活动' :
                       recordType === 'motion' ? '检测到移动物体' : '定时录制'
         });
@@ -275,7 +275,14 @@ const RecordedVideoManager = ({ device }) => {
       width: 100,
       render: (url, record) => (
         <div className={styles.thumbnail}>
-          <img src={url} alt="缩略图" />
+          <img
+            src={url}
+            alt="缩略图"
+            onError={(e) => {
+              // 图片加载失败时显示默认占位图
+              e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iNDUiIHZpZXdCb3g9IjAgMCA4MCA0NSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjQ1IiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0zNSAyMEw0NSAzMEgyNUwzNSAyMFoiIGZpbGw9IiNEOUQ5RDkiLz4KPGNpcmNsZSBjeD0iMzAiIGN5PSIxOCIgcj0iMyIgZmlsbD0iI0Q5RDlEOSIvPgo8dGV4dCB4PSI0MCIgeT0iMjQiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI4IiBmaWxsPSIjOTk5OTk5Ij7op4bpopE8L3RleHQ+Cjwvc3ZnPgo=';
+            }}
+          />
           <div className={styles.duration}>{formatDuration(record.duration)}</div>
         </div>
       )
@@ -297,32 +304,7 @@ const RecordedVideoManager = ({ device }) => {
         </div>
       )
     },
-    {
-      title: '录制类型',
-      dataIndex: 'recordType',
-      key: 'recordType',
-      width: 120,
-      render: (type, record) => {
-        const typeMap = {
-          scheduled: { color: 'blue', text: '定时录制', icon: '⏰' },
-          motion: { color: 'orange', text: '移动侦测', icon: '🏃' },
-          alarm: { color: 'red', text: '报警录制', icon: '🚨' }
-        };
-        const config = typeMap[type] || { color: 'default', text: type, icon: '📹' };
-        return (
-          <div>
-            <Tag color={config.color}>
-              {config.icon} {config.text}
-            </Tag>
-            {record.description && (
-              <div style={{ fontSize: '11px', color: '#666', marginTop: '2px' }}>
-                {record.description}
-              </div>
-            )}
-          </div>
-        );
-      }
-    },
+
     {
       title: '画质',
       dataIndex: 'quality',

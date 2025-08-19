@@ -1,0 +1,458 @@
+/* 大屏监控系统样式 */
+.audioCallModal {
+  /* 自定义弹窗样式 */
+}
+
+.audioCallModal :global(.ant-modal-content) {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.audioCallModal :global(.ant-modal-body) {
+  padding: 24px;
+  overflow: hidden;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.audioCallModal :global(.ant-modal-header) {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 16px 16px 0 0 !important;
+}
+
+.audioCallModal :global(.ant-modal-title) {
+  color: #ffffff !important;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.audioCallModal :global(.ant-modal-close) {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.audioCallModal :global(.ant-modal-close:hover) {
+  color: #ffffff !important;
+}
+
+/* 最小化按钮样式 */
+.minimizeBtn {
+  color: rgba(255, 255, 255, 0.8) !important;
+  border: none !important;
+  background: transparent !important;
+  padding: 4px !important;
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.minimizeBtn:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  transform: scale(1.1) !important;
+}
+
+/* 关闭按钮样式 */
+.closeBtn {
+  color: rgba(255, 255, 255, 0.8) !important;
+  border: none !important;
+  background: transparent !important;
+  padding: 4px !important;
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.closeBtn:hover {
+  color: #ff4d4f !important;
+  background: rgba(255, 77, 79, 0.1) !important;
+  transform: scale(1.1) !important;
+}
+
+/* 确保按钮是完美的圆形 */
+.audioCallModal :global(.ant-btn-circle) {
+  border-radius: 50% !important;
+  aspect-ratio: 1 !important;
+}
+
+.audioCallModal :global(.ant-btn-circle.ant-btn-lg) {
+  width: 80px !important;
+  height: 80px !important;
+  min-width: 80px !important;
+  min-height: 80px !important;
+}
+
+/* 防止内容溢出 */
+.audioCallModal * {
+  box-sizing: border-box;
+}
+
+.audioCallModal :global(.ant-row) {
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+.audioCallModal :global(.ant-col) {
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+.callContent {
+  padding: 24px 0;
+  color: #ffffff;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.deviceInfo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(10px);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.deviceIcon {
+  font-size: 40px;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.deviceDetails {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.deviceName {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deviceId {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.callStatus {
+  margin: 32px 0;
+  text-align: center;
+}
+
+.callControls {
+  margin: 32px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* 大屏风格按钮 */
+.callButton {
+  width: 80px !important;
+  height: 80px !important;
+  min-width: 80px !important;
+  font-size: 28px;
+  background: linear-gradient(135deg, #00c851 0%, #007e33 100%);
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 50% !important;
+  box-shadow:
+    0 8px 24px rgba(0, 200, 81, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  color: #ffffff !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+}
+
+.callButton:hover,
+.callButton:focus {
+  background: linear-gradient(135deg, #00ff5f 0%, #00c851 100%) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  transform: scale(1.08);
+  box-shadow:
+    0 12px 32px rgba(0, 200, 81, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  color: #ffffff !important;
+}
+
+.endCallButton {
+  width: 80px !important;
+  height: 80px !important;
+  min-width: 80px !important;
+  font-size: 24px;
+  background: linear-gradient(135deg, #ff4757 0%, #c44569 100%);
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 50% !important;
+  box-shadow:
+    0 8px 24px rgba(255, 71, 87, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  color: #ffffff !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+}
+
+.endCallButton:hover,
+.endCallButton:focus {
+  background: linear-gradient(135deg, #ff6b7a 0%, #ff4757 100%) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  transform: scale(1.08);
+  box-shadow:
+    0 12px 32px rgba(255, 71, 87, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  color: #ffffff !important;
+}
+
+.muteButton {
+  width: 60px !important;
+  height: 60px !important;
+  min-width: 60px !important;
+  font-size: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 50% !important;
+  color: #ffffff !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+}
+
+.muteButton:hover,
+.muteButton:focus {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  transform: scale(1.05);
+  color: #ffffff !important;
+}
+
+.callTips {
+  margin-top: 24px;
+  min-height: 24px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+}
+
+/* 大屏风格动画效果 */
+.callButton {
+  animation: callPulse 2s infinite;
+}
+
+@keyframes callPulse {
+  0% {
+    box-shadow:
+      0 8px 24px rgba(0, 200, 81, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      0 0 0 0 rgba(0, 200, 81, 0.7);
+  }
+  50% {
+    box-shadow:
+      0 12px 32px rgba(0, 200, 81, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      0 0 0 20px rgba(0, 200, 81, 0);
+  }
+  100% {
+    box-shadow:
+      0 8px 24px rgba(0, 200, 81, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      0 0 0 0 rgba(0, 200, 81, 0);
+  }
+}
+
+/* 通话中的动画效果 */
+.endCallButton {
+  animation: endCallGlow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes endCallGlow {
+  from {
+    box-shadow:
+      0 8px 24px rgba(255, 71, 87, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  to {
+    box-shadow:
+      0 16px 40px rgba(255, 71, 87, 0.8),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+}
+
+/* 呼叫状态指示器 */
+.statusIndicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+  animation: statusBlink 1.5s infinite;
+}
+
+.statusIndicator.calling {
+  background: #ffa726;
+}
+
+.statusIndicator.talking {
+  background: #66bb6a;
+}
+
+@keyframes statusBlink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.3; }
+}
+
+/* 通话时长显示 */
+.durationDisplay {
+  font-size: 32px;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 2px;
+  font-family: 'Courier New', monospace;
+}
+
+/* 信号强度指示器 */
+.signalStrength {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+}
+
+.signalBars {
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+}
+
+.signalBar {
+  width: 3px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 1px;
+}
+
+.signalBar.active {
+  background: #66bb6a;
+}
+
+.signalBar:nth-child(1) { height: 6px; }
+.signalBar:nth-child(2) { height: 9px; }
+.signalBar:nth-child(3) { height: 12px; }
+.signalBar:nth-child(4) { height: 15px; }
+
+/* 大屏适配 */
+@media (min-width: 1920px) {
+  .audioCallModal :global(.ant-modal) {
+    width: 480px !important;
+  }
+
+  .callContent {
+    padding: 32px 0;
+  }
+
+  .deviceInfo {
+    padding: 32px;
+    gap: 24px;
+  }
+
+  .deviceIcon {
+    width: 80px;
+    height: 80px;
+    font-size: 48px;
+  }
+
+  .callButton,
+  .endCallButton {
+    width: 96px;
+    height: 96px;
+    font-size: 32px;
+  }
+
+  .muteButton {
+    width: 72px;
+    height: 72px;
+    font-size: 24px;
+  }
+
+  .durationDisplay {
+    font-size: 40px;
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+  .deviceInfo {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .deviceIcon {
+    width: 56px;
+    height: 56px;
+    font-size: 32px;
+  }
+
+  .callButton,
+  .endCallButton {
+    width: 72px;
+    height: 72px;
+    font-size: 24px;
+  }
+
+  .muteButton {
+    width: 56px;
+    height: 56px;
+    font-size: 18px;
+  }
+
+  .durationDisplay {
+    font-size: 28px;
+  }
+}

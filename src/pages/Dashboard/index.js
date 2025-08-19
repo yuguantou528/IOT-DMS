@@ -168,7 +168,7 @@ const Dashboard = ({ title = '首页' }) => {
   const deviceTypeData = [
     { name: '摄像头设备', value: deviceStats.cameraDevices, color: '#1890ff' },
     { name: 'Mesh电台', value: deviceStats.radioDevices, color: '#52c41a' },
-    { name: '传感器设备', value: deviceStats.sensorDevices, color: '#faad14' },
+    { name: '370基站', value: deviceStats.sensorDevices, color: '#faad14' },
     { name: '基站设备', value: deviceStats.baseStationDevices, color: '#f5222d' }
   ];
 
@@ -501,10 +501,10 @@ const Dashboard = ({ title = '首页' }) => {
           <Card className={`${styles.deviceTypeCard} ${styles.sensorCard}`} bordered={false}>
             <div className={styles.deviceTypeContent}>
               <div className={styles.deviceTypeIcon}>
-                <ExperimentOutlined />
+                <GlobalOutlined />
               </div>
               <div className={styles.deviceTypeStat}>
-                <div className={styles.deviceTypeTitle}>传感器设备</div>
+                <div className={styles.deviceTypeTitle}>370基站</div>
                 <div className={styles.deviceTypeValue}>{deviceStats.sensorDevices}</div>
               </div>
             </div>

@@ -1,0 +1,499 @@
+/* 围栏绘制地图容器 */
+.fenceDrawMapContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f5f5f5;
+  border: 1px solid #d9d9d9;
+}
+
+.mapContainer {
+  border-radius: 8px;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* 确保Leaflet地图容器正确显示 */
+.fenceDrawMapContainer :global(.leaflet-container) {
+  height: 100% !important;
+  width: 100% !important;
+  border-radius: 8px;
+}
+
+.fenceDrawMapContainer :global(.leaflet-map-pane) {
+  z-index: 1;
+}
+
+.fenceDrawMapContainer :global(.leaflet-tile-pane) {
+  filter: none;
+}
+
+/* 绘制工具栏 */
+.drawToolbar {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 8px 12px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+.drawToolbar :global(.ant-btn) {
+  border-radius: 4px;
+  font-size: 12px;
+  height: 28px;
+  padding: 0 12px;
+}
+
+.drawToolbar :global(.ant-btn-primary) {
+  background: #1890ff;
+  border-color: #1890ff;
+}
+
+.drawToolbar :global(.ant-btn-primary:hover) {
+  background: #40a9ff;
+  border-color: #40a9ff;
+}
+
+/* 绘制状态信息 */
+.drawStatus {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 8px 12px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  font-size: 12px;
+  color: #595959;
+  text-align: center;
+}
+
+.statusSuccess {
+  color: #52c41a;
+  font-weight: 500;
+}
+
+/* 地图加载指示器 */
+.mapLoadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  border-radius: 8px;
+}
+
+.mapLoadingOverlay :global(.ant-spin-text) {
+  color: #595959;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+/* 地图错误覆盖层 */
+.mapErrorOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(250, 250, 250, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  border-radius: 8px;
+  text-align: center;
+  padding: 20px;
+}
+
+.mapErrorOverlay :global(.ant-btn) {
+  border-radius: 6px;
+}
+
+/* 地图控件样式覆盖 */
+.fenceDrawMapContainer :global(.leaflet-control-zoom) {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid #d9d9d9 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  position: absolute !important;
+  right: 10px !important;
+  top: 10px !important;
+  left: auto !important;
+  bottom: auto !important;
+}
+
+.fenceDrawMapContainer :global(.leaflet-control-zoom a) {
+  background: transparent !important;
+  color: #595959 !important;
+  border: none !important;
+  font-size: 14px !important;
+  font-weight: bold !important;
+  transition: all 0.3s ease !important;
+  width: 26px !important;
+  height: 26px !important;
+  line-height: 24px !important;
+}
+
+.fenceDrawMapContainer :global(.leaflet-control-zoom a:hover) {
+  background: #f0f0f0 !important;
+  color: #1890ff !important;
+}
+
+.fenceDrawMapContainer :global(.leaflet-popup-content-wrapper) {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.fenceDrawMapContainer :global(.leaflet-popup-tip) {
+  background: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* 围栏样式 */
+.fenceDrawMapContainer :global(.leaflet-interactive) {
+  cursor: pointer;
+}
+
+.fenceDrawMapContainer :global(.leaflet-interactive:hover) {
+  stroke-width: 3;
+  stroke-opacity: 0.8;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .drawToolbar {
+    top: 5px;
+    left: 5px;
+    padding: 6px 8px;
+  }
+  
+  .drawToolbar :global(.ant-btn) {
+    font-size: 11px;
+    height: 26px;
+    padding: 0 8px;
+  }
+  
+  .drawStatus {
+    bottom: 5px;
+    left: 5px;
+    right: 5px;
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+  
+  .fenceDrawMapContainer :global(.leaflet-control-zoom) {
+    right: 5px !important;
+    top: 5px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .drawToolbar {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin-bottom: 8px;
+    border-radius: 0;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .drawStatus {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-top: 8px;
+    border-radius: 0;
+    background: #fff;
+    box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .fenceDrawMapContainer {
+    border-radius: 0;
+  }
+  
+  .mapContainer {
+    border-radius: 0;
+  }
+}
+
+/* 加载状态 */
+.mapLoading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: #f5f5f5;
+  color: #8c8c8c;
+}
+
+.mapLoadingIcon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.mapLoadingText {
+  font-size: 14px;
+}
+
+/* 错误状态 */
+.mapError {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: #fff2f0;
+  color: #ff4d4f;
+  border: 1px solid #ffccc7;
+}
+
+.mapErrorIcon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.mapErrorText {
+  font-size: 14px;
+  text-align: center;
+}
+
+/* 暗色主题适配 */
+.fenceDrawMapContainer.dark {
+  background: #141414;
+  border-color: #434343;
+}
+
+.fenceDrawMapContainer.dark .drawToolbar {
+  background: rgba(30, 30, 30, 0.95);
+  color: #fff;
+}
+
+.fenceDrawMapContainer.dark .drawStatus {
+  background: rgba(30, 30, 30, 0.95);
+  color: #d9d9d9;
+}
+
+.fenceDrawMapContainer.dark .statusSuccess {
+  color: #73d13d;
+}
+
+.fenceDrawMapContainer.dark :global(.leaflet-control-zoom) {
+  background: rgba(30, 30, 30, 0.9) !important;
+  border-color: #434343 !important;
+}
+
+.fenceDrawMapContainer.dark :global(.leaflet-control-zoom a) {
+  color: #d9d9d9 !important;
+}
+
+.fenceDrawMapContainer.dark :global(.leaflet-control-zoom a:hover) {
+  background: #434343 !important;
+  color: #1890ff !important;
+}
+
+.fenceDrawMapContainer.dark :global(.leaflet-popup-content-wrapper) {
+  background: rgba(30, 30, 30, 0.95) !important;
+  color: #d9d9d9 !important;
+}
+
+.fenceDrawMapContainer.dark :global(.leaflet-popup-tip) {
+  background: rgba(30, 30, 30, 0.95) !important;
+}
+
+/* 全屏地图样式 */
+.fullscreenModal {
+  z-index: 9999;
+}
+
+.fullscreenModal :global(.ant-modal-content) {
+  height: 100vh;
+  border-radius: 0;
+}
+
+.fullscreenModal :global(.ant-modal-body) {
+  height: 100vh;
+  padding: 0;
+}
+
+.fullscreenModal :global(.ant-modal-close) {
+  top: 16px;
+  right: 16px;
+  z-index: 1002;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fullscreenModal :global(.ant-modal-close-x) {
+  color: #fff;
+  font-size: 18px;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+}
+
+.fullscreenMapContainer {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: #f5f5f5;
+}
+
+.fullscreenMapContent {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.fullscreenToolbar {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+.fullscreenToolbar :global(.ant-btn) {
+  border-radius: 6px;
+  font-size: 14px;
+  height: 32px;
+  padding: 0 16px;
+  margin-right: 8px;
+}
+
+.fullscreenToolbar :global(.ant-btn:last-child) {
+  margin-right: 0;
+}
+
+.fullscreenLoadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+
+.fullscreenLoadingOverlay :global(.ant-spin-text) {
+  color: #595959;
+  margin-top: 16px;
+  font-size: 16px;
+}
+
+.fullscreenErrorOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(250, 250, 250, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  text-align: center;
+  padding: 40px;
+}
+
+.fullscreenDrawStatus {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  font-size: 14px;
+  color: #595959;
+  text-align: center;
+}
+
+/* 全屏地图响应式设计 */
+@media (max-width: 768px) {
+  .fullscreenToolbar {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    padding: 8px 12px;
+  }
+
+  .fullscreenToolbar :global(.ant-btn) {
+    font-size: 12px;
+    height: 28px;
+    padding: 0 12px;
+    margin-right: 6px;
+  }
+
+  .fullscreenDrawStatus {
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .fullscreenModal :global(.ant-modal-close) {
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .fullscreenModal :global(.ant-modal-close-x) {
+    font-size: 16px;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fullscreenToolbar {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .fullscreenToolbar :global(.ant-btn) {
+    font-size: 11px;
+    height: 26px;
+    padding: 0 8px;
+    margin-right: 0;
+  }
+}

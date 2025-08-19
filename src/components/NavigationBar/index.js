@@ -53,7 +53,7 @@ const NavigationBar = ({ collapsed }) => {
         },
         {
           key: 'product-management',
-          label: '产品管理',
+          label: '设备模板',
           path: '/device/product'
         },
         {
@@ -63,18 +63,18 @@ const NavigationBar = ({ collapsed }) => {
         }
       ]
     },
-    {
-      key: 'topology',
-      icon: <NodeIndexOutlined />,
-      label: '拓扑图管理',
-      children: [
-        {
-          key: 'topology-management',
-          label: '拓扑图',
-          path: '/topology/management'
-        }
-      ]
-    },
+    // {
+    //   key: 'topology',
+    //   icon: <NodeIndexOutlined />,
+    //   label: '拓扑图管理',
+    //   children: [
+    //     {
+    //       key: 'topology-management',
+    //       label: '拓扑图',
+    //       path: '/topology/management'
+    //     }
+    //   ]
+    // },
     {
       key: 'topology2',
       icon: <NodeIndexOutlined />,
@@ -92,6 +92,11 @@ const NavigationBar = ({ collapsed }) => {
       icon: <AlertOutlined />,
       label: '告警管理',
       children: [
+        {
+          key: 'electronic-fence',
+          label: '电子围栏管理',
+          path: '/alarm/electronic-fence'
+        },
         {
           key: 'alarm-messages',
           label: '告警消息管理',
@@ -137,8 +142,9 @@ const NavigationBar = ({ collapsed }) => {
     '/device/product': 'product-management',
     '/device/management': 'device-management',
     '/device/thing-model': 'thing-model',
-    '/topology/management': 'topology-management',
+    // '/topology/management': 'topology-management',
     '/topology/management2': 'topology-management2',
+    '/alarm/electronic-fence': 'electronic-fence',
     '/alarm/messages': 'alarm-messages',
     '/alarm/rules': 'alarm-rules',
     '/system/users': 'user-list',
@@ -149,7 +155,7 @@ const NavigationBar = ({ collapsed }) => {
   // 获取父菜单key
   const getParentKey = (childKey) => {
     if (childKey.startsWith('device-')) return 'device';
-    if (childKey === 'topology-management') return 'topology';
+    // if (childKey === 'topology-management') return 'topology';
     if (childKey === 'topology-management2') return 'topology2';
     if (childKey.startsWith('alarm-')) return 'alarm';
     if (childKey.startsWith('system-')) return 'system';
