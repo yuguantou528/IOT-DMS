@@ -478,6 +478,7 @@ const FenceEditModal = ({
                   center={fenceData?.center}
                   radius={fenceData?.radius}
                   onChange={handleCoordinateChange}
+                  isEditing={!!editingFence} // 传递是否为编辑模式
                 />
               </div>
             )}
