@@ -18,7 +18,7 @@ export const deviceTypes = [
   { value: 'satellite_communication', label: '卫星通信' },
   { value: 'network_camera', label: '网络摄像头' },
   { value: 'video_surveillance', label: '视频监控' },
-  { value: 'sensor', label: '传感器' },
+  { value: 'sensor', label: '对讲机' },
   { value: 'gateway', label: '网关设备' },
   { value: 'other', label: '其他设备' }
 ];

@@ -142,7 +142,7 @@ const FullScreenMonitor = () => {
     const typeMap = {
       camera: { name: '摄像头', count: 0 },
       radio: { name: '电台', count: 0 },
-      sensor: { name: '传感器', count: 0 },
+      sensor: { name: '网关设备', count: 0 },
       base_station: { name: '基站', count: 0 },
       body_camera: { name: '执法仪', count: 0 }
     };

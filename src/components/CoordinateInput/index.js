@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Card,
   Form,
@@ -35,23 +35,26 @@ const CoordinateInput = ({
   const [circleCenter, setCircleCenter] = useState({ lng: '', lat: '' });
   const [circleRadius, setCircleRadius] = useState('');
 
+  // 用于跟踪是否是内部更新，避免循环
+  const isInternalUpdateRef = useRef(false);
+
 
   // 初始化数据和同步外部变化
   useEffect(() => {
+    // 如果是内部更新触发的，跳过这次处理
+    if (isInternalUpdateRef.current) {
+      isInternalUpdateRef.current = false;
+      return;
+    }
+
     if (fenceType === 'polygon') {
       if (coordinates && coordinates.length > 0) {
         const points = coordinates.map(coord => ({
           lng: coord[1], // 经度
           lat: coord[0]  // 纬度
         }));
+        console.log('外部坐标发生变化，更新内部状态');
         setPolygonPoints(points);
-      } else if (isEditing && polygonPoints.length === 0) {
-        // 只在编辑模式下且没有坐标时，初始化默认点
-        setPolygonPoints([
-          { lng: 110.35, lat: 29.25 },
-          { lng: 110.36, lat: 29.25 },
-          { lng: 110.36, lat: 29.26 }
-        ]);
       } else if (!isEditing) {
         // 新增模式下，清空坐标点
         setPolygonPoints([]);
@@ -75,6 +78,24 @@ const CoordinateInput = ({
     }
   }, [fenceType, coordinates, center, radius, isEditing]);
 
+  // 编辑模式初始化默认点（单独的 useEffect 避免循环依赖）
+  useEffect(() => {
+    if (fenceType === 'polygon' && isEditing && (!coordinates || coordinates.length === 0)) {
+      // 只在编辑模式下且没有外部坐标时，初始化默认点
+      // 使用 ref 或者其他方式避免依赖 polygonPoints.length
+      setPolygonPoints(prevPoints => {
+        if (prevPoints.length === 0) {
+          return [
+            { lng: 110.35, lat: 29.25 },
+            { lng: 110.36, lat: 29.25 },
+            { lng: 110.36, lat: 29.26 }
+          ];
+        }
+        return prevPoints;
+      });
+    }
+  }, [fenceType, isEditing, coordinates]);
+
   // 当围栏类型改变时，通知父组件初始数据
   useEffect(() => {
     if (fenceType && onChange && isEditing) {
@@ -96,18 +117,30 @@ const CoordinateInput = ({
         });
       }
     }
-  }, [fenceType, isEditing]); // 在围栏类型或编辑模式改变时触发
+  }, [fenceType, isEditing, polygonPoints, circleCenter, circleRadius, onChange]); // 添加缺失的依赖项
 
   // 坐标验证函数
   const validateLongitude = (value) => {
+    // 空值时不显示错误状态
+    if (value === '' || value === null || value === undefined) {
+      return true;
+    }
     return value >= -180 && value <= 180;
   };
 
   const validateLatitude = (value) => {
+    // 空值时不显示错误状态
+    if (value === '' || value === null || value === undefined) {
+      return true;
+    }
     return value >= -90 && value <= 90;
   };
 
   const validateRadius = (value) => {
+    // 空值时不显示错误状态
+    if (value === '' || value === null || value === undefined) {
+      return true;
+    }
     return value >= 10 && value <= 100000; // 10米到100公里
   };
 
@@ -126,6 +159,8 @@ const CoordinateInput = ({
       );
 
       if (validPoints.length >= 3) {
+        // 设置内部更新标志，避免循环更新
+        isInternalUpdateRef.current = true;
         const coords = validPoints.map(point => [point.lat, point.lng]);
         onChange({
           type: 'polygon',
@@ -139,8 +174,20 @@ const CoordinateInput = ({
 
   // 添加多边形点
   const addPolygonPoint = () => {
+    console.log('点击添加顶点按钮，当前顶点数量:', polygonPoints.length);
+    console.log('当前顶点数据:', polygonPoints);
+
+    // 设置最大顶点数量限制（可以根据需要调整）
+    const MAX_POLYGON_POINTS = 20;
+
+    if (polygonPoints.length >= MAX_POLYGON_POINTS) {
+      console.warn('已达到最大顶点数量限制:', MAX_POLYGON_POINTS);
+      return;
+    }
+
     const newPoint = { lng: '', lat: '' }; // 新增点不带默认值
     const newPoints = [...polygonPoints, newPoint];
+    console.log('准备设置新的顶点数据:', newPoints);
     setPolygonPoints(newPoints);
 
     // 只有当所有点都有有效坐标时才触发onChange
@@ -150,7 +197,10 @@ const CoordinateInput = ({
         !isNaN(point.lat) && !isNaN(point.lng)
       );
 
+      console.log('有效顶点数量:', validPoints.length);
       if (validPoints.length >= 3) {
+        // 设置内部更新标志，避免循环更新
+        isInternalUpdateRef.current = true;
         const coords = validPoints.map(point => [point.lat, point.lng]);
         onChange({
           type: 'polygon',
@@ -176,6 +226,8 @@ const CoordinateInput = ({
       );
 
       if (validPoints.length >= 3) {
+        // 设置内部更新标志，避免循环更新
+        isInternalUpdateRef.current = true;
         const coords = validPoints.map(point => [point.lat, point.lng]);
         onChange({
           type: 'polygon',
@@ -185,6 +237,7 @@ const CoordinateInput = ({
         });
       } else {
         // 如果有效点少于3个，清空围栏数据
+        isInternalUpdateRef.current = true;
         onChange({
           type: 'polygon',
           coordinates: null,
@@ -247,6 +300,8 @@ const CoordinateInput = ({
                   size="small"
                   icon={<PlusOutlined />}
                   onClick={addPolygonPoint}
+                  disabled={polygonPoints.length >= 20}
+                  title={polygonPoints.length >= 20 ? '已达到最大顶点数量(20个)' : '添加新顶点'}
                 >
                   添加顶点
                 </Button>

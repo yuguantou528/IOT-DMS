@@ -44,7 +44,7 @@ const mockDevices = [
   },
   {
     id: 3,
-    name: '温湿度传感器-003',
+    name: '数字网关-003',
     type: 'sensor',
     status: 'offline',
     position: [110.2987, 29.1923], // 金鞭溪区域
@@ -60,7 +60,7 @@ const mockDevices = [
     ip: '192.168.1.103',
     location: '湖南省张家界市武陵源区金鞭溪自然保护区',
     lastOnline: '2024-01-20 13:45:10',
-    description: '多功能环境监测传感器，监测温度、湿度、空气质量'
+    description: '多功能环境监测网关设备，监测温度、湿度、空气质量'
   },
   {
     id: 4,
@@ -159,6 +159,7 @@ const mockAlarms = [
     description: '在监控区域内检测到可疑人员活动，请及时查看现场情况。建议立即查看实时视频画面并确认是否为正常活动。',
     handler: null,
     handleTime: null,
+    handleResult: null,
     solution: '1. 立即查看实时视频画面\n2. 确认移动物体性质\n3. 如有必要，派遣安保人员现场查看\n4. 记录事件详情'
   },
   {
@@ -174,12 +175,13 @@ const mockAlarms = [
     description: '人脸识别系统检测到未授权人员，建议立即核实身份。该人员未在系统白名单中，可能存在安全风险。',
     handler: null,
     handleTime: null,
+    handleResult: null,
     solution: '1. 立即查看现场视频\n2. 核实人员身份\n3. 联系安保部门\n4. 必要时启动应急预案'
   },
   {
     id: 3,
     deviceId: 3,
-    deviceName: '温湿度传感器-003',
+    deviceName: '数字网关-003',
     type: '温度异常',
     level: 'error',
     message: '温度超过阈值',
@@ -189,6 +191,7 @@ const mockAlarms = [
     description: '当前温度为45°C，超过设定阈值40°C，可能存在设备过热风险。环境温度异常可能影响设备正常运行。',
     handler: null,
     handleTime: null,
+    handleResult: null,
     solution: '1. 检查空调或通风系统\n2. 确认是否有热源异常\n3. 检查设备散热情况\n4. 必要时启动应急降温措施'
   },
   {
@@ -204,6 +207,7 @@ const mockAlarms = [
     description: '基站信号强度低于-85dBm，可能影响通信质量。信号强度偏低可能导致通信中断或质量下降。',
     handler: null,
     handleTime: null,
+    handleResult: null,
     solution: '1. 检查天线连接状态\n2. 测试传输链路质量\n3. 检查周围是否有干扰源\n4. 调整天线方向或功率'
   },
   {
@@ -219,6 +223,7 @@ const mockAlarms = [
     description: '执法记录仪设备失去网络连接，无法接收实时数据。可能是网络故障或设备电量不足。',
     handler: null,
     handleTime: null,
+    handleResult: null,
     solution: '1. 检查设备电量状态\n2. 确认网络连接状态\n3. 联系现场执法人员\n4. 检查设备是否正常工作'
   }
 ];
@@ -306,7 +311,7 @@ export const getAlarmList = async (params = {}) => {
 };
 
 // 处理告警
-export const handleAlarm = async (alarmId, handler) => {
+export const handleAlarm = async (alarmId, handleData) => {
   return new Promise((resolve) => {
     setTimeout(() => {
       const alarmIndex = mockAlarms.findIndex(a => a.id === parseInt(alarmId));
@@ -314,10 +319,11 @@ export const handleAlarm = async (alarmId, handler) => {
         mockAlarms[alarmIndex] = {
           ...mockAlarms[alarmIndex],
           status: 'handled',
-          handler: handler,
-          handleTime: new Date().toLocaleString('zh-CN')
+          handler: handleData.handler || '当前用户',
+          handleTime: new Date().toLocaleString('zh-CN'),
+          handleResult: handleData.handleResult
         };
-        
+
         resolve({
           success: true,
           message: '告警处理成功'

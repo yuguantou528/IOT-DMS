@@ -185,6 +185,49 @@
   margin-left: 8px;
 }
 
+/* 气泡框操作按钮区域 */
+.popupActions {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: center;
+}
+
+.popupActionBtn {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, background-color;
+  transform: translateZ(0);
+}
+
+.popupActionBtn:hover {
+  background-color: #f5f5f5;
+  color: #1890ff;
+  transform: scale(1.05) translateZ(0);
+}
+
+.popupActionBtn:active {
+  transform: scale(1.02) translateZ(0);
+  transition: all 0.05s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.popupActionBtn:disabled {
+  color: #d9d9d9;
+  cursor: not-allowed;
+}
+
+.popupActionBtn:disabled:hover {
+  background-color: transparent;
+  color: #d9d9d9;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .deviceMarker {
@@ -204,10 +247,42 @@
   .popupContent {
     font-size: 11px;
   }
-  
+
   .popupTitle {
     font-size: 13px;
   }
+
+  .popupActionBtn {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* 按钮即时反馈效果 */
+.instantFeedback {
+  position: relative;
+  overflow: hidden;
+}
+
+.instantFeedback::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(24, 144, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.instantFeedback:active::before {
+  width: 50px;
+  height: 50px;
+  transition: width 0.1s ease, height 0.1s ease;
 }
 
 /* 暗色主题适配 */

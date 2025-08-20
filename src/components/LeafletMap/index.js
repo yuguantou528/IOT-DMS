@@ -1,5 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import React, { useEffect, useState } from 'react';
+import { MapContainer, Marker, Popup, useMap } from 'react-leaflet';
+import { Button, Space, Tooltip } from 'antd';
+import {
+  InfoCircleOutlined,
+  NodeIndexOutlined,
+  PlayCircleOutlined,
+  PhoneOutlined,
+  EyeOutlined
+} from '@ant-design/icons';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import DeviceTrack from './DeviceTrack';
@@ -232,7 +240,14 @@ const LeafletMap = ({
   mapZoom = null, // 动态地图缩放级别
   showScaleAndZoom = true, // 是否显示比例尺和层级
   isRealTimeTracking = false, // 是否为实时轨迹跟踪
-  enableTrackPlayback = false // 是否启用轨迹播放功能
+  enableTrackPlayback = false, // 是否启用轨迹播放功能
+  // 操作函数props
+  onDeviceDetail = null, // 查看设备详情
+  onQuickTrack = null, // 轨迹跟踪
+  onDeviceTrack = null, // 轨迹查询
+  onVideoView = null, // 视频查看
+  onAudioCall = null, // 语音呼叫
+  onLocateDevice = null // 定位设备
 }) => {
   const [currentScale, setCurrentScale] = useState('');
   const [currentZoom, setCurrentZoom] = useState(zoom);
@@ -384,6 +399,102 @@ const LeafletMap = ({
                         <span className={styles.popupValue}>{device.lastOnline}</span>
                       </div>
                     )}
+                  </div>
+
+                  {/* 操作按钮区域 */}
+                  <div className={styles.popupActions}>
+                    <Space size="small" wrap>
+                      {/* 查看详情按钮 */}
+                      <Tooltip title="查看详情">
+                        <Button
+                          type="text"
+                          size="small"
+                          icon={<InfoCircleOutlined />}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDeviceDetail && onDeviceDetail(device);
+                          }}
+                          className={styles.popupActionBtn}
+                        />
+                      </Tooltip>
+
+                      {/* 轨迹跟踪按钮 - 仅在线设备可用 */}
+                      <Tooltip title="轨迹跟踪">
+                        <Button
+                          type="text"
+                          size="small"
+                          icon={<NodeIndexOutlined />}
+                          disabled={device.status !== 'online'}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onQuickTrack && onQuickTrack(device);
+                          }}
+                          className={styles.popupActionBtn}
+                        />
+                      </Tooltip>
+
+                      {/* 轨迹查询按钮 */}
+                      <Tooltip title="轨迹查询">
+                        <Button
+                          type="text"
+                          size="small"
+                          icon={<NodeIndexOutlined />}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDeviceTrack && onDeviceTrack(device);
+                          }}
+                          className={styles.popupActionBtn}
+                        />
+                      </Tooltip>
+
+                      {/* 视频查看按钮 - 仅摄像头设备 */}
+                      {device.type === 'camera' && (
+                        <Tooltip title="查看视频">
+                          <Button
+                            type="text"
+                            size="small"
+                            icon={<PlayCircleOutlined />}
+                            disabled={device.status !== 'online'}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onVideoView && onVideoView(device);
+                            }}
+                            className={styles.popupActionBtn}
+                          />
+                        </Tooltip>
+                      )}
+
+                      {/* 语音呼叫按钮 - 仅单兵设备 */}
+                      {device.type === 'body_camera' && (
+                        <Tooltip title="语音呼叫">
+                          <Button
+                            type="text"
+                            size="small"
+                            icon={<PhoneOutlined />}
+                            disabled={device.status !== 'online'}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onAudioCall && onAudioCall(device);
+                            }}
+                            className={styles.popupActionBtn}
+                          />
+                        </Tooltip>
+                      )}
+
+                      {/* 定位设备按钮 */}
+                      <Tooltip title="定位设备">
+                        <Button
+                          type="text"
+                          size="small"
+                          icon={<EyeOutlined />}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onLocateDevice && onLocateDevice(device.id);
+                          }}
+                          className={styles.popupActionBtn}
+                        />
+                      </Tooltip>
+                    </Space>
                   </div>
                 </div>
               </Popup>

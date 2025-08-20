@@ -101,7 +101,8 @@ const FenceDrawMap = ({
   initialFence = null, // 初始围栏数据（编辑模式）
   readOnly = false, // 只读模式
   drawMode: externalDrawMode = null, // 外部传入的绘制模式
-  hideTypeSelector = false // 是否隐藏类型选择器
+  hideTypeSelector = false, // 是否隐藏类型选择器
+  hideEditButton = false // 是否隐藏编辑按钮
 }) => {
   const [drawMode, setDrawMode] = useState(externalDrawMode); // 'polygon' | 'circle' | null
   const [polygonPoints, setPolygonPoints] = useState([]);
@@ -479,7 +480,7 @@ const FenceDrawMap = ({
                       disabled={isEditing}
                     />
                   </Tooltip>
-                  {!isEditing && (
+                  {!isEditing && !hideEditButton && (
                     <Tooltip title="编辑围栏">
                       <Button
                         icon={<EditOutlined />}

@@ -7,6 +7,7 @@ import {
   Modal,
   Form,
   Input,
+  InputNumber,
   message,
   Popconfirm,
   Card,
@@ -543,10 +544,16 @@ const DeviceManagement = () => {
 
   // 地图选点确认
   const handleMapConfirm = (position) => {
-    setSelectedPosition(position);
+    // 格式化经纬度为6位小数
+    const formattedPosition = {
+      longitude: parseFloat(position.longitude.toFixed(6)),
+      latitude: parseFloat(position.latitude.toFixed(6))
+    };
+
+    setSelectedPosition(formattedPosition);
     form.setFieldsValue({
-      longitude: position.longitude,
-      latitude: position.latitude
+      longitude: formattedPosition.longitude.toFixed(6),
+      latitude: formattedPosition.latitude.toFixed(6)
     });
     setIsMapPickerVisible(false);
     message.success('位置选择成功');
@@ -577,18 +584,28 @@ const DeviceManagement = () => {
     setPositioningMethod(positioning);
 
     if (record.longitude && record.latitude) {
-      setSelectedPosition({
+      const formattedPosition = {
         longitude: parseFloat(record.longitude),
         latitude: parseFloat(record.latitude)
-      });
+      };
+      setSelectedPosition(formattedPosition);
     }
 
-    form.setFieldsValue({
+    // 准备表单数据，格式化经纬度
+    const formData = {
       ...record,
       installDate: record.installDate ? moment(record.installDate) : null,
       warrantyExpiry: record.warrantyExpiry ? moment(record.warrantyExpiry) : null,
       positioningMethod: positioning
-    });
+    };
+
+    // 如果有经纬度，格式化为6位小数
+    if (record.longitude && record.latitude) {
+      formData.longitude = parseFloat(record.longitude).toFixed(6);
+      formData.latitude = parseFloat(record.latitude).toFixed(6);
+    }
+
+    form.setFieldsValue(formData);
 
     // 设置级联选择状态
     setSelectedDeviceType(record.deviceType);
@@ -1502,16 +1519,18 @@ const DeviceManagement = () => {
                           }
                         ]}
                       >
-                        <Input
-                          type="number"
+                        <InputNumber
                           placeholder="请输入经度"
-                          step="0.000001"
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            if (value) {
+                          precision={6}
+                          step={0.000001}
+                          min={-180}
+                          max={180}
+                          style={{ width: '100%' }}
+                          onChange={(value) => {
+                            if (value !== null && value !== undefined) {
                               setSelectedPosition(prev => ({
                                 ...prev,
-                                longitude: parseFloat(value)
+                                longitude: value
                               }));
                             }
                           }}
@@ -1536,16 +1555,18 @@ const DeviceManagement = () => {
                           }
                         ]}
                       >
-                        <Input
-                          type="number"
+                        <InputNumber
                           placeholder="请输入纬度"
-                          step="0.000001"
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            if (value) {
+                          precision={6}
+                          step={0.000001}
+                          min={-90}
+                          max={90}
+                          style={{ width: '100%' }}
+                          onChange={(value) => {
+                            if (value !== null && value !== undefined) {
                               setSelectedPosition(prev => ({
                                 ...prev,
-                                latitude: parseFloat(value)
+                                latitude: value
                               }));
                             }
                           }}
@@ -1608,10 +1629,25 @@ const DeviceManagement = () => {
                     name="port"
                     rules={[
                       { required: true, message: '请输入端口' },
-                      { type: 'number', min: 1, max: 65535, message: '端口范围为1-65535' }
+                      {
+                        validator: (_, value) => {
+                          if (value === undefined || value === '') return Promise.resolve();
+                          const num = parseInt(value, 10);
+                          if (isNaN(num) || num < 1 || num > 65535) {
+                            return Promise.reject(new Error('端口范围为1-65535'));
+                          }
+                          return Promise.resolve();
+                        }
+                      }
                     ]}
                   >
-                    <Input type="number" placeholder="请输入端口" />
+                    <InputNumber
+                      placeholder="请输入端口"
+                      min={1}
+                      max={65535}
+                      precision={0}
+                      style={{ width: '100%' }}
+                    />
                   </Form.Item>
                 </Col>
               </Row>
@@ -1752,12 +1788,12 @@ const DeviceManagement = () => {
                   <>
                     <Descriptions.Item label="经度">
                       <span style={{ fontFamily: 'Monaco, monospace', color: '#722ed1' }}>
-                        {currentDevice.longitude}
+                        {parseFloat(currentDevice.longitude).toFixed(6)}
                       </span>
                     </Descriptions.Item>
                     <Descriptions.Item label="纬度">
                       <span style={{ fontFamily: 'Monaco, monospace', color: '#722ed1' }}>
-                        {currentDevice.latitude}
+                        {parseFloat(currentDevice.latitude).toFixed(6)}
                       </span>
                     </Descriptions.Item>
                   </>

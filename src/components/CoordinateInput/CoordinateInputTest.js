@@ -29,7 +29,8 @@ const CoordinateInputTest = () => {
         coordinates: [
           [29.25, 110.35],
           [29.26, 110.36],
-          [29.27, 110.35]
+          [29.27, 110.35],
+          [29.28, 110.37] // 添加第4个点用于测试
         ],
         center: null,
         radius: null
@@ -43,6 +44,43 @@ const CoordinateInputTest = () => {
       });
     }
     message.info('已切换到编辑模式');
+  };
+
+  const testAddMorePoints = () => {
+    // 测试添加更多顶点的功能
+    if (fenceType === 'polygon') {
+      setFenceData({
+        type: 'polygon',
+        coordinates: [
+          [29.25, 110.35],
+          [29.26, 110.36],
+          [29.27, 110.35],
+          [29.28, 110.37],
+          [29.29, 110.38],
+          [29.30, 110.39] // 6个点
+        ],
+        center: null,
+        radius: null
+      });
+      message.info('已设置6个顶点用于测试');
+    }
+  };
+
+  const testThreePoints = () => {
+    // 测试3个完整顶点的情况
+    if (fenceType === 'polygon') {
+      setFenceData({
+        type: 'polygon',
+        coordinates: [
+          [29.25, 110.35],
+          [29.26, 110.36],
+          [29.27, 110.35]
+        ],
+        center: null,
+        radius: null
+      });
+      message.info('已设置3个完整顶点，现在可以测试添加第4个顶点');
+    }
   };
 
   return (
@@ -78,6 +116,12 @@ const CoordinateInputTest = () => {
             <Button type="primary" onClick={simulateEditMode}>
               模拟编辑模式
             </Button>
+            <Button onClick={testAddMorePoints} disabled={fenceType !== 'polygon'}>
+              测试6个顶点
+            </Button>
+            <Button onClick={testThreePoints} disabled={fenceType !== 'polygon'}>
+              测试3个顶点
+            </Button>
           </Space>
         </div>
 
@@ -89,6 +133,7 @@ const CoordinateInputTest = () => {
             <li>只有输入有效坐标后才会触发onChange事件</li>
             <li>多边形需要至少3个有效顶点才会生成围栏数据</li>
             <li>圆形需要中心点和半径都有效才会生成围栏数据</li>
+            <li><strong style={{color: '#ff4d4f'}}>测试重点</strong>：验证添加顶点功能，应该能够添加超过3个顶点（最多20个）</li>
           </ul>
         </div>
 

@@ -175,13 +175,13 @@ let deviceModelData = [
   },
   {
     id: 10,
-    name: 'TEMP-SENSOR-01',
-    code: 'TEMPSENSOR01',
-    manufacturerId: 4,
+    name: 'DIGITAL-RADIO-01',
+    code: 'DIGITALRADIO01',
+    manufacturerId: 2,
     manufacturerName: '小米科技有限责任公司',
     deviceType: 'sensor',
     specifications: {
-      sensorType: '温度传感器',
+      radioType: '数字对讲机',
       range: '-40°C ~ +125°C',
       accuracy: '±0.5°C',
       resolution: '0.1°C',
@@ -190,7 +190,7 @@ let deviceModelData = [
     },
     applicableScenarios: '环境监测、仓储管理、农业物联网',
     status: 'active',
-    description: '高精度温度传感器，低功耗设计',
+    description: '高精度数字对讲机，低功耗设计',
     createTime: '2024-01-26 11:45:00',
     updateTime: '2024-01-29 09:30:00'
   },
@@ -224,7 +224,7 @@ export const deviceTypes = [
   { value: 'satellite_communication', label: '卫星通信' },
   { value: 'network_camera', label: '网络摄像头' },
   { value: 'video_surveillance', label: '视频监控' },
-  { value: 'sensor', label: '传感器' },
+  { value: 'sensor', label: '对讲机' },
   { value: 'gateway', label: '网关设备' },
   { value: 'other', label: '其他设备' }
 ];

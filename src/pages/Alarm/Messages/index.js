@@ -121,7 +121,7 @@ const AlarmMessages = () => {
     {
       id: 3,
       deviceId: 'DEV003',
-      deviceName: '温度传感器-003',
+      deviceName: '数字对讲机-003',
       alarmType: 'data_anomaly',
       alarmLevel: 'critical',
       alarmTitle: '温度数据异常',
@@ -130,9 +130,9 @@ const AlarmMessages = () => {
       status: 'resolved',
       handler: '李四',
       handleTime: '2024-01-20 14:45:00',
-      handleRemark: '已确认为传感器故障，已更换新设备',
+      handleRemark: '已确认为对讲机故障，已更换新设备',
       location: '上海市浦东新区xxx工厂',
-      deviceType: '传感器'
+      deviceType: '对讲机'
     }
   ];
 

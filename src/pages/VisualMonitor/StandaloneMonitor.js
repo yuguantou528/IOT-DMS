@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   Card,
   Row,
@@ -19,7 +19,8 @@ import {
   Input,
   Divider,
   DatePicker,
-  Dropdown
+  Dropdown,
+  Form
 } from 'antd';
 import dayjs from 'dayjs';
 import LeafletMap from '../../components/LeafletMap';
@@ -60,6 +61,44 @@ import DeviceOverviewCharts from '../../components/DeviceOverviewCharts';
 const { Option } = Select;
 const { Search } = Input;
 
+// 防抖工具函数
+const debounce = (func, wait) => {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
+
+// 节流工具函数
+const throttle = (func, limit) => {
+  let inThrottle;
+  return function executedFunction(...args) {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+};
+
+// 添加即时反馈效果
+const addInstantFeedback = (element) => {
+  if (element && !element.classList.contains('instant-feedback-added')) {
+    element.classList.add('instant-feedback-added');
+    element.addEventListener('mousedown', () => {
+      element.classList.add(styles.quickClick);
+      setTimeout(() => {
+        element.classList.remove(styles.quickClick);
+      }, 150);
+    });
+  }
+};
+
 const StandaloneMonitor = () => {
   const [devices, setDevices] = useState([]);
   const [alarms, setAlarms] = useState([]);
@@ -81,6 +120,9 @@ const StandaloneMonitor = () => {
   const [deviceInfoVisible, setDeviceInfoVisible] = useState(false);
   const [alarmDetailVisible, setAlarmDetailVisible] = useState(false);
   const [selectedAlarm, setSelectedAlarm] = useState(null);
+  const [alarmHandleVisible, setAlarmHandleVisible] = useState(false);
+  const [selectedHandleAlarm, setSelectedHandleAlarm] = useState(null);
+  const [alarmActiveTab, setAlarmActiveTab] = useState('active');
   const [activeTab, setActiveTab] = useState('status'); // 'status' 或 'monitor'
   const [deviceFilter, setDeviceFilter] = useState('all'); // 'all', 'online', 'offline', 'camera'
   const [selectedVideoDevice, setSelectedVideoDevice] = useState(null);
@@ -295,12 +337,12 @@ const StandaloneMonitor = () => {
   const onlineRate = stats.totalDevices > 0 ? 
     Math.round((stats.onlineDevices / stats.totalDevices) * 100) : 0;
 
-  // 获取设备类型统计
-  const getDeviceTypeStats = () => {
+  // 获取设备类型统计 - 使用useMemo缓存计算结果
+  const deviceTypeStats = useMemo(() => {
     const typeMap = {
       camera: { name: '摄像头', count: 0 },
       radio: { name: '电台', count: 0 },
-      sensor: { name: '传感器', count: 0 },
+      sensor: { name: '网关设备', count: 0 },
       base_station: { name: '基站', count: 0 },
       body_camera: { name: '执法仪', count: 0 }
     };
@@ -316,7 +358,7 @@ const StandaloneMonitor = () => {
       name: data.name,
       count: data.count
     })).filter(item => item.count > 0);
-  };
+  }, [devices]);
 
   // 获取设备类型图标
   const getDeviceTypeIcon = (type) => {
@@ -330,8 +372,8 @@ const StandaloneMonitor = () => {
     return icons[type] || '📱';
   };
 
-  // 获取设备类型颜色
-  const getDeviceTypeColor = (type) => {
+  // 获取设备类型颜色 - 使用useMemo缓存
+  const getDeviceTypeColor = useMemo(() => {
     const colors = {
       camera: '#1890ff',
       radio: '#52c41a',
@@ -339,30 +381,30 @@ const StandaloneMonitor = () => {
       base_station: '#f5222d',
       body_camera: '#13c2c2'
     };
-    return colors[type] || '#722ed1';
-  };
+    return (type) => colors[type] || '#722ed1';
+  }, []);
 
-  // 切换地图类型
-  const toggleMapType = () => {
+  // 切换地图类型 - 使用useCallback优化
+  const toggleMapType = useCallback(() => {
     setMapType(prevType => {
       const types = ['normal', 'satellite', 'dark'];
       const currentIndex = types.indexOf(prevType);
       const nextIndex = (currentIndex + 1) % types.length;
       return types[nextIndex];
     });
-  };
+  }, []);
 
-  // 处理地图设备点击（只显示白色气泡框，不显示Modal）
-  const handleMapDeviceClick = (device) => {
+  // 处理地图设备点击（只显示白色气泡框，不显示Modal）- 使用useCallback优化
+  const handleMapDeviceClick = useCallback((device) => {
     setSelectedDevice(device);
     // 不设置 setDeviceInfoVisible(true)，只让Leaflet的Popup显示
-  };
+  }, []);
 
-  // 处理监控列表设备详情点击（显示Modal弹窗）
-  const handleDeviceDetailClick = (device) => {
+  // 处理监控列表设备详情点击（显示Modal弹窗）- 使用useCallback优化
+  const handleDeviceDetailClick = useCallback((device) => {
     setSelectedDevice(device);
     setDeviceInfoVisible(true);
-  };
+  }, []);
 
   // 处理单个设备轨迹查看
   const handleDeviceTrack = (device) => {
@@ -578,10 +620,64 @@ const StandaloneMonitor = () => {
     }
   };
 
-  // 处理告警详情点击
-  const handleAlarmClick = (alarm) => {
+  // 处理告警详情点击 - 使用节流优化
+  const handleAlarmClick = useCallback(throttle((alarm) => {
     setSelectedAlarm(alarm);
     setAlarmDetailVisible(true);
+  }, 300), []);
+
+  // 处理告警处理按钮点击 - 使用节流优化
+  const handleAlarmProcess = useCallback(throttle((alarm, e) => {
+    e.stopPropagation(); // 阻止事件冒泡
+    setSelectedHandleAlarm(alarm);
+    setAlarmHandleVisible(true);
+  }, 300), []);
+
+  // 提交告警处理
+  const handleAlarmSubmit = async (values) => {
+    try {
+      // 更新告警状态
+      const updatedAlarms = alarms.map(alarm => {
+        if (alarm.id === selectedHandleAlarm.id) {
+          return {
+            ...alarm,
+            status: 'handled',
+            handler: values.handler || '当前用户',
+            handleTime: new Date().toLocaleString('zh-CN'),
+            handleResult: values.handleResult
+          };
+        }
+        return alarm;
+      });
+
+      setAlarms(updatedAlarms);
+
+      // 更新统计数据
+      const activeCount = updatedAlarms.filter(alarm => alarm.status === 'active').length;
+      setStats(prev => ({
+        ...prev,
+        activeAlarms: activeCount
+      }));
+
+      setAlarmHandleVisible(false);
+      setSelectedHandleAlarm(null);
+      message.success('告警处理成功');
+    } catch (error) {
+      message.error('告警处理失败');
+    }
+  };
+
+  // 获取不同状态的告警列表
+  const getActiveAlarms = () => {
+    return alarms.filter(alarm => alarm.status === 'active');
+  };
+
+  const getHandledAlarms = () => {
+    return alarms.filter(alarm => alarm.status === 'handled');
+  };
+
+  const getCurrentTabAlarms = () => {
+    return alarmActiveTab === 'active' ? getActiveAlarms() : getHandledAlarms();
   };
 
   // 筛选设备列表
@@ -765,8 +861,8 @@ const StandaloneMonitor = () => {
     }
   }, [isDragging, dragOffset]);
 
-  // 筛选地图上显示的设备（简化版，只保留搜索功能）
-  const getFilteredMapDevices = () => {
+  // 筛选地图上显示的设备 - 使用useMemo缓存筛选结果
+  const filteredMapDevices = useMemo(() => {
     // 如果没有搜索文本，显示所有设备
     if (!mapSearchText) {
       return devices;
@@ -782,7 +878,7 @@ const StandaloneMonitor = () => {
              deviceId.includes(searchText) ||
              deviceLocation.includes(searchText);
     });
-  };
+  }, [devices, mapSearchText]);
 
   // 获取搜索结果（用于下拉选择）
   const getSearchResults = (searchText) => {
@@ -801,13 +897,21 @@ const StandaloneMonitor = () => {
     }).slice(0, 8); // 限制显示最多8个结果
   };
 
-  // 处理搜索输入变化
-  const handleSearchChange = (value) => {
+  // 防抖搜索函数
+  const debouncedSearch = useMemo(
+    () => debounce((value) => {
+      const results = getSearchResults(value);
+      setSearchResults(results);
+      setShowSearchResults(value.length > 0 && results.length > 0);
+    }, 200),
+    [devices]
+  );
+
+  // 处理搜索输入变化 - 使用防抖优化
+  const handleSearchChange = useCallback((value) => {
     setMapSearchText(value);
-    const results = getSearchResults(value);
-    setSearchResults(results);
-    setShowSearchResults(value.length > 0 && results.length > 0);
-  };
+    debouncedSearch(value);
+  }, [debouncedSearch]);
 
   // 处理搜索结果选择
   const handleSearchResultSelect = (device) => {
@@ -900,7 +1004,7 @@ const StandaloneMonitor = () => {
           <div className={styles.mapContainer}>
             {/* Leaflet地图 */}
             <LeafletMap
-              devices={getFilteredMapDevices()}
+              devices={filteredMapDevices}
               onDeviceClick={handleMapDeviceClick}
               mapType={mapType}
               height="100%"
@@ -912,6 +1016,13 @@ const StandaloneMonitor = () => {
               mapZoom={mapZoom}
               isRealTimeTracking={isRealTimeTracking}
               enableTrackPlayback={showDeviceTracks && !isRealTimeTracking}
+              // 操作函数props
+              onDeviceDetail={handleDeviceDetailClick}
+              onQuickTrack={handleQuickTrack}
+              onDeviceTrack={handleDeviceTrack}
+              onVideoView={handleVideoView}
+              onAudioCall={handleAudioCall}
+              onLocateDevice={locateDevice}
             />
 
             {/* 地图搜索控制面板 */}
@@ -971,18 +1082,6 @@ const StandaloneMonitor = () => {
                     </div>
                   )}
                 </div>
-
-                {showDeviceTracks && (
-                  <Button
-                    size="small"
-                    type="primary"
-                    danger
-                    onClick={clearDeviceTracks}
-                    className={styles.clearTrackBtn}
-                  >
-                    {isRealTimeTracking ? '取消跟踪' : '清除轨迹'}
-                  </Button>
-                )}
               </div>
             </div>
 
@@ -1246,7 +1345,6 @@ const StandaloneMonitor = () => {
                   <Space>
                     <WarningOutlined />
                     <span>实时告警监控</span>
-                    <Badge count={stats.activeAlarms} />
                   </Space>
                   <Button
                     type="text"
@@ -1258,41 +1356,129 @@ const StandaloneMonitor = () => {
                   </Button>
                 </div>
                 <div className={`${styles.panelContent} ${styles.alarmPanelContent}`}>
-                  {alarms.length > 0 ? (
-                    <List
-                      size="small"
-                      dataSource={alarms.slice(0, 6)}
-                      renderItem={alarm => (
-                        <List.Item
-                          className={styles.overlayAlarmItem}
-                          onClick={() => handleAlarmClick(alarm)}
-                          style={{ cursor: 'pointer' }}
-                        >
-                          <div className={styles.alarmContent}>
-                            <div className={styles.alarmHeader}>
-                              <Tag color={getAlarmColor(alarm.level)} size="small">
-                                {getAlarmLevelText(alarm.level)}
-                              </Tag>
-                              <span className={styles.alarmTime}>
-                                {alarm.time.split(' ')[1]}
-                              </span>
-                            </div>
-                            <div className={styles.alarmDevice}>{alarm.deviceName}</div>
-                            <div className={styles.alarmMessage}>{alarm.message}</div>
-                            <div className={styles.alarmAction}>
-                              <InfoCircleOutlined style={{ marginRight: '4px' }} />
-                              点击查看详情
-                            </div>
+                  <Tabs
+                    activeKey={alarmActiveTab}
+                    onChange={setAlarmActiveTab}
+                    size="small"
+                    className={styles.alarmTabs}
+                    items={[
+                      {
+                        key: 'active',
+                        label: (
+                          <Space>
+                            <span>未处理</span>
+                            <Badge count={getActiveAlarms().length} size="small" />
+                          </Space>
+                        ),
+                        children: (
+                          <div className={styles.alarmTabContent}>
+                            {getActiveAlarms().length > 0 ? (
+                              <List
+                                size="small"
+                                dataSource={getActiveAlarms().slice(0, 10)}
+                                renderItem={alarm => (
+                                  <List.Item
+                                    className={styles.overlayAlarmItem}
+                                    onClick={() => handleAlarmClick(alarm)}
+                                    style={{ cursor: 'pointer' }}
+                                  >
+                                    <div className={styles.alarmContent}>
+                                      <div className={styles.alarmHeader}>
+                                        <Tag color={getAlarmColor(alarm.level)} size="small">
+                                          {getAlarmLevelText(alarm.level)}
+                                        </Tag>
+                                        <span className={styles.alarmTime}>
+                                          {alarm.time.split(' ')[1]}
+                                        </span>
+                                      </div>
+                                      <div className={styles.alarmDevice}>{alarm.deviceName}</div>
+                                      <div className={styles.alarmMessage}>{alarm.message}</div>
+                                      <div className={styles.alarmAction}>
+                                        <Space>
+                                          <span>
+                                            <InfoCircleOutlined style={{ marginRight: '4px' }} />
+                                            点击查看详情
+                                          </span>
+                                          <Button
+                                            type="primary"
+                                            size="small"
+                                            onClick={(e) => handleAlarmProcess(alarm, e)}
+                                            className={styles.processBtn}
+                                          >
+                                            处理
+                                          </Button>
+                                        </Space>
+                                      </div>
+                                    </div>
+                                  </List.Item>
+                                )}
+                              />
+                            ) : (
+                              <div className={styles.emptyState}>
+                                <CheckCircleOutlined style={{ fontSize: '24px', color: '#52c41a', marginBottom: '8px' }} />
+                                <div>暂无未处理告警</div>
+                              </div>
+                            )}
                           </div>
-                        </List.Item>
-                      )}
-                    />
-                  ) : (
-                    <div className={styles.emptyState}>
-                      <CheckCircleOutlined style={{ fontSize: '24px', color: '#52c41a', marginBottom: '8px' }} />
-                      <div>暂无活跃告警</div>
-                    </div>
-                  )}
+                        )
+                      },
+                      {
+                        key: 'handled',
+                        label: (
+                          <Space>
+                            <span>已处理</span>
+                            <Badge count={getHandledAlarms().length} size="small" />
+                          </Space>
+                        ),
+                        children: (
+                          <div className={styles.alarmTabContent}>
+                            {getHandledAlarms().length > 0 ? (
+                              <List
+                                size="small"
+                                dataSource={getHandledAlarms().slice(0, 10)}
+                                renderItem={alarm => (
+                                  <List.Item
+                                    className={styles.overlayAlarmItem}
+                                    onClick={() => handleAlarmClick(alarm)}
+                                    style={{ cursor: 'pointer' }}
+                                  >
+                                    <div className={styles.alarmContent}>
+                                      <div className={styles.alarmHeader}>
+                                        <Tag color={getAlarmColor(alarm.level)} size="small">
+                                          {getAlarmLevelText(alarm.level)}
+                                        </Tag>
+                                        <span className={styles.alarmTime}>
+                                          {alarm.time.split(' ')[1]}
+                                        </span>
+                                      </div>
+                                      <div className={styles.alarmDevice}>{alarm.deviceName}</div>
+                                      <div className={styles.alarmMessage}>{alarm.message}</div>
+                                      <div className={styles.alarmAction}>
+                                        <Space>
+                                          <span>
+                                            <InfoCircleOutlined style={{ marginRight: '4px' }} />
+                                            点击查看详情
+                                          </span>
+                                          <Tag color="success" size="small">
+                                            已处理
+                                          </Tag>
+                                        </Space>
+                                      </div>
+                                    </div>
+                                  </List.Item>
+                                )}
+                              />
+                            ) : (
+                              <div className={styles.emptyState}>
+                                <CheckCircleOutlined style={{ fontSize: '24px', color: '#52c41a', marginBottom: '8px' }} />
+                                <div>暂无已处理告警</div>
+                              </div>
+                            )}
+                          </div>
+                        )
+                      }
+                    ]}
+                  />
                 </div>
 
 
@@ -1409,7 +1595,7 @@ const StandaloneMonitor = () => {
                     <span className={styles.infoValue}>
                       {selectedDevice.type === 'camera' ? '摄像头' :
                        selectedDevice.type === 'radio' ? '电台' :
-                       selectedDevice.type === 'sensor' ? '传感器' :
+                       selectedDevice.type === 'sensor' ? '网关设备' :
                        selectedDevice.type === 'body_camera' ? '执法仪' : '基站'}
                     </span>
                   </div>
@@ -1505,64 +1691,160 @@ const StandaloneMonitor = () => {
                 </Tag>
               </div>
               <div className={styles.alarmBasicInfo}>
-                <h3 className={styles.alarmTitle}>{selectedAlarm.message}</h3>
-                <div className={styles.alarmDevice}>设备：{selectedAlarm.deviceName}</div>
+                <h3 className={styles.alarmTitle}>{selectedAlarm.type}</h3>
+                <div className={styles.alarmDevice}>{selectedAlarm.deviceName}</div>
               </div>
             </div>
 
             <div className={styles.alarmDetailContent}>
               <Row gutter={[12, 12]}>
-                <Col span={24}>
+                <Col span={12}>
                   <div className={styles.alarmInfoItem}>
-                    <span className={styles.alarmInfoLabel}>告警时间:</span>
-                    <span className={styles.alarmInfoValue}>{selectedAlarm.time}</span>
+                    <div className={styles.alarmInfoLabel}>告警时间</div>
+                    <div className={styles.alarmInfoValue}>{selectedAlarm.time}</div>
                   </div>
                 </Col>
                 <Col span={12}>
                   <div className={styles.alarmInfoItem}>
-                    <span className={styles.alarmInfoLabel}>告警类型:</span>
-                    <span className={styles.alarmInfoValue}>{selectedAlarm.type || '设备异常'}</span>
+                    <div className={styles.alarmInfoLabel}>告警状态</div>
+                    <div className={styles.alarmInfoValue}>
+                      {selectedAlarm.status === 'active' ? '活跃' : '已处理'}
+                    </div>
                   </div>
                 </Col>
-                <Col span={12}>
-                  <div className={styles.alarmInfoItem}>
-                    <span className={styles.alarmInfoLabel}>告警级别:</span>
-                    <span className={styles.alarmInfoValue}>{getAlarmLevelText(selectedAlarm.level)}</span>
-                  </div>
-                </Col>
-                <Col span={12}>
-                  <div className={styles.alarmInfoItem}>
-                    <span className={styles.alarmInfoLabel}>设备ID:</span>
-                    <span className={styles.alarmInfoValue}>{selectedAlarm.deviceId}</span>
-                  </div>
-                </Col>
-                <Col span={12}>
-                  <div className={styles.alarmInfoItem}>
-                    <span className={styles.alarmInfoLabel}>处理状态:</span>
-                    <span className={styles.alarmInfoValue} style={{ color: selectedAlarm.status === 'resolved' ? '#52c41a' : '#ff4d4f' }}>
-                      {selectedAlarm.status === 'resolved' ? '已处理' : '待处理'}
-                    </span>
-                  </div>
-                </Col>
+                {selectedAlarm.handler && (
+                  <>
+                    <Col span={12}>
+                      <div className={styles.alarmInfoItem}>
+                        <div className={styles.alarmInfoLabel}>处理人员</div>
+                        <div className={styles.alarmInfoValue}>{selectedAlarm.handler}</div>
+                      </div>
+                    </Col>
+                    <Col span={12}>
+                      <div className={styles.alarmInfoItem}>
+                        <div className={styles.alarmInfoLabel}>处理时间</div>
+                        <div className={styles.alarmInfoValue}>{selectedAlarm.handleTime}</div>
+                      </div>
+                    </Col>
+                  </>
+                )}
               </Row>
             </div>
 
             <div className={styles.alarmDescription}>
-              <div className={styles.alarmInfoLabel}>详细描述:</div>
-              <div className={styles.alarmDescriptionText}>
-                {selectedAlarm.description || selectedAlarm.message || '设备出现异常，请及时检查设备状态并进行相应处理。'}
+              <div className={styles.alarmInfoLabel}>告警描述</div>
+              <div className={styles.alarmDescriptionText}>{selectedAlarm.description}</div>
+            </div>
+
+            {selectedAlarm.handleResult && (
+              <div className={styles.alarmDescription}>
+                <div className={styles.alarmInfoLabel}>处理结果</div>
+                <div className={styles.alarmDescriptionText}>{selectedAlarm.handleResult}</div>
+              </div>
+            )}
+
+            <div className={styles.alarmSolution}>
+              <div className={styles.alarmInfoLabel}>建议解决方案</div>
+              <div className={styles.alarmSolutionText}>
+                {selectedAlarm.solution?.split('\n').map((line, index) => (
+                  <div key={index}>{line}</div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </Modal>
+
+      {/* 告警处理弹窗 */}
+      <Modal
+        title={
+          <Space>
+            <WarningOutlined />
+            <span>处理告警</span>
+            {selectedHandleAlarm && (
+              <Tag color={getAlarmColor(selectedHandleAlarm.level)}>
+                {getAlarmLevelText(selectedHandleAlarm.level)}
+              </Tag>
+            )}
+          </Space>
+        }
+        open={alarmHandleVisible}
+        onCancel={() => {
+          setAlarmHandleVisible(false);
+          setSelectedHandleAlarm(null);
+        }}
+        footer={null}
+        width={600}
+        className={styles.alarmHandleModal}
+      >
+        {selectedHandleAlarm && (
+          <Form
+            layout="vertical"
+            onFinish={handleAlarmSubmit}
+            initialValues={{
+              handler: '当前用户'
+            }}
+          >
+            {/* 告警信息展示 */}
+            <div className={styles.alarmInfo}>
+              <div className={styles.alarmInfoRow}>
+                <span className={styles.alarmInfoLabel}>设备名称：</span>
+                <span className={styles.alarmInfoValue}>{selectedHandleAlarm.deviceName}</span>
+              </div>
+              <div className={styles.alarmInfoRow}>
+                <span className={styles.alarmInfoLabel}>告警类型：</span>
+                <span className={styles.alarmInfoValue}>{selectedHandleAlarm.type}</span>
+              </div>
+              <div className={styles.alarmInfoRow}>
+                <span className={styles.alarmInfoLabel}>告警时间：</span>
+                <span className={styles.alarmInfoValue}>{selectedHandleAlarm.time}</span>
+              </div>
+              <div className={styles.alarmInfoRow}>
+                <span className={styles.alarmInfoLabel}>告警描述：</span>
+                <span className={styles.alarmInfoValue}>{selectedHandleAlarm.message}</span>
               </div>
             </div>
 
-            {selectedAlarm.solution && (
-              <div className={styles.alarmSolution}>
-                <div className={styles.alarmInfoLabel}>处理建议:</div>
-                <div className={styles.alarmSolutionText}>
-                  {selectedAlarm.solution}
-                </div>
-              </div>
-            )}
-          </div>
+            <Divider />
+
+            {/* 处理表单 */}
+            <Form.Item
+              name="handleResult"
+              label="处理结果"
+              rules={[
+                { required: true, message: '请输入处理结果' },
+                { min: 10, message: '处理结果至少需要10个字符' }
+              ]}
+            >
+              <Input.TextArea
+                rows={4}
+                placeholder="请详细描述处理过程和结果..."
+                maxLength={500}
+                showCount
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="handler"
+              label="处理人员"
+            >
+              <Input placeholder="处理人员姓名" />
+            </Form.Item>
+
+            <Form.Item>
+              <Space>
+                <Button type="primary" htmlType="submit">
+                  确认处理
+                </Button>
+                <Button onClick={() => {
+                  setAlarmHandleVisible(false);
+                  setSelectedHandleAlarm(null);
+                }}>
+                  取消
+                </Button>
+              </Space>
+            </Form.Item>
+          </Form>
         )}
       </Modal>
 

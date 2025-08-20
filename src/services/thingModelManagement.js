@@ -210,14 +210,14 @@ let thingModelData = [
   },
   {
     id: 3,
-    name: '温湿度传感器物模型',
-    code: 'temp_humidity_sensor_model',
+    name: '数字对讲机物模型',
+    code: 'digital_radio_model',
     productId: null,
     productName: null,
     productCode: null,
     version: '1.0.0',
     status: 'active',
-    description: '温湿度传感器标准物模型，支持温度、湿度数据采集',
+    description: '数字对讲机标准物模型，支持温度、湿度数据采集',
     properties: [
       {
         id: 1,

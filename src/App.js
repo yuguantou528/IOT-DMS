@@ -21,6 +21,9 @@ import TopologyManagement2 from './pages/Topology/Management2';
 import AlarmMessages from './pages/Alarm/Messages';
 import AlarmRules from './pages/Alarm/Rules';
 import ElectronicFence from './pages/Alarm/ElectronicFence';
+import UserManagement from './pages/System/UserManagement';
+import RoleManagement from './pages/System/RoleManagement';
+import PermissionManagement from './pages/System/PermissionManagement';
 import NavigationBar from './components/NavigationBar';
 import HeaderBar from './components/HeaderBar';
 import Breadcrumb from './components/Breadcrumb';
@@ -101,9 +104,9 @@ function App() {
               <Route path="/alarm/electronic-fence" element={<ElectronicFence />} />
               <Route path="/alarm/messages" element={<AlarmMessages />} />
               <Route path="/alarm/rules" element={<AlarmRules />} />
-              <Route path="/system/users" element={<Dashboard title="用户列表" />} />
-              <Route path="/system/roles" element={<Dashboard title="角色管理" />} />
-              <Route path="/system/permissions" element={<Dashboard title="权限管理" />} />
+              <Route path="/system/users" element={<UserManagement />} />
+              <Route path="/system/roles" element={<RoleManagement />} />
+              <Route path="/system/permissions" element={<PermissionManagement />} />
             </Routes>
           </div>
         </div>

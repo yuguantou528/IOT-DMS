@@ -248,14 +248,24 @@ const TrackPlayback = ({
         {/* 进度条 */}
         <div className={styles.progressSection}>
           <div className={styles.progressInfo}>
-            <span className={styles.progressText}>
-              {currentIndex + 1} / {trackData.length}
-            </span>
-            {currentPoint && (
-              <span className={styles.currentTime}>
-                {new Date(currentPoint.timestamp).toLocaleString()}
+            <div className={styles.progressLeft}>
+              <span className={styles.progressText}>
+                {currentIndex + 1} / {trackData.length}
               </span>
-            )}
+            </div>
+            <div className={styles.progressRight}>
+              {currentPoint && (
+                <span className={styles.currentTime}>
+                  {new Date(currentPoint.timestamp).toLocaleString('zh-CN', {
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                  })}
+                </span>
+              )}
+            </div>
           </div>
           <Slider
             value={progress}

@@ -206,7 +206,7 @@ export const deviceTypes = [
   { value: 'satellite_communication', label: '卫星通信' },
   { value: 'network_camera', label: '网络摄像头' },
   { value: 'video_surveillance', label: '视频监控' },
-  { value: 'sensor', label: '传感器' },
+  { value: 'sensor', label: '对讲机' },
   { value: 'gateway', label: '网关设备' },
   { value: 'other', label: '其他设备' }
 ];
@@ -227,10 +227,10 @@ export const deviceTypeLabelMap = {
   '红外摄像头': 'network_camera',
   '球机摄像头': 'network_camera',
   '视频监控': 'video_surveillance',
-  '温度传感器': 'sensor',
-  '湿度传感器': 'sensor',
-  '烟雾传感器': 'sensor',
-  '门磁传感器': 'sensor',
+  '数字对讲机': 'sensor',
+  '模拟对讲机': 'sensor',
+  '手持对讲机': 'sensor',
+  '车载对讲机': 'sensor',
   '4G路由器': 'gateway',
   '网关设备': 'gateway',
   '交换机': 'gateway',

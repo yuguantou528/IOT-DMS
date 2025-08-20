@@ -1,84 +1,117 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Modal, Button, Input, Row, Col, message, Space } from 'antd';
-import { EnvironmentOutlined, AimOutlined } from '@ant-design/icons';
+import { EnvironmentOutlined, AimOutlined, GlobalOutlined } from '@ant-design/icons';
+import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import styles from './index.module.css';
 
-const MapPicker = ({ 
-  visible, 
-  onCancel, 
-  onConfirm, 
-  initialPosition = { longitude: 116.397428, latitude: 39.90923 } 
+// 修复Leaflet默认图标问题
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+});
+
+// 地图点击事件处理组件
+const MapClickHandler = ({ onPositionChange }) => {
+  useMapEvents({
+    click: (e) => {
+      const { lat, lng } = e.latlng;
+      onPositionChange({ latitude: lat, longitude: lng });
+    }
+  });
+  return null;
+};
+
+// 地图中心控制组件
+const MapCenterController = ({ center }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (center) {
+      map.setView([center.latitude, center.longitude], map.getZoom());
+    }
+  }, [map, center]);
+
+  return null;
+};
+
+const MapPicker = ({
+  visible,
+  onCancel,
+  onConfirm,
+  initialPosition = { longitude: 110.3500, latitude: 29.2500 } // 改为张家界坐标
 }) => {
   const [position, setPosition] = useState(initialPosition);
   const [tempPosition, setTempPosition] = useState(initialPosition);
-  const mapRef = useRef(null);
-  const mapInstanceRef = useRef(null);
-  const markerRef = useRef(null);
+  const [mapKey, setMapKey] = useState(0);
+  const [currentTileSource, setCurrentTileSource] = useState(0);
+  const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapInstance, setMapInstance] = useState(null);
+  const [networkError, setNetworkError] = useState(false);
+  const [shouldRenderMap, setShouldRenderMap] = useState(false);
 
-  // 初始化地图
-  useEffect(() => {
-    if (visible && mapRef.current && !mapInstanceRef.current) {
-      // 这里使用高德地图作为示例，实际项目中可以根据需要选择其他地图服务
-      // 注意：需要在 public/index.html 中引入高德地图 API
-      if (window.AMap) {
-        initMap();
-      } else {
-        // 如果地图API未加载，显示提示
-        message.warning('地图服务未加载，请检查网络连接');
-      }
+  // 多个地图瓦片源，提供备用选项
+  const tileSources = [
+    {
+      url: "https://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}",
+      attribution: '&copy; 高德地图',
+      name: '高德地图'
+    },
+    {
+      url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      name: 'OpenStreetMap'
+    },
+    {
+      url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+      attribution: '&copy; Esri',
+      name: 'Esri地图'
     }
-  }, [visible]);
+  ];
 
-  // 初始化地图实例
-  const initMap = () => {
-    const map = new window.AMap.Map(mapRef.current, {
-      zoom: 15,
-      center: [tempPosition.longitude, tempPosition.latitude],
-      mapStyle: 'amap://styles/normal'
-    });
-
-    mapInstanceRef.current = map;
-
-    // 添加标记
-    const marker = new window.AMap.Marker({
-      position: [tempPosition.longitude, tempPosition.latitude],
-      icon: new window.AMap.Icon({
-        size: new window.AMap.Size(25, 34),
-        image: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
-        imageOffset: new window.AMap.Pixel(-9, -34)
-      }),
-      draggable: true
-    });
-
-    markerRef.current = marker;
-    map.add(marker);
-
-    // 地图点击事件
-    map.on('click', (e) => {
-      const { lng, lat } = e.lnglat;
-      const newPosition = { longitude: lng, latitude: lat };
-      setTempPosition(newPosition);
-      marker.setPosition([lng, lat]);
-    });
-
-    // 标记拖拽事件
-    marker.on('dragend', (e) => {
-      const { lng, lat } = e.lnglat;
-      const newPosition = { longitude: lng, latitude: lat };
-      setTempPosition(newPosition);
-    });
-  };
-
-  // 清理地图实例
+  // 当弹窗打开时，重置临时位置
   useEffect(() => {
-    return () => {
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.destroy();
-        mapInstanceRef.current = null;
-        markerRef.current = null;
-      }
-    };
-  }, []);
+    if (visible) {
+      setTempPosition(position);
+      setMapKey(prev => prev + 1); // 强制重新渲染地图
+      setShouldRenderMap(false);
+
+      // 延迟渲染地图，确保弹窗完全打开
+      const timer = setTimeout(() => {
+        setShouldRenderMap(true);
+      }, 500);
+
+      return () => clearTimeout(timer);
+    } else {
+      setShouldRenderMap(false);
+    }
+  }, [visible, position]);
+
+  // 当地图实例创建后，强制调整尺寸
+  useEffect(() => {
+    if (mapInstance && shouldRenderMap) {
+      // 立即调整
+      mapInstance.invalidateSize();
+
+      // 多次延迟执行，确保地图正确渲染
+      const timers = [
+        setTimeout(() => mapInstance.invalidateSize(), 50),
+        setTimeout(() => mapInstance.invalidateSize(), 200),
+        setTimeout(() => mapInstance.invalidateSize(), 500),
+        setTimeout(() => mapInstance.invalidateSize(), 1000)
+      ];
+
+      return () => timers.forEach(timer => clearTimeout(timer));
+    }
+  }, [mapInstance, shouldRenderMap]);
+
+  // 处理地图点击位置变化
+  const handlePositionChange = (newPosition) => {
+    setTempPosition(newPosition);
+  };
 
   // 手动输入坐标
   const handleCoordinateChange = (field, value) => {
@@ -86,13 +119,6 @@ const MapPicker = ({
     if (!isNaN(numValue)) {
       const newPosition = { ...tempPosition, [field]: numValue };
       setTempPosition(newPosition);
-      
-      // 更新地图中心和标记位置
-      if (mapInstanceRef.current && markerRef.current) {
-        const center = [newPosition.longitude, newPosition.latitude];
-        mapInstanceRef.current.setCenter(center);
-        markerRef.current.setPosition(center);
-      }
     }
   };
 
@@ -104,13 +130,6 @@ const MapPicker = ({
           const { longitude, latitude } = position.coords;
           const newPosition = { longitude, latitude };
           setTempPosition(newPosition);
-          
-          if (mapInstanceRef.current && markerRef.current) {
-            const center = [longitude, latitude];
-            mapInstanceRef.current.setCenter(center);
-            markerRef.current.setPosition(center);
-          }
-          
           message.success('已获取当前位置');
         },
         (error) => {
@@ -155,6 +174,17 @@ const MapPicker = ({
       height={600}
       destroyOnClose
       className={styles.mapPickerModal}
+      afterOpenChange={(open) => {
+        if (open && mapInstance) {
+          // 弹窗打开后，延迟重新计算地图尺寸
+          setTimeout(() => {
+            mapInstance.invalidateSize();
+          }, 100);
+          setTimeout(() => {
+            mapInstance.invalidateSize();
+          }, 300);
+        }
+      }}
     >
       <div className={styles.mapPickerContainer}>
         {/* 坐标输入区域 */}
@@ -198,13 +228,122 @@ const MapPicker = ({
 
         {/* 地图容器 */}
         <div className={styles.mapContainer}>
-          <div ref={mapRef} className={styles.map}></div>
-          {!window.AMap && (
-            <div className={styles.mapPlaceholder}>
-              <EnvironmentOutlined style={{ fontSize: 48, color: '#ccc' }} />
-              <p>地图服务未加载</p>
-              <p>请在 public/index.html 中引入地图API</p>
+          {/* 地图源切换按钮 */}
+          <div className={styles.mapControls}>
+            <Button
+              size="small"
+              icon={<GlobalOutlined />}
+              onClick={() => {
+                const nextSource = (currentTileSource + 1) % tileSources.length;
+                setCurrentTileSource(nextSource);
+                setNetworkError(false);
+                setMapLoaded(false);
+                message.info(`切换到${tileSources[nextSource].name}`);
+              }}
+              title={`当前: ${tileSources[currentTileSource].name}，点击切换`}
+            >
+              {tileSources[currentTileSource].name}
+            </Button>
+          </div>
+          {(!shouldRenderMap || (!mapLoaded && !networkError)) && (
+            <div className={styles.mapLoading}>
+              <div className={styles.loadingSpinner}></div>
+              <p>{!shouldRenderMap ? '准备地图中...' : `正在加载${tileSources[currentTileSource].name}...`}</p>
+              <div style={{ marginTop: '8px', fontSize: '12px', color: '#8c8c8c' }}>
+                {!shouldRenderMap ? '请稍候' : '如果加载时间过长，请稍后重试'}
+              </div>
             </div>
+          )}
+
+          {networkError && (
+            <div className={styles.mapLoading}>
+              <div style={{ color: '#ff4d4f', fontSize: '16px', marginBottom: '8px' }}>⚠️</div>
+              <p style={{ color: '#ff4d4f' }}>地图加载失败</p>
+              <div style={{ marginTop: '8px', fontSize: '12px', color: '#8c8c8c', marginBottom: '16px' }}>
+                请检查网络连接或稍后重试
+              </div>
+              <Button
+                type="primary"
+                icon={<GlobalOutlined />}
+                onClick={() => {
+                  setNetworkError(false);
+                  setMapLoaded(false);
+                  setCurrentTileSource(0);
+                }}
+              >
+                重新加载地图
+              </Button>
+            </div>
+          )}
+          {shouldRenderMap && (
+            <MapContainer
+            key={mapKey}
+            center={[tempPosition.latitude, tempPosition.longitude]}
+            zoom={15}
+            style={{ height: '450px', width: '100%' }}
+            className={styles.map}
+            whenCreated={(mapInstance) => {
+              // 保存地图实例引用
+              setMapInstance(mapInstance);
+
+              // 监听地图加载完成事件
+              mapInstance.on('load', () => {
+                setMapLoaded(true);
+              });
+
+              // 设置超时，防止一直加载
+              setTimeout(() => {
+                setMapLoaded(true);
+              }, 3000);
+
+              // 延迟调整地图尺寸，确保容器已经渲染完成
+              setTimeout(() => {
+                mapInstance.invalidateSize();
+              }, 200);
+            }}
+          >
+            <TileLayer
+              key={currentTileSource}
+              url={tileSources[currentTileSource].url}
+              attribution={tileSources[currentTileSource].attribution}
+              errorTileUrl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
+              maxZoom={18}
+              minZoom={1}
+              eventHandlers={{
+                loading: () => setMapLoaded(false),
+                load: () => setMapLoaded(true),
+                tileerror: () => {
+                  // 如果当前瓦片源加载失败，尝试下一个
+                  if (currentTileSource < tileSources.length - 1) {
+                    console.log('地图瓦片加载失败，尝试备用源...');
+                    setCurrentTileSource(prev => prev + 1);
+                    setNetworkError(false);
+                  } else {
+                    setNetworkError(true);
+                    setMapLoaded(true); // 停止加载指示器
+                  }
+                }
+              }}
+            />
+
+            {/* 地图点击事件处理 */}
+            <MapClickHandler onPositionChange={handlePositionChange} />
+
+            {/* 地图中心控制 */}
+            <MapCenterController center={tempPosition} />
+
+            {/* 位置标记 */}
+            <Marker
+              position={[tempPosition.latitude, tempPosition.longitude]}
+              draggable={true}
+              eventHandlers={{
+                dragend: (e) => {
+                  const { lat, lng } = e.target.getLatLng();
+                  handlePositionChange({ latitude: lat, longitude: lng });
+                }
+              }}
+            />
+          </MapContainer>
           )}
         </div>
 

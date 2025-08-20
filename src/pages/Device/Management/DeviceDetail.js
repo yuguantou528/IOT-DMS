@@ -269,7 +269,7 @@ const DeviceDetail = () => {
                     <span>{device.location}</span>
                     {device.longitude && device.latitude && (
                       <span style={{ color: '#8c8c8c', fontSize: '12px' }}>
-                        ({device.longitude}, {device.latitude})
+                        ({parseFloat(device.longitude).toFixed(6)}, {parseFloat(device.latitude).toFixed(6)})
                       </span>
                     )}
                   </div>

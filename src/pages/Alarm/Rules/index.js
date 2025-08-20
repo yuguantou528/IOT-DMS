@@ -55,7 +55,7 @@ const AlarmRules = () => {
   const deviceTypes = [
     { value: 'network_camera', label: '网络摄像头' },
     { value: 'mesh_radio', label: 'Mesh电台' },
-    { value: 'sensor', label: '传感器' },
+    { value: 'sensor', label: '对讲机' },
     { value: 'base_station', label: '370M基站' },
     { value: 'satellite', label: '卫星通信设备' }
   ];

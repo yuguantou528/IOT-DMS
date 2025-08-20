@@ -431,6 +431,7 @@ const FenceEditModal = ({
                     onFenceChange={handleFenceChange}
                     drawMode={editingFence?.type || fenceType}
                     hideTypeSelector={true}
+                    hideEditButton={!editingFence} // 新增模式下隐藏编辑按钮
                     initialFence={editingFence || (inputMethod === 'coordinate' && fenceData ? {
                       type: fenceData.type,
                       coordinates: fenceData.coordinates,

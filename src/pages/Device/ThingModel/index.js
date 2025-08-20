@@ -593,9 +593,9 @@ const ThingModelManagement = () => {
                 >
                   {productOptions.map(product => (
                     <Option key={product.value} value={product.value}>
-                      <div>
-                        <div>{product.label}</div>
-                        <div style={{ fontSize: '12px', color: '#666' }}>{product.code}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span>{product.label}</span>
+                        <span style={{ fontSize: '12px', color: '#666' }}>({product.code})</span>
                       </div>
                     </Option>
                   ))}

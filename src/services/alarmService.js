@@ -42,7 +42,7 @@ const mockAlarmMessages = [
   {
     id: 3,
     deviceId: 'DEV003',
-    deviceName: '温度传感器-003',
+    deviceName: '数字对讲机-003',
     alarmType: 'data_anomaly',
     alarmLevel: 'critical',
     alarmTitle: '温度数据异常',
@@ -51,9 +51,9 @@ const mockAlarmMessages = [
     status: 'resolved',
     handler: '李四',
     handleTime: '2024-01-20 14:45:00',
-    handleRemark: '已确认为传感器故障，已更换新设备，温度恢复正常',
+    handleRemark: '已确认为对讲机故障，已更换新设备，温度恢复正常',
     location: '上海市浦东新区xxx工厂车间A区',
-    deviceType: '传感器',
+    deviceType: '对讲机',
     ruleId: 2,
     ruleName: '温度异常告警规则'
   },
@@ -119,7 +119,7 @@ const mockAlarmRules = [
     threshold: '80',
     alarmLevel: 'warning',
     enabled: true,
-    description: '当温度传感器检测值超过80度时触发告警，防止设备过热',
+    description: '当对讲机检测值超过80度时触发告警，防止设备过热',
     createTime: '2024-01-15 11:00:00',
     updateTime: '2024-01-18 09:15:00'
   },

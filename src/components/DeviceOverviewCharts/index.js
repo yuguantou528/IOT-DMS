@@ -45,7 +45,7 @@ const DeviceOverviewCharts = ({ stats }) => {
     },
     xAxis: {
       type: 'category',
-      data: ['摄像头', 'Mesh电台', '传感器', '基站'],
+      data: ['摄像头', 'Mesh电台', '网关设备', '基站'],
       axisLabel: {
         color: '#ffffff',
         fontSize: 11,
