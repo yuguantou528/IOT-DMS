@@ -24,6 +24,7 @@ import ElectronicFence from './pages/Alarm/ElectronicFence';
 import UserManagement from './pages/System/UserManagement';
 import RoleManagement from './pages/System/RoleManagement';
 import PermissionManagement from './pages/System/PermissionManagement';
+import Profile from './pages/Profile';
 import NavigationBar from './components/NavigationBar';
 import HeaderBar from './components/HeaderBar';
 import Breadcrumb from './components/Breadcrumb';
@@ -107,6 +108,7 @@ function App() {
               <Route path="/system/users" element={<UserManagement />} />
               <Route path="/system/roles" element={<RoleManagement />} />
               <Route path="/system/permissions" element={<PermissionManagement />} />
+              <Route path="/profile" element={<Profile />} />
             </Routes>
           </div>
         </div>

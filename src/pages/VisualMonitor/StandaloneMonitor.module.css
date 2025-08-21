@@ -1271,17 +1271,27 @@
 }
 
 .legendAlarm {
-  width: 12px;
-  height: 12px;
-  background: #ff4d4f;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 8px;
-  font-weight: bold;
-  color: #ffffff;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 10px solid #ff4d4f;
+  position: relative;
   flex-shrink: 0;
+  margin: 2px 4px;
+}
+
+.legendAlarm::after {
+  content: '!';
+  position: absolute;
+  top: 3px;
+  left: -2px;
+  color: white;
+  font-size: 7px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1;
+  width: 4px;
 }
 
 .mapPlaceholder {
@@ -3905,6 +3915,141 @@
   color: #ff4d4f !important;
   background: rgba(255, 77, 79, 0.1) !important;
   transform: scale(1.1) !important;
+}
+
+/* 设备告警详情模态框样式 */
+.deviceAlarmModal :global(.ant-modal-content) {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.9) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 50px rgba(59, 130, 246, 0.2);
+}
+
+.deviceAlarmModal :global(.ant-modal-header) {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2) !important;
+  border-radius: 12px 12px 0 0 !important;
+}
+
+.deviceAlarmModal :global(.ant-modal-title) {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.deviceAlarmModal :global(.ant-modal-close) {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.deviceAlarmModal :global(.ant-modal-close:hover) {
+  color: #ffffff !important;
+}
+
+.deviceAlarmModal :global(.ant-badge-status-text) {
+  color: #ffffff !important;
+}
+
+.deviceAlarmContent {
+  color: #ffffff;
+}
+
+.deviceAlarmHeader {
+  margin-bottom: 16px;
+}
+
+.deviceAlarmInfo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.deviceAlarmItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.deviceAlarmLabel {
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  min-width: 80px;
+}
+
+.deviceAlarmValue {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.deviceAlarmList {
+  margin-top: 16px;
+}
+
+.deviceAlarmListTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.deviceAlarmListItem {
+  background: rgba(59, 130, 246, 0.05);
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  padding: 12px;
+  transition: all 0.3s ease;
+}
+
+.deviceAlarmListItem:hover {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.alarmItemContent {
+  width: 100%;
+}
+
+.alarmItemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.alarmItemTitle {
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.alarmItemTime {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 6px;
+}
+
+.alarmItemDesc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.alarmItemStatus {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.noAlarmData {
+  text-align: center;
+  padding: 40px 20px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.noAlarmData div {
+  margin-top: 8px;
+  font-size: 14px;
 }
 
 /* 删除全局样式覆盖 */

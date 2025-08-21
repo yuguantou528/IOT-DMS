@@ -1,0 +1,280 @@
+.profile {
+  padding: 24px;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.pageHeader {
+  margin-bottom: 24px;
+}
+
+.pageHeader h2 {
+  margin-bottom: 8px;
+  color: #262626;
+}
+
+/* 用户信息卡片 */
+.userCard {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.userHeader {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.avatarContainer {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.avatar {
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.avatarBtn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #1890ff;
+  border: 2px solid #fff;
+}
+
+.userBasic {
+  text-align: center;
+}
+
+.userName {
+  margin-bottom: 4px !important;
+  color: #262626;
+}
+
+.userRole {
+  margin-top: 8px;
+}
+
+/* 安全设置 */
+.securitySettings {
+  max-width: 600px;
+}
+
+.securityItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.securityInfo {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.securityIcon {
+  font-size: 20px;
+  color: #1890ff;
+  margin-right: 12px;
+}
+
+.securityTitle {
+  font-weight: 500;
+  color: #262626;
+  margin-bottom: 4px;
+}
+
+.securityDesc {
+  color: #8c8c8c;
+  font-size: 12px;
+}
+
+/* 登录历史 */
+.loginHistory {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* 系统偏好设置 */
+.preferences {
+  max-width: 800px;
+}
+
+/* 头像上传 */
+.avatarUploader {
+  display: block;
+  margin: 0 auto;
+}
+
+.avatarUploader .ant-upload {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+}
+
+.avatarUploader .ant-upload-select {
+  border-radius: 50% !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .profile {
+    padding: 16px;
+  }
+  
+  .userHeader {
+    padding: 16px 0;
+  }
+  
+  .avatar {
+    width: 60px !important;
+    height: 60px !important;
+  }
+  
+  .securityItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .securityInfo {
+    width: 100%;
+  }
+}
+
+/* 卡片样式优化 */
+.profile :global(.ant-card) {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile :global(.ant-card-head) {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.profile :global(.ant-tabs-tab) {
+  font-weight: 500;
+}
+
+.profile :global(.ant-tabs-tab-active) {
+  color: #1890ff;
+}
+
+.profile :global(.ant-form-item-label > label) {
+  font-weight: 500;
+  color: #262626;
+}
+
+.profile :global(.ant-descriptions-item-label) {
+  font-weight: 500;
+  color: #595959;
+}
+
+.profile :global(.ant-descriptions-item-content) {
+  color: #262626;
+}
+
+/* 按钮样式 */
+.profile :global(.ant-btn-primary) {
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(24, 144, 255, 0.2);
+}
+
+.profile :global(.ant-btn) {
+  border-radius: 6px;
+}
+
+/* 输入框样式 */
+.profile :global(.ant-input),
+.profile :global(.ant-select-selector),
+.profile :global(.ant-input-password) {
+  border-radius: 6px;
+}
+
+.profile :global(.ant-input:focus),
+.profile :global(.ant-select-focused .ant-select-selector),
+.profile :global(.ant-input-password:focus) {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+/* 标签样式 */
+.profile :global(.ant-tag) {
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+/* 警告框样式 */
+.profile :global(.ant-alert) {
+  border-radius: 8px;
+}
+
+/* 模态框样式 */
+.profile :global(.ant-modal) {
+  border-radius: 12px;
+}
+
+.profile :global(.ant-modal-header) {
+  border-radius: 12px 12px 0 0;
+}
+
+.profile :global(.ant-modal-content) {
+  border-radius: 12px;
+}
+
+/* 上传组件样式 */
+.profile :global(.ant-upload-list-picture-card .ant-upload-list-item) {
+  border-radius: 8px;
+}
+
+.profile :global(.ant-upload-select) {
+  border-radius: 8px;
+  border: 2px dashed #d9d9d9;
+  transition: all 0.3s;
+}
+
+.profile :global(.ant-upload-select:hover) {
+  border-color: #1890ff;
+}
+
+/* 描述列表样式 */
+.profile :global(.ant-descriptions-item) {
+  padding-bottom: 12px;
+}
+
+.profile :global(.ant-descriptions-item-label) {
+  width: 120px;
+}
+
+/* 动画效果 */
+.profile :global(.ant-card),
+.profile :global(.ant-btn),
+.profile :global(.ant-input),
+.profile :global(.ant-select-selector) {
+  transition: all 0.3s ease;
+}
+
+.profile :global(.ant-card:hover) {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 滚动条样式 */
+.loginHistory::-webkit-scrollbar {
+  width: 6px;
+}
+
+.loginHistory::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.loginHistory::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.loginHistory::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

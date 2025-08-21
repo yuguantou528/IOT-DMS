@@ -55,11 +55,73 @@ import {
   getStatistics,
   getDeviceTrack
 } from '../../services/visualMonitorService';
+import { getDeviceAlarms } from '../../services/alarmService';
 import AudioCallModal from '../../components/AudioCallModal';
 import DeviceOverviewCharts from '../../components/DeviceOverviewCharts';
 
 const { Option } = Select;
 const { Search } = Input;
+
+// 计算两个经纬度点之间的距离（使用Haversine公式）
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
+  const R = 6371; // 地球半径（公里）
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a =
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c; // 距离（公里）
+};
+
+// 计算轨迹总距离
+const calculateTotalDistance = (trackData) => {
+  if (!trackData || trackData.length < 2) return 0;
+
+  let totalDistance = 0;
+  for (let i = 1; i < trackData.length; i++) {
+    const prev = trackData[i - 1];
+    const curr = trackData[i];
+
+    if (prev.position && curr.position &&
+        prev.position.length >= 2 && curr.position.length >= 2) {
+      const distance = calculateDistance(
+        prev.position[1], prev.position[0], // 前一点的纬度、经度（position格式：[经度, 纬度]）
+        curr.position[1], curr.position[0]  // 当前点的纬度、经度
+      );
+      totalDistance += distance;
+    }
+  }
+
+  return totalDistance;
+};
+
+// 计算平均速度
+const calculateAverageSpeed = (trackData) => {
+  if (!trackData || trackData.length === 0) return 0;
+
+  // 方法1：如果轨迹点有speed字段，计算平均值
+  const speedValues = trackData.filter(point => point.speed && point.speed > 0);
+  if (speedValues.length > 0) {
+    const totalSpeed = speedValues.reduce((sum, point) => sum + point.speed, 0);
+    return totalSpeed / speedValues.length;
+  }
+
+  // 方法2：基于总距离和总时长计算
+  if (trackData.length >= 2) {
+    const totalDistance = calculateTotalDistance(trackData);
+    const startTime = new Date(trackData[0].timestamp).getTime();
+    const endTime = new Date(trackData[trackData.length - 1].timestamp).getTime();
+    const totalTimeHours = (endTime - startTime) / (1000 * 60 * 60); // 转换为小时
+
+    if (totalTimeHours > 0) {
+      return totalDistance / totalTimeHours;
+    }
+  }
+
+  return 0;
+};
 
 // 防抖工具函数
 const debounce = (func, wait) => {
@@ -122,6 +184,9 @@ const StandaloneMonitor = () => {
   const [selectedAlarm, setSelectedAlarm] = useState(null);
   const [alarmHandleVisible, setAlarmHandleVisible] = useState(false);
   const [selectedHandleAlarm, setSelectedHandleAlarm] = useState(null);
+  const [deviceAlarmDetailVisible, setDeviceAlarmDetailVisible] = useState(false);
+  const [selectedDeviceForAlarm, setSelectedDeviceForAlarm] = useState(null);
+  const [deviceAlarms, setDeviceAlarms] = useState([]);
   const [alarmActiveTab, setAlarmActiveTab] = useState('active');
   const [activeTab, setActiveTab] = useState('status'); // 'status' 或 'monitor'
   const [deviceFilter, setDeviceFilter] = useState('all'); // 'all', 'online', 'offline', 'camera'
@@ -150,6 +215,18 @@ const StandaloneMonitor = () => {
   const [isRealTimeTracking, setIsRealTimeTracking] = useState(false);
   const [realTimeTrackData, setRealTimeTrackData] = useState([]);
   const [trackingStartTime, setTrackingStartTime] = useState(null);
+
+  // 计算轨迹统计信息
+  const trackStats = useMemo(() => {
+    const currentTrackData = isRealTimeTracking ? realTimeTrackData : deviceTrackData;
+    const totalDistance = calculateTotalDistance(currentTrackData);
+    const averageSpeed = calculateAverageSpeed(currentTrackData);
+
+    return {
+      totalDistance: totalDistance.toFixed(1),
+      averageSpeed: averageSpeed.toFixed(1)
+    };
+  }, [deviceTrackData, realTimeTrackData, isRealTimeTracking]);
 
   // 地图控制状态
   const [mapCenter, setMapCenter] = useState(null);
@@ -418,7 +495,7 @@ const StandaloneMonitor = () => {
     setTrackEndTime(now);
   };
 
-  // 快速轨迹跟踪（显示最近2小时轨迹）
+  // 快速轨迹跟踪（开始实时轨迹跟踪）
   const handleQuickTrack = (device) => {
     setCurrentQuickTrackDevice(device);
     setQuickTrackModalVisible(true);
@@ -703,6 +780,32 @@ const StandaloneMonitor = () => {
       setVideoModalVisible(true);
     } else {
       message.warning('该设备不支持视频查看功能');
+    }
+  };
+
+  // 处理设备告警详情
+  const handleDeviceAlarmDetail = async (device) => {
+    if (!device.alarmCount || device.alarmCount === 0) {
+      message.warning('该设备暂无告警信息');
+      return;
+    }
+
+    try {
+      setSelectedDeviceForAlarm(device);
+      setDeviceAlarmDetailVisible(true);
+
+      // 调用API获取设备的告警数据
+      const response = await getDeviceAlarms(device.id, device.name);
+      if (response.success) {
+        setDeviceAlarms(response.data.alarms);
+      } else {
+        message.error('获取设备告警信息失败');
+        setDeviceAlarms([]);
+      }
+    } catch (error) {
+      console.error('获取设备告警信息失败:', error);
+      message.error('获取设备告警信息失败');
+      setDeviceAlarms([]);
     }
   };
 
@@ -1023,6 +1126,7 @@ const StandaloneMonitor = () => {
               onVideoView={handleVideoView}
               onAudioCall={handleAudioCall}
               onLocateDevice={locateDevice}
+              onAlarmDetail={handleDeviceAlarmDetail}
             />
 
             {/* 地图搜索控制面板 */}
@@ -1030,7 +1134,7 @@ const StandaloneMonitor = () => {
               <div className={styles.searchPanelContent}>
                 <div className={styles.searchContainer}>
                   <Input
-                    placeholder="搜索设备名称、ID或位置..."
+                    placeholder="搜索设备名称、ID、位置"
                     value={mapSearchText}
                     onChange={(e) => handleSearchChange(e.target.value)}
                     onBlur={handleSearchBlur}
@@ -1157,6 +1261,18 @@ const StandaloneMonitor = () => {
                           </span>
                           <span className={styles.trackDetailValue}>
                             {new Date(deviceTrackData[deviceTrackData.length - 1].timestamp).toLocaleTimeString('zh-CN')}
+                          </span>
+                        </div>
+                        <div className={styles.trackDetailItem}>
+                          <span className={styles.trackDetailLabel}>总距离:</span>
+                          <span className={styles.trackDetailValue}>
+                            {trackStats.totalDistance} km
+                          </span>
+                        </div>
+                        <div className={styles.trackDetailItem}>
+                          <span className={styles.trackDetailLabel}>平均速度:</span>
+                          <span className={styles.trackDetailValue}>
+                            {trackStats.averageSpeed} km/h
                           </span>
                         </div>
                       </div>
@@ -1708,7 +1824,24 @@ const StandaloneMonitor = () => {
                   <div className={styles.alarmInfoItem}>
                     <div className={styles.alarmInfoLabel}>告警状态</div>
                     <div className={styles.alarmInfoValue}>
-                      {selectedAlarm.status === 'active' ? '活跃' : '已处理'}
+                      {(() => {
+                        switch(selectedAlarm.status) {
+                          case 'pending':
+                            return '待处理';
+                          case 'processing':
+                            return '处理中';
+                          case 'resolved':
+                            return '已解决';
+                          case 'ignored':
+                            return '已忽略';
+                          case 'active':
+                            return '待处理';
+                          case 'handled':
+                            return '已处理';
+                          default:
+                            return selectedAlarm.status || '未知状态';
+                        }
+                      })()}
                     </div>
                   </div>
                 </Col>
@@ -1916,6 +2049,115 @@ const StandaloneMonitor = () => {
                   <span>延迟: 200ms</span>
                 </div>
               </Space>
+            </div>
+          </div>
+        )}
+      </Modal>
+
+      {/* 设备告警详情弹窗 */}
+      <Modal
+        title={
+          <Space>
+            <WarningOutlined />
+            <span>设备告警详情</span>
+            {selectedDeviceForAlarm && (
+              <Tag color="blue">{selectedDeviceForAlarm.name}</Tag>
+            )}
+          </Space>
+        }
+        open={deviceAlarmDetailVisible}
+        onCancel={() => {
+          setDeviceAlarmDetailVisible(false);
+          setSelectedDeviceForAlarm(null);
+          setDeviceAlarms([]);
+        }}
+        footer={[
+          <Button key="close" onClick={() => {
+            setDeviceAlarmDetailVisible(false);
+            setSelectedDeviceForAlarm(null);
+            setDeviceAlarms([]);
+          }}>
+            关闭
+          </Button>
+        ]}
+        width={800}
+        className={styles.deviceAlarmModal}
+        bodyStyle={{
+          padding: '16px',
+          maxHeight: '500px',
+          overflowY: 'auto'
+        }}
+      >
+        {selectedDeviceForAlarm && (
+          <div className={styles.deviceAlarmContent}>
+            {/* 设备基本信息 */}
+            <div className={styles.deviceAlarmHeader}>
+              <div className={styles.deviceAlarmInfo}>
+                <div className={styles.deviceAlarmItem}>
+                  <span className={styles.deviceAlarmLabel}>设备ID:</span>
+                  <span className={styles.deviceAlarmValue}>{selectedDeviceForAlarm.id}</span>
+                </div>
+                <div className={styles.deviceAlarmItem}>
+                  <span className={styles.deviceAlarmLabel}>设备位置:</span>
+                  <span className={styles.deviceAlarmValue}>{selectedDeviceForAlarm.location || '位置未知'}</span>
+                </div>
+                <div className={styles.deviceAlarmItem}>
+                  <span className={styles.deviceAlarmLabel}>设备状态:</span>
+                  <Badge
+                    status={selectedDeviceForAlarm.status === 'online' ? 'success' : 'error'}
+                    text={
+                      <span style={{ color: '#ffffff' }}>
+                        {selectedDeviceForAlarm.status === 'online' ? '在线' : '离线'}
+                      </span>
+                    }
+                  />
+                </div>
+                <div className={styles.deviceAlarmItem}>
+                  <span className={styles.deviceAlarmLabel}>告警数量:</span>
+                  <span className={styles.deviceAlarmValue} style={{ color: '#ff4d4f' }}>
+                    {selectedDeviceForAlarm.alarmCount} 条
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <Divider />
+
+            {/* 告警列表 */}
+            <div className={styles.deviceAlarmList}>
+              <div className={styles.deviceAlarmListTitle}>告警详情列表</div>
+              {deviceAlarms.length > 0 ? (
+                <List
+                  size="small"
+                  dataSource={deviceAlarms}
+                  renderItem={(alarm) => (
+                    <List.Item className={styles.deviceAlarmListItem}>
+                      <div className={styles.alarmItemContent}>
+                        <div className={styles.alarmItemHeader}>
+                          <span className={styles.alarmItemTitle}>{alarm.alarmTitle}</span>
+                          <Tag color={getAlarmColor(alarm.alarmLevel)}>
+                            {getAlarmLevelText(alarm.alarmLevel)}
+                          </Tag>
+                        </div>
+                        <div className={styles.alarmItemTime}>
+                          告警时间: {alarm.alarmTime}
+                        </div>
+                        <div className={styles.alarmItemDesc}>
+                          {alarm.alarmDescription}
+                        </div>
+                        <div className={styles.alarmItemStatus}>
+                          状态: {getAlarmStatusTag(alarm.status)}
+                        </div>
+                      </div>
+                    </List.Item>
+                  )}
+                />
+              ) : (
+                <div className={styles.noAlarmData}>
+                  <WarningOutlined style={{ fontSize: '24px', color: '#d9d9d9' }} />
+                  <div>暂无告警数据</div>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -2186,6 +2428,7 @@ const getAlarmColor = (level) => {
     info: 'blue',
     warning: 'orange',
     error: 'red',
+    critical: 'volcano',
     alarm: 'volcano'
   };
   return colors[level] || 'default';
@@ -2196,9 +2439,22 @@ const getAlarmLevelText = (level) => {
     info: '信息',
     warning: '警告',
     error: '错误',
+    critical: '严重',
     alarm: '报警'
   };
   return texts[level] || level;
+};
+
+const getAlarmStatusTag = (status) => {
+  const statusConfig = {
+    pending: { color: 'orange', text: '待处理' },
+    processing: { color: 'blue', text: '处理中' },
+    resolved: { color: 'green', text: '已解决' },
+    ignored: { color: 'gray', text: '已忽略' }
+  };
+
+  const config = statusConfig[status] || { color: 'default', text: status };
+  return <Tag color={config.color}>{config.text}</Tag>;
 };
 
 export default StandaloneMonitor;

@@ -67,24 +67,31 @@
   line-height: 1;
 }
 
-/* 告警数量标记 */
+/* 告警三角形标记 */
 .markerAlarm {
   position: absolute;
-  top: -8px;
-  right: -8px;
-  background: #ff4d4f;
-  color: white;
-  border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  font-weight: bold;
+  top: -12px;
+  right: -12px;
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-bottom: 16px solid #ff4d4f;
   z-index: 3;
-  border: 2px solid white;
   animation: alarmBlink 1s infinite alternate;
+}
+
+.markerAlarm::after {
+  content: '!';
+  position: absolute;
+  top: 6px;
+  left: -3px;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1;
+  width: 6px;
 }
 
 /* 脉冲动画 */
@@ -106,11 +113,11 @@
 /* 告警闪烁动画 */
 @keyframes alarmBlink {
   0% {
-    background: #ff4d4f;
+    border-bottom-color: #ff4d4f;
     transform: scale(1);
   }
   100% {
-    background: #ff7875;
+    border-bottom-color: #ff7875;
     transform: scale(1.1);
   }
 }
@@ -237,11 +244,18 @@
   }
   
   .markerAlarm {
-    width: 16px;
-    height: 16px;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 12px solid #ff4d4f;
+    top: -10px;
+    right: -10px;
+  }
+
+  .markerAlarm::after {
+    top: 4px;
+    left: -2px;
     font-size: 9px;
-    top: -6px;
-    right: -6px;
+    width: 4px;
   }
   
   .popupContent {

@@ -6,7 +6,8 @@ import {
   NodeIndexOutlined,
   PlayCircleOutlined,
   PhoneOutlined,
-  EyeOutlined
+  EyeOutlined,
+  WarningOutlined
 } from '@ant-design/icons';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -43,7 +44,7 @@ const createDeviceIcon = (device) => {
   const iconHtml = `
     <div class="${styles.deviceMarker} ${isOnline ? styles.onlineMarker : styles.offlineMarker}">
       <div class="${styles.markerIcon}">${getIconText(device.type)}</div>
-      ${hasAlarm ? `<div class="${styles.markerAlarm}">${device.alarmCount}</div>` : ''}
+      ${hasAlarm ? `<div class="${styles.markerAlarm}"></div>` : ''}
     </div>
   `;
 
@@ -247,7 +248,8 @@ const LeafletMap = ({
   onDeviceTrack = null, // 轨迹查询
   onVideoView = null, // 视频查看
   onAudioCall = null, // 语音呼叫
-  onLocateDevice = null // 定位设备
+  onLocateDevice = null, // 定位设备
+  onAlarmDetail = null // 查看告警详情
 }) => {
   const [currentScale, setCurrentScale] = useState('');
   const [currentZoom, setCurrentZoom] = useState(zoom);
@@ -477,6 +479,23 @@ const LeafletMap = ({
                               onAudioCall && onAudioCall(device);
                             }}
                             className={styles.popupActionBtn}
+                          />
+                        </Tooltip>
+                      )}
+
+                      {/* 告警详情按钮 - 仅有告警时显示 */}
+                      {device.alarmCount > 0 && (
+                        <Tooltip title="告警详情">
+                          <Button
+                            type="text"
+                            size="small"
+                            icon={<WarningOutlined />}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onAlarmDetail && onAlarmDetail(device);
+                            }}
+                            className={styles.popupActionBtn}
+                            style={{ color: '#ff4d4f' }}
                           />
                         </Tooltip>
                       )}

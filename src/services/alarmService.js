@@ -5,8 +5,8 @@ import moment from 'moment';
 const mockAlarmMessages = [
   {
     id: 1,
-    deviceId: 'DEV001',
-    deviceName: '海康威视摄像头-001',
+    deviceId: 1,
+    deviceName: '智能摄像头-001',
     alarmType: 'device_offline',
     alarmLevel: 'error',
     alarmTitle: '设备离线告警',
@@ -22,8 +22,26 @@ const mockAlarmMessages = [
     ruleName: '设备离线告警规则'
   },
   {
+    id: 6,
+    deviceId: 1,
+    deviceName: '智能摄像头-001',
+    alarmType: 'video_quality',
+    alarmLevel: 'warning',
+    alarmTitle: '视频质量异常',
+    alarmDescription: '检测到视频画面模糊，可能是镜头污损或焦距调节问题，建议检查设备状态',
+    alarmTime: '2024-01-20 13:15:42',
+    status: 'pending',
+    handler: null,
+    handleTime: null,
+    handleRemark: null,
+    location: '湖南省张家界市武陵源区森林公园入口',
+    deviceType: '网络摄像头',
+    ruleId: 5,
+    ruleName: '视频质量监控规则'
+  },
+  {
     id: 2,
-    deviceId: 'DEV002',
+    deviceId: 2,
     deviceName: 'Mesh电台-002',
     alarmType: 'parameter_abnormal',
     alarmLevel: 'warning',
@@ -41,7 +59,7 @@ const mockAlarmMessages = [
   },
   {
     id: 3,
-    deviceId: 'DEV003',
+    deviceId: 3,
     deviceName: '数字对讲机-003',
     alarmType: 'data_anomaly',
     alarmLevel: 'critical',
@@ -59,7 +77,7 @@ const mockAlarmMessages = [
   },
   {
     id: 4,
-    deviceId: 'DEV004',
+    deviceId: 4,
     deviceName: '370M基站-004',
     alarmType: 'connection_timeout',
     alarmLevel: 'error',
@@ -77,7 +95,7 @@ const mockAlarmMessages = [
   },
   {
     id: 5,
-    deviceId: 'DEV005',
+    deviceId: 5,
     deviceName: '卫星通信设备-005',
     alarmType: 'security_alert',
     alarmLevel: 'critical',
@@ -421,5 +439,35 @@ export const getAlarmStatistics = async () => {
         }
       });
     }, 200);
+  });
+};
+
+// 获取设备告警数据
+export const getDeviceAlarms = async (deviceId, deviceName) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // 根据设备ID或设备名称筛选告警数据
+      const deviceAlarms = mockAlarmMessages.filter(alarm => {
+        if (deviceId && alarm.deviceId) {
+          return alarm.deviceId === deviceId || alarm.deviceId === String(deviceId);
+        }
+        if (deviceName && alarm.deviceName) {
+          return alarm.deviceName.includes(deviceName) || deviceName.includes(alarm.deviceName);
+        }
+        return false;
+      });
+
+      resolve({
+        success: true,
+        data: {
+          deviceId: deviceId,
+          deviceName: deviceName,
+          alarms: deviceAlarms,
+          totalCount: deviceAlarms.length,
+          activeCount: deviceAlarms.filter(alarm => alarm.status === 'pending').length,
+          resolvedCount: deviceAlarms.filter(alarm => alarm.status === 'resolved').length
+        }
+      });
+    }, 300);
   });
 };

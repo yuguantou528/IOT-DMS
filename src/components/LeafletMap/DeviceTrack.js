@@ -3,6 +3,67 @@ import { Polyline, Popup, CircleMarker } from 'react-leaflet';
 import L from 'leaflet';
 import './DeviceTrack.css';
 
+// 计算两个经纬度点之间的距离（使用Haversine公式）
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
+  const R = 6371; // 地球半径（公里）
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a =
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c; // 距离（公里）
+};
+
+// 计算轨迹总距离
+const calculateTotalDistance = (trackData) => {
+  if (!trackData || trackData.length < 2) return 0;
+
+  let totalDistance = 0;
+  for (let i = 1; i < trackData.length; i++) {
+    const prev = trackData[i - 1];
+    const curr = trackData[i];
+
+    if (prev.position && curr.position &&
+        prev.position.length >= 2 && curr.position.length >= 2) {
+      const distance = calculateDistance(
+        prev.position[0], prev.position[1], // 前一点的纬度、经度
+        curr.position[0], curr.position[1]  // 当前点的纬度、经度
+      );
+      totalDistance += distance;
+    }
+  }
+
+  return totalDistance;
+};
+
+// 计算平均速度
+const calculateAverageSpeed = (trackData) => {
+  if (!trackData || trackData.length === 0) return 0;
+
+  // 方法1：如果轨迹点有speed字段，计算平均值
+  const speedValues = trackData.filter(point => point.speed && point.speed > 0);
+  if (speedValues.length > 0) {
+    const totalSpeed = speedValues.reduce((sum, point) => sum + point.speed, 0);
+    return totalSpeed / speedValues.length;
+  }
+
+  // 方法2：基于总距离和总时长计算
+  if (trackData.length >= 2) {
+    const totalDistance = calculateTotalDistance(trackData);
+    const startTime = new Date(trackData[0].timestamp).getTime();
+    const endTime = new Date(trackData[trackData.length - 1].timestamp).getTime();
+    const totalTimeHours = (endTime - startTime) / (1000 * 60 * 60); // 转换为小时
+
+    if (totalTimeHours > 0) {
+      return totalDistance / totalTimeHours;
+    }
+  }
+
+  return 0;
+};
+
 // 生成模拟轨迹数据
 const generateTrackData = (device) => {
   try {
@@ -14,7 +75,7 @@ const generateTrackData = (device) => {
     const trackPoints = [];
     const now = new Date();
 
-  // 生成过去2小时的轨迹点（每10分钟一个点，共12个点）
+  // 生成模拟轨迹点（每10分钟一个点，共12个点，约2小时的数据）
   const trackLength = 12;
   for (let i = trackLength - 1; i >= 0; i--) {
     const time = new Date(now.getTime() - i * 10 * 60 * 1000); // 每10分钟一个点
@@ -94,18 +155,30 @@ const DeviceTrack = ({
     lineJoin: 'round'
   }), [getTrackColor, device?.status]);
 
+  // 计算轨迹统计信息
+  const trackStats = useMemo(() => {
+    const totalDistance = calculateTotalDistance(trackData);
+    const averageSpeed = calculateAverageSpeed(trackData);
+
+    return {
+      totalDistance: totalDistance.toFixed(1),
+      averageSpeed: averageSpeed.toFixed(1)
+    };
+  }, [trackData]);
+
   // 如果不应该显示轨迹，返回null
-  if (!visible || !device || !trackData || trackData.length < 2) {
+  if (!visible || !device || !trackData || trackData.length === 0) {
     return null;
   }
 
   return (
     <>
-      {/* 轨迹线 */}
-      <Polyline
-        positions={positions}
-        pathOptions={pathOptions}
-      >
+      {/* 轨迹线 - 只有在有至少2个点时才显示 */}
+      {trackData.length >= 2 && (
+        <Polyline
+          positions={positions}
+          pathOptions={pathOptions}
+        >
         <Popup>
           <div style={{ minWidth: '200px' }}>
             <h4 style={{ margin: '0 0 8px 0', color: '#1890ff' }}>
@@ -113,13 +186,20 @@ const DeviceTrack = ({
             </h4>
             <div style={{ fontSize: '12px', lineHeight: '1.5' }}>
               <div><strong>轨迹点数:</strong> {trackData.length}</div>
-              <div><strong>时间范围:</strong> 过去2小时</div>
-              <div><strong>总距离:</strong> 约 {(Math.random() * 50 + 10).toFixed(1)} km</div>
-              <div><strong>平均速度:</strong> {Math.round(trackData.reduce((sum, p) => sum + p.speed, 0) / trackData.length)} km/h</div>
+              <div><strong>时间范围:</strong> {
+                trackData.length > 1 ?
+                  `${new Date(trackData[0].timestamp).toLocaleString('zh-CN')} 至 ${new Date(trackData[trackData.length - 1].timestamp).toLocaleString('zh-CN')}` :
+                  trackData.length === 1 ?
+                    new Date(trackData[0].timestamp).toLocaleString('zh-CN') :
+                    '无数据'
+              }</div>
+              <div><strong>总距离:</strong> {trackStats.totalDistance} km</div>
+              <div><strong>平均速度:</strong> {trackStats.averageSpeed} km/h</div>
             </div>
           </div>
         </Popup>
       </Polyline>
+      )}
 
       {/* 所有轨迹点标记 */}
       {trackData.length > 0 && trackData.map((point, index) => {

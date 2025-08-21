@@ -1,11 +1,11 @@
 import React from 'react';
 import { Layout, Button, Dropdown, Avatar, Space, Typography } from 'antd';
-import { 
-  MenuFoldOutlined, 
-  MenuUnfoldOutlined, 
-  UserOutlined, 
-  LogoutOutlined,
-  SettingOutlined
+import { useNavigate } from 'react-router-dom';
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  UserOutlined,
+  LogoutOutlined
 } from '@ant-design/icons';
 import styles from './index.module.css';
 
@@ -13,17 +13,14 @@ const { Header } = Layout;
 const { Text } = Typography;
 
 const HeaderBar = ({ collapsed, onToggle, onLogout }) => {
+  const navigate = useNavigate();
+
   // 用户菜单项
   const userMenuItems = [
     {
       key: 'profile',
       icon: <UserOutlined />,
       label: '个人中心',
-    },
-    {
-      key: 'settings',
-      icon: <SettingOutlined />,
-      label: '个人设置',
     },
     {
       type: 'divider',
@@ -39,8 +36,9 @@ const HeaderBar = ({ collapsed, onToggle, onLogout }) => {
   const handleMenuClick = ({ key }) => {
     if (key === 'logout') {
       onLogout();
+    } else if (key === 'profile') {
+      navigate('/profile');
     }
-    // 其他菜单项的处理逻辑可以在这里添加
   };
 
   return (
